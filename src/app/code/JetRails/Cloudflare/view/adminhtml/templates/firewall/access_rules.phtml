@@ -1,0 +1,83 @@
+<section
+	class="cloudflare firewall access_rules initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="firewall"
+	data-section-name="access_rules"
+	data-item-count="0"
+	data-page="1"
+	data-page-size="15"
+	data-sort=""
+	data-sort-order="" >
+	<div class="row" >
+		<div class="wrapper_left no_padding_bottom" >
+			<span class="section_title" >Access Rules</span>
+			<p>Firewall rules can be based on IP address, IP address range, Autonomous System Number (ASN) or country.</p>
+		</div>
+	</div>
+	<div class="row" >
+		<div>
+			<input data-target="search" class="search trigger-change" type="text" placeholder="Search Access Rules" data-target="search" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/search.svg') ?>);" />
+			<div class="dynamic_wrapper wrappable" >
+				<input class="grow" type="text" name="value" placeholder="Enter an IP, IP range, country name, or ASN" />
+				<select name="mode" >
+					<option value="block" selected>Block</option>
+					<option value="whitelist" >Whitelist</option>
+					<option value-"challenge" >Challenge</option>
+					<option value="js_challenge" >JavaScript Challenge</option>
+				</select>
+				<select name="scope" >
+					<option selected disabled >This website</option>
+				</select>
+				<input type="text" name="note" placeholder="Add a note" />
+				<input type="button" value="Add" class="trigger" data-target="add" />
+			</div>
+		</div>
+	</div>
+	<div class="row" >
+		<table cellspacing="0" cellpadding="0" class="rules"  >
+			<thead>
+				<tr>
+					<th class="trigger" data-target="sort" data-sort="configuration.value" >Value</th>
+					<th class="trigger" data-target="sort" data-sort="scope.type" >Applies to</th>
+					<th class="trigger" data-target="sort" data-sort="mode" >Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="3" >No Access Rules</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<div class="pagination_container" >
+				<span class="previous trigger" data-target="previous_page" >&#xF002;</span>
+				<div class="pages" ></div>
+				<span class="next trigger" data-target="next_page" >&#xF003;</span>
+				<span class="showing" >0 - 0 of 0 rules</span>
+			</div>
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What option should I choose?</h4>
+			<ul>
+				<li><strong>Block:</strong> Ensures that an IP address will never be allowed to access your website</li>
+				<li><strong>CAPTCHA:</strong> Specified IP addresses will be shown a CAPTCHA before being allowed to access your website</li>
+				<li><strong>JavaScript Challenge</strong>: The JavaScript challenge page requires the visitor to wait 5 seconds while Cloudflare determines if the visitor is coming from a real browser. The challenge requires the visitor's browser to answer a math problem which takes a bit of time to compute. Once successfully answered, the browser will be remembered and won't be challenged again.</li>
+				<li><strong>Whitelist:</strong> Ensures that an IP address will never be blocked from accessing your website. Only use for verified IPs that you trust!</li>
+			</ul>
+			<p><strong>What can Access Rules be applied to?</strong><br>Access Rules can be applied based on:</p>
+			<ul>
+				<li><strong>IP address</strong></li>
+				<li><strong>IP address range:</strong> Cloudflare accepts the following CIDR notations: /16 and /24 for IPv4 addresses and /64, /48, and /32 for IPv6</li>
+				<li><strong>Autonomous System Number (ASN):</strong> An ASN is the unique identifier for any network, such as the Cloudflare network (AS13335). The accepted format for ASN's is "AS12345"</li>
+				<li><strong>Country:</strong> Specified using ISO 2-letter country codes, such as "US" for the United States</li>
+			</ul>
+			<p>You can apply Access Rules to this domain only or all domains in your account.</p>
+			<p>To modify an existing Access Rule, create a new Access Rule and delete the existing one.</p>
+		</div>
+	</div>
+</section>

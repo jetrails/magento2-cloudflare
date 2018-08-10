@@ -1,0 +1,153 @@
+<section
+	class="cloudflare dns dns_records initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="dns"
+	data-section-name="dns_records"
+	data-item-count="0"
+	data-page="1"
+	data-page-size="15"
+	data-sort=""
+	data-sort-order="" >
+	<div class="row" >
+		<div class="wrapper_left holds_table" >
+			<span class="section_title" >DNS Records</span>
+			<p>A, AAAA, and CNAME records can have their traffic routed through the Cloudflare system. Add more records using this form, and click the cloud next to each record to toggle Cloudflare on or off.</p>
+			<div/>
+				<input class="search trigger-change" type="text" placeholder="Search DNS records" data-target="search" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/search.svg') ?>);" />
+			</div>
+			<div class="dynamic_wrapper" />
+				<select class="dynamic-trigger type" >
+					<option value="a" selected >A</option>
+					<option value="aaaa" >AAAA</option>
+					<option value="cname" >CNAME</option>
+					<option value="mx" >MX</option>
+					<option value="loc" >LOC</option>
+					<option value="srv" >SRV</option>
+					<option value="spf" >SPF</option>
+					<option value="txt" >TXT</option>
+					<option value="ns" >NS</option>
+					<option value="caa" >CAA</option>
+					<option value="ptr" >PTR</option>
+				</select>
+				<div class="active" data-dynamic-wrapper="a" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="IPv4 address" name="content" />
+				</div>
+				<div data-dynamic-wrapper="aaaa" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="IPv6 address" name="content" />
+				</div>
+				<div data-dynamic-wrapper="cname" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="Domain Name" name="content" />
+				</div>
+				<div data-dynamic-wrapper="mx" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="Click to configure" name="content" class="show-form-mx" />
+				</div>
+				<div data-dynamic-wrapper="loc" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="Click to configure" name="content" class="show-form-loc" />
+				</div>
+				<div data-dynamic-wrapper="srv" >
+					<input type="text" placeholder="Click to configure" name="name" class="show-form-srv-name" />
+					<input type="text" placeholder="Click to configure" name="content" class="show-form-srv" />
+				</div>
+				<div data-dynamic-wrapper="spf" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="Click to configure" name="content" class="show-form-spf" />
+				</div>
+				<div data-dynamic-wrapper="txt" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="Click to configure" name="content" class="show-form-txt" />
+				</div>
+				<div data-dynamic-wrapper="ns" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="Nameserver" name="content" />
+				</div>
+				<div data-dynamic-wrapper="caa" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="Click to configure" name="content" class="show-form-caa" />
+				</div>
+				<div data-dynamic-wrapper="ptr" >
+					<input type="text" placeholder="Name" name="name" />
+					<input type="text" placeholder="Domain Name" name="content" />
+				</div>
+				<select class="ttl" >
+					<option value="1" selected >Automatic TTL</option>
+					<option value="120" >2 minutes</option>
+					<option value="300" >5 minutes</option>
+					<option value="600" >10 minutes</option>
+					<option value="900" >15 minutes</option>
+					<option value="1800" >30 minutes</option>
+					<option value="3600" >1 hour</option>
+					<option value="7200" >2 hour</option>
+					<option value="18000" >5 hours</option>
+					<option value="43200" >12 hours</option>
+					<option value="86400" >1 day</option>
+				</select>
+				<img class="proxied add" src="<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/proxied_on.png') ?>" data-dynamic-show='["a","aaaa","cname"]' />
+				<input type="hidden" class="priority add" value="" />
+				<input data-target="create" class="trigger" type="button" value="Add Record" />
+			</div>
+			<table class="dns_records" cellpadding="0" cellspacing="0" data-image-base="<?php echo $block->getSkinUrl ('images/cloudflare') ?>" >
+				<thead>
+					<tr>
+						<th class="trigger" data-target="sort" data-sort="type" >Type</th>
+						<th class="trigger" data-target="sort" data-sort="name" >Name</th>
+						<th class="trigger" data-target="sort" data-sort="content" >Value</th>
+						<th class="trigger" data-target="sort" data-sort="ttl" >TTL</th>
+						<th class="trigger" data-target="sort" data-sort="proxied" >Status</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="6" >No DNS records found.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" > </div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<div class="pagination_container" >
+				<span class="previous trigger" data-target="previous_page" >&#xF002;</span>
+				<div class="pages" ></div>
+				<span class="next trigger" data-target="next_page" >&#xF003;</span>
+				<span class="showing" >0 - 0 of 0 records</span>
+			</div>
+			<a data-tab="advanced" >Advanced</a>
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="advanced" >
+			<div class="wrapper_left" >
+				<h3>Upload DNS File</h3>
+				<p>If you have a DNS file that is in the BIND format, you can upload it here and we will do our best to parse it so you don't have to retype it.</p>
+			</div>
+			<div class="wrapper_right" >
+				<input class="trigger" data-target="upload" type="button" value="Upload" />
+			</div>
+			<div class="wrapper_left" >
+				<h3>Export DNS File</h3>
+				<p>If you want to keep a backup of your zone file or export it to use with another DNS provider, click the button on the right. The exported file will be in BIND format.</p>
+			</div>
+			<div class="wrapper_right" >
+				<input class="trigger" data-target="export" type="button" value="Export" />
+			</div>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What is DNS?</h4>
+			<p>DNS is the system at the core of the Internet that translates human-readable domain names (e.g., www.example.com) into computer-understood IP addresses (e.g., 74.125.19.99).</p>
+			<p>On your Cloudflare DNS page, each DNS record will have one of these icons:</p>
+			<ul>
+				<li><img class='inline-image' src="<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/proxied_on.png') ?>" /><strong>Orange Cloud:</strong> Records that display an orange cloud icon are accelerated and protected by Cloudflare</li>
+				<li><img class='inline-image' src="<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/proxied_off.png') ?>" /><strong>Grey Cloud:</strong> Records that display a grey cloud icon will bypass Cloudflare, using only Cloudflare DNS</li>
+				<li><div class='inline-image' ></div><span class="cf-unproxied" style="background:none"></span> <strong>No Cloud:</strong> Records that do not display a cloud icon <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/204643758">must bypass Cloudflare</a>, using only Cloudflare DNS.</li>
+			</ul>
+			<p><strong>Note:</strong> Only A, AAAA, and CNAME records with publicly routable IP addresses can have their traffic on Cloudflare.</p>
+		</div>
+	</div>
+</section>

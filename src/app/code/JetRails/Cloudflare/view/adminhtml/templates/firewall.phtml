@@ -1,0 +1,28 @@
+<h1 class="tab-content" >Firewall</h1>
+<h2 class="tab-content" >Manage access by IP, country, or query rules</h2>
+<?php
+
+	echo $block->renderSections ( "firewall", array (
+		"security_level",
+		"challenge_passage"
+	));
+
+?>
+<section class='tabs-wrapper at_least_one' >
+	<div data-tab='ip_firewall' class='active' >IP Firewall</div>
+	<div data-tab='web_application_firewall' >Web Application Firewall</div>
+	<div data-tab-content='ip_firewall' class='active' >
+		<?php
+
+			echo $block->renderSections ( "firewall/ip_firewall", array (
+				"access_rules",
+				"user_agent_blocking",
+				"unmetered_ddos_mitigation"
+			));
+
+		?>
+	</div>
+	<div data-tab-content='web_application_firewall' >
+		<?php echo $block->loadSection ( "core", "coming_soon" ) ?>
+	</div>
+</section>

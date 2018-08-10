@@ -1,0 +1,13 @@
+<h1 class="tab-content" >Caching</h1>
+<h2 class="tab-content" >Manage caching settings for your website</h2>
+<?php
+
+	echo $block->renderSections ( "caching", array (
+		"purge_cache",
+		"caching_level",
+		"browser_cache_expiration",
+		"always_online",
+		"development_mode"
+	));
+
+?>

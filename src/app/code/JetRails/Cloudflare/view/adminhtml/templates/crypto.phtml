@@ -1,0 +1,17 @@
+<h1 class="tab-content" >Crypto</h1>
+<h2 class="tab-content" >Manage cryptography settings for your website</h2>
+<?php
+
+	echo $block->renderSections ( "crypto", array (
+		"ssl",
+		"always_use_https",
+		"http_strict_transport_security",
+		"authenticated_origin_pulls",
+		"opportunistic_encryption",
+		"minimum_tls_version",
+		"tls_13",
+		"automatic_https_rewrites",
+		"disable_universal_ssl"
+	));
+
+?>

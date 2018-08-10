@@ -1,0 +1,33 @@
+{
+	"version": "1.0.0",
+	"name": "magento2-cloudflare",
+	"description": "Interact with popular Cloudflare features though Magento's backend portal",
+	"author": "Rafael Grigorian",
+	"company": "JetRails®",
+	"license": "MIT",
+	"namespace": "JetRails_Cloudflare",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jetrails/magento2-cloudflare.git"
+	},
+	"devDependencies": {
+		"extract-text-webpack-plugin": "^3.0.2",
+		"fs-extra": "^7.0.0",
+		"gulp": "^3.9.1",
+		"gulp-concat": "^2.6.1",
+		"gulp-gzip": "^1.4.2",
+		"gulp-magepack": "^1.0.3",
+		"gulp-minify": "^2.1.0",
+		"gulp-minify-css": "^1.2.4",
+		"gulp-replace": "^1.0.0",
+		"gulp-sass": "^3.2.1",
+		"gulp-tar": "^2.1.0",
+		"gulp-uglify": "^3.0.0",
+		"webpack": "^3.12.0",
+		"webpack-stream": "^4.0.3"
+	},
+	"dependencies": {
+		"jquery": "^3.2.1",
+		"jquery-ui": "^1.12.1"
+	}
+}

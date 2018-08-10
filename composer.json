@@ -1,0 +1,26 @@
+{
+	"name": "jetrails/magento2-cloudflare",
+	"description": "Interact with popular Cloudflare features though Magento's backend portal",
+	"type": "magento2-module",
+	"version": "1.0.0",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Rafael Grigorian",
+			"email": "me@raffi.io"
+		}
+	],
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://composer.magerepo.com/"
+		}
+	],
+	"require": {
+		"magento/magento-composer-installer": "*"
+	},
+	"autoload": {
+		"psr-4": { "JetRails\\Cloudflare\\": "src/app/code/JetRails/Cloudflare" },
+		"files": [ "src/app/code/JetRails/Cloudflare/registration.php" ]
+	}
+}

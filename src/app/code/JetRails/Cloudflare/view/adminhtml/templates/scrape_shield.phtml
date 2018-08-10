@@ -1,0 +1,11 @@
+<h1 class="tab-content" >Scrape Shield</h1>
+<h2 class="tab-content" >Protect content on your site</h2>
+<?php
+
+	echo $block->renderSections ( "scrape_shield", array (
+		"email_address_obfuscation",
+		"server_side_excludes",
+		"hotlink_protection"
+	));
+
+?>

@@ -1,0 +1,30 @@
+<section
+	class="cloudflare speed brotli initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="speed"
+	data-section-name="brotli" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Brotli</span>
+			<p>Speed up page load times for your visitor’s HTTPS traffic by applying Brotli compression.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<p>Cloudflare applies Brotli compression to help speed up page load times for your visitors. Cloudflare will select Brotli compression as the preferred content encoding method if multiple compression methods are supported by the client. If the client does not indicate that Brotli compression is supported, then gzip compression will be applied. <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200168396" >What will Cloudflare compress?</a></p>
+		</div>
+	</div>
+</section>

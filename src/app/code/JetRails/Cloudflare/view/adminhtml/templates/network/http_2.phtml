@@ -1,0 +1,48 @@
+<section
+	class="cloudflare network http_2 initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="network"
+	data-section-name="http_2" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >HTTP/2</span>
+			<p>Accelerate your website with HTTP/2</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What is HTTP/2?</h4>
+			<p><a target="blank" href="https://www.cloudflare.com/website-optimization/http2/what-is-http2/" >HTTP/2</a> is a major revision of the Web’s protocol designed for low-latency transport of content over the World Wide Web.</p>
+			<p>HTTP/2 improves the way HTTP requests and responses are sent allowing for faster page load times.</p>
+			<p>HTTP/2 improves page load times by:</p>
+			<ul>
+				<li>Connection multiplexing: Multiple resources can be retrieved in a single network request. Responses are sent when resources are available (sometimes out of order), to avoid slowing down page rendering.</li>
+				<li>HTTP header compression: HTTP requests are simplified to avoid resending headers, and compression is applied to headers that must be sent.</li>
+				<li>HTTP/2 Server Push: Allows Cloudflare to provide content to clients without waiting for a request. This can improve the time to retrieve a resource by “pushing” the responses it thinks the client will need into its cache.</li>
+			</ul>
+			<p>Keep in mind:</p>
+			<ul>
+				<li>Not all browsers support HTTP/2. These browsers will leverage HTTP 1.x instead</li>
+				<li>HTTP/2 requires a valid SSL certificate and is only available over TLS</li>
+				<li>Connection multiplexing is on a per-domain basis</li>
+				<li>The connection from Cloudflare to your origin will be made over HTTP 1.x</li>
+			</ul>
+			<p><strong>Note</strong>: Rocket Loader can further improve connection multiplexing in HTTP/2 by allowing resources hosted on different domains to be retrieved in a single network request. Without Rocket Loader, if a website has resources that are hosted on a different domain, separate HTTP/2 connections will need to be made for resources on each domain. While HTTP/2 is not supported between the Cloudflare network and the customer origin, Cloudflare Railgun provides similar benefits for connection multiplexing and HTTP header compression on this connection.</p>
+			<p><a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200168126-Who-can-use-HTTP-2-and-SPDY" >Does my site support HTTP/2</a></p>
+			<p><a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200167976-How-can-I-tell-if-HTTP-2-or-SPDY-is-working-for-my-website" >How can I tell HTTP/2 is working on my site.</a></p>
+		</div>
+	</div>
+</section>

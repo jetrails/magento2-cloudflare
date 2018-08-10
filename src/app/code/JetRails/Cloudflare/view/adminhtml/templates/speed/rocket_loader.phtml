@@ -1,0 +1,42 @@
+<section
+	class="cloudflare speed rocket_loader initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="speed"
+	data-section-name="rocket_loader" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Rocket Loader</span>
+			<p>Improve load time for pages that include JavaScript.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" > </div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What does Rocket Loader do?</h4>
+			<p><a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200168056-What-does-Rocket-Loader-do" >Rocket Loader can improve load times</a> for pages that include JavaScript. Your search engine ranking may be improved by reducing page load time.</p>
+			<p>Rocket Loader improves page load times by:</p>
+			<ul>
+				<li>Decreasing the number of network requests by bundling JavaScript files, <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200168016-Will-Rocket-Loader-help-with-the-performance-of-third-party-widgets-ads-and-buttons" >even third party resources</a>, to avoid slowing down page rendering</li>
+				<li>Asynchronously loading scripts, including third party scripts, so that they do not block the content of your page from loading immediately</li>
+				<li>Caching scripts locally (using LocalStorage, available on most browsers and smart phones) so they aren’t refetched unless necessary</li>
+			</ul>
+			<p><em>Rocket Loader is considered <strong>Beta</strong> because it’s an experimental feature that modifies the loading and execution flow of Javascript. While efforts are taken to increase Rocket Loader’s compatibility with third-party Javascripts, not all scripts work with this feature. Issues with Rocket Loader affect only a small percentage of customers.</em></p>
+			</br>
+			<h5>Additional Resources</h5>
+			<a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200168056-What-does-Rocket-Loader-do-">What does Rocket Loader do?</a></br>
+			<a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200169436-How-can-I-have-Rocket-Loader-ignore-my-script-s-in-Automatic-Mode" >How can I have Rocket Loader ignore my script(s) in Automatic Mode?</a>
+		</div>
+	</div>
+</section>

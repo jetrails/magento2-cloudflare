@@ -1,0 +1,82 @@
+.cloudflare_notification {
+	font-family: "Open Sans", sans-serif;
+	font-size: 15px;
+    font-weight: 100;
+	color: $color-white;
+	position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+	z-index: 10000;
+	.notification {
+		position: relative;
+		min-height: 15px;
+		padding: 12px 40px 10px 40px;
+		transition: all 200ms;
+		border-bottom: solid 1px rgba( 0, 0, 0, 0.012 );
+	}
+	.response_success {
+		background: #87B331;
+	}
+	.response_error {
+		background: $color-red;
+	}
+	span.message {
+	    position: unset;
+	    color: #FFF;
+	    width: 100%;
+	    left: 0;
+	    top: 0;
+	    height: 100%;
+	    z-index: 10;
+		line-height: 22px;
+		transition: all 200ms;
+		padding: initial;
+		background: initial;
+		&:before {
+			display: none;
+		}
+	}
+	span.progress {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		left: 0;
+    	top: 0;
+		background: rgba( 255, 255, 255, 0.1 );
+		transition: width 0s linear;
+	}
+	span.close {
+		position: absolute;
+		width: 22px;
+		height: 22px;
+		right: 7px;
+		top: calc( 50% - 11px );
+		cursor: pointer;
+		font-size: 0.8em;
+    	line-height: 2.3em;
+	}
+	.notification.auto_remove {
+		.progress {
+			width: 0%;
+			transition: width 10s linear;
+		}
+	}
+	.cloudflare-icon {
+		font-family: "cloudflare-font";
+	    font-size: 1.3em;
+	    line-height: 1.2em;
+		font-style: normal;
+		font-smoothing: antialiased;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+	.status {
+		left: 4px;
+		top: calc( 50% - ( 1em / 2 ) );
+	    position: absolute;
+	    vertical-align: middle;
+	    padding-left: 7px;
+		color: $color-white;
+	}
+}

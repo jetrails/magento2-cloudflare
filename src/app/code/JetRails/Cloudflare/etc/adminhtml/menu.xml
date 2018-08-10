@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<config
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd" >
+	<menu>
+		<add
+			id="JetRails_Cloudflare::jetrails"
+			title="JetRails"
+			module="JetRails_Cloudflare"
+			resource="JetRails_Cloudflare::jetrails"
+			sortOrder="0"
+		/>
+		<add
+			id="JetRails_Cloudflare::cloudflare"
+			title="Cloudflare"
+			module="JetRails_Cloudflare"
+			parent="JetRails_Cloudflare::jetrails"
+			resource="JetRails_Cloudflare::cloudflare"
+			sortOrder="0"
+		/>
+		<add
+			id="JetRails_Cloudflare::cloudflare_dashboard"
+			title="Cloudflare Dashboard"
+			module="JetRails_Cloudflare"
+			parent="JetRails_Cloudflare::cloudflare"
+			resource="JetRails_Cloudflare::cloudflare"
+			action="cloudflare/dashboard/view"
+			sortOrder="0"
+		/>
+	</menu>
+</config>

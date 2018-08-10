@@ -1,0 +1,7 @@
+version: "2"
+
+syncs:
+    app-sync:
+        src: "./public_html"
+        sync_userid: 1000
+        sync_groupid: 1000

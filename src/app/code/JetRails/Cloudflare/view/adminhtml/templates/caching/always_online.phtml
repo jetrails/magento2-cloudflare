@@ -1,0 +1,39 @@
+<section
+	class="cloudflare caching always_online initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="caching"
+	data-section-name="always_online" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Always Online</span>
+			<p>If your server goes down, Cloudflare will serve your website’s static pages from our cache.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What does Always Online mean?</h4>
+			<p>If your server goes down, Cloudflare will serve your website’s most popular pages from our cache. For more information see <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200168006-How-does-Always-Online-work" >here</a>.</p>
+			<p>Visitors viewing a cached page will receive a message informing them that they are in an offline browsing mode. As soon as your server comes back online, Cloudflare will move users back to regular browsing.</p>
+			<p><strong>Note:</strong> If Cloudflare does not have the requested page in its cache, visitors will receive an error page letting them know the requested page is offline.</p>
+			<h4>What are the limitations of Always Online?</h4>
+			<p>Always Online will only trigger for specific error conditions, namely 500,503 or 4XX series errors. For more information take a look at our KB <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/202238800" >Why is Always Online not Working</a></p>
+			<br>
+			<h5>Additional Resources</h5>
+			<a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200168006-How-does-Always-Online-work" >How does Always Online work?</a>
+			<a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/202238800-Why-is-Always-Online-not-working" >Why is Always Online not working?</a>
+		</div>
+	</div>
+</section>

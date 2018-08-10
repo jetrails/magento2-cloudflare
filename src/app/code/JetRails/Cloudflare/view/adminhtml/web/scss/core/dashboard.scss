@@ -1,0 +1,198 @@
+div.cloudflare-dashboard {
+	position: relative;
+	font-size: 14px;
+	font-family: "Open Sans";
+	display: flex;
+	flex-wrap: wrap;
+	.dashboard-header {
+		width: 100%;
+		height: 85px;
+		display: flex;
+		.logo {
+			display: flex;
+			float: none;
+			margin: 0;
+			height: initial;
+			background: #FFF;
+			width: 221px;
+			min-width: 221px;
+			height: 85px;
+			padding: 20px;
+			box-sizing: border-box;
+			border-bottom: solid 1px $color-border_gray;
+			border-right: solid 1px $color-border_gray;
+			align-items: center;
+			justify-content: center;
+			img {
+				height: 30px;
+				width: 150px;
+			}
+		}
+		.domain_wrapper {
+			background: #FFF;
+			height: 85px;
+			box-sizing: border-box;
+			color: $color-text_gray_dark;
+			font-size: 1.3em;
+			line-height: 45px;
+			box-sizing: border-box;
+			z-index: 2;
+			.selected {
+				padding: 20px 40px 19px 20px;
+				position: relative;
+				cursor: pointer;
+				border-right: solid 1px $color-border_gray;
+				&:after {
+					position: absolute;
+					content: "\F001";
+					font-family: "cloudflare-font";
+					font-size: 25px;
+					right: 8px;
+					height: 45px;
+					line-height: 45px;
+					color: #333;
+				}
+			}
+			.options {
+				border-top: none;
+				background: #FFF;
+				overflow: hidden;
+				max-height: 0px;
+				border-top: none;
+				border-bottom: solid 1px $color-border_gray;
+				border-right: solid 1px $color-border_gray;
+				a {
+					text-decoration: none;
+					color: #333;
+					.option {
+						height: 65px;
+						line-height: 65px;
+						padding: 0 20px;
+						cursor: pointer;
+						background: #FFF;
+						&:hover {
+							background: rgba( 0, 0, 0, 0.05 );
+						}
+						&.active {
+							background: rgba( 0, 0, 0, 0.05 );
+							cursor: default;
+						}
+					}
+				}
+			}
+			&:hover {
+				.selected {
+					&:after {
+						content: "\F003";
+					}
+				}
+				.options {
+					border-top: solid 1px $color-border_gray;
+					max-height: initial;
+				}
+			}
+		}
+		.attribution {
+			box-sizing: border-box;
+			background: #FFF;
+			height: 85px;
+			border-bottom: solid 1px $color-border_gray;
+			width: 100%;
+			img {
+				height: 20px;
+				float: right;
+				margin-right: 30px;
+				margin-top: 32.5px;
+			}
+			p {
+				line-height: 85px;
+				float: right;
+				margin: 0;
+				margin-right: 10px;
+				span {
+					color: red;
+				}
+			}
+		}
+	}
+	.dashboard-main {
+		width: 100%;
+		display: flex;
+		ul.tabs {
+			background: $color-white;
+			width: 220px;
+			border: none;
+			li {
+				height: 65px;
+				display: flex;
+				cursor: pointer;
+				background: #FFF;
+				transition: all 200ms;
+				span:nth-child( 1 ) {
+					font-family: "cloudflare-font", sans-serif;
+					font-style: normal;
+					font-weight: 500;
+					font-smoothing: antialiased;
+					-webkit-font-smoothing: antialiased;
+					-moz-osx-font-smoothing: grayscale;
+					text-rendering: geometricPrecision;
+					margin: 7.5px 20px;
+					padding: 0;
+					height: 50px;
+					width: 50px;
+					background: #2968A2;
+					border-radius: 3px;
+					line-height: 50px;
+					color: #FFF;
+					text-align: center;
+					font-size: 30px;
+				}
+				span:nth-child( 2 ) {
+					background: transparent;
+					line-height: 65px;
+					padding: 0;
+					margin: 0;
+				}
+				&.selected {
+					background: $color-fill_gray_dark;
+					span:nth-child( 1 ) {
+						background: #1F4E78;
+					}
+				}
+			}
+		}
+		.content-wrapper {
+			width: calc( 100% - 220px );
+			box-sizing: border-box;
+			padding: 0 30px 30px 30px;
+			flex-grow: 1;
+			display: flex;
+			background: $color-fill_gray_dark;
+			.content {
+				display: none;
+				width: 100%;
+				&.selected {
+					display: block;
+				}
+			}
+		}
+	}
+	.overlay {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		background: rgba(0,0,0,0.5);
+		color: #FFF;
+		font-size: 30px;
+		z-index: 1000;
+	}
+	&.logged-off {
+		pointer-events: none;
+		.overlay {
+			display: block;
+		}
+	}
+}

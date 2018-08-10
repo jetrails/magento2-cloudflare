@@ -1,0 +1,579 @@
+h1.tab-content {
+	font-family: "Open Sans", Helvetica, Arial, sans-serif;
+	font-weight: 400;
+	color: $color-text_gray_dark;
+	margin-bottom: 0;
+	font-size: 28px;
+	max-width: 960px;
+	margin: 30px auto 0;
+	font-smoothing: antialiased;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+h2.tab-content {
+	font-family: "Open Sans", Helvetica, Arial, sans-serif;
+	font-weight: 100;
+	color: $color-text_gray_light !important;
+	font-size: 22px;
+	max-width: 960px;
+	margin: 0 auto 0;
+	font-smoothing: antialiased;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+section.cloudflare {
+	font-family: "Open Sans", Helvetica, Arial, sans-serif;
+	font-size: 15px;
+	background: #FFF;
+	color: $color-text_gray_dark;
+	margin: 15px auto;
+	border: 1px solid $color-border_gray;
+	border-bottom: 0;
+	border-radius: 2px;
+	box-sizing: border-box;
+	max-width: 960px;
+	display: block;
+	position: relative;
+	transition: all 1s;
+	box-shadow: 0;
+}
+
+section.cloudflare.loading {
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	transform: translateY( -5px );
+}
+
+section.cloudflare {
+	div.lightbox {
+		transition: all 200ms;
+		position: absolute;
+		display: block;
+		visibility: visible;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		background-color: rgba( 0, 0, 0, 0 );
+		background-repeat: no-repeat;
+	    background-position: top right;
+	    background-size: 50px;
+		visibility: hidden;
+		cursor: not-allowed;
+	}
+	&.loading {
+		div.lightbox {
+			background-color: rgba(230, 230, 230, 0.2901960784313726);
+			visibility: visible;
+		}
+	}
+}
+
+section.cloudflare > div.row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+section.cloudflare > div.row > div.wrapper_bottom {
+	width: 100%;
+	box-sizing: border-box;
+	height: 50px;
+	border-top: 1px solid $color-border_gray;
+	padding: 5px;
+	transition: all 200ms;
+	overflow: hidden;
+	text-align: right;
+}
+
+section.cloudflare > div.row > div.wrapper_left,
+section.cloudflare > div.row > div.wrapper_right {
+	position: relative;
+	box-sizing: border-box;
+	padding: 25px 0;
+	&.no_padding_bottom {
+		padding-bottom: 0;
+	}
+}
+
+section.cloudflare > div.row > div.wrapper_left.holds_table {
+	padding-bottom: 0;
+}
+
+section.cloudflare > div.row > div.wrapper_right {
+	padding: 25px;
+}
+
+section.cloudflare > div.row > div.wrapper_right > div {
+	width: 100%;
+	text-align: center;
+}
+
+section.cloudflare > div.row > div.wrapper_left {
+	width: 100%;
+	align-self: baseline;
+}
+
+section.cloudflare > div.row > div.wrapper_right {
+	background: #F0F0F0;
+	width: 600px;
+	border-left: 1px solid $color-border_gray;
+	align-self: stretch;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+section.cloudflare > div.row > div.wrapper_left > span.section_title {
+	font-weight: 400;
+	font-size: 1.4em;
+	padding: 0 25px;
+}
+
+section.cloudflare > div.row > div.wrapper_left > p {
+	margin: 15px 0;
+	line-height: 1.5em;
+	padding: 0 25px;
+}
+
+section.cloudflare, .cloudflare_modal {
+	textarea {
+		box-sizing: border-box;
+		width: 100%;
+		min-height: 100px;
+		resize: vertical;
+		padding: 10px;
+	    font-size: 0.9em;
+	    font-weight: 100;
+		color: $color-text_gray_dark;
+		border: solid 1px $color-border_gray;
+		border-radius: 2px;
+		margin: 5px 0;
+		max-height: 200px;
+		transition: all 200ms;
+		font-family: "Open Sans", sans-serif;
+		font-size: 0.9em;
+		font-weight: 100;
+		&:focus {
+			border: solid 1px $color-blue;
+		}
+	}
+}
+
+section.cloudflare img.load {
+	transition: all 200ms;
+	height: 20px;
+    position: relative;
+    display: inline;
+    float: left;
+}
+
+section.cloudflare p.messages {
+	height: 20px;
+    font-size: 1em;
+    position: relative;
+    display: inline;
+    float: left;
+}
+
+section.cloudflare p.messages > span {
+	width: 100%;
+    display: block;
+	margin-top: 0px;
+	opacity: 1;
+	transition: opacity, margin-top 200s;
+	max-width: 800px;
+	max-height: 20px;
+	overflow: hidden;
+}
+
+section.cloudflare p.messages > span.hidden {
+	display: none;
+	margin-top: -20px;
+	opacity: 0;
+}
+
+section.cloudflare p.messages > span:hidden {
+	margin-top: -15px;
+}
+
+section.cloudflare div.status_pair {
+	padding: 0 25px;
+}
+
+section.cloudflare div.status_pair label {
+	display: inline;
+	float: left;
+	font-weight: bold;
+}
+
+section.cloudflare div.status_pair p {
+	color: #2F7BBF;
+}
+
+section.cloudflare div.status_pair p:before {
+	content: "\00a0\00a0";
+}
+
+
+
+
+section.cloudflare.loading input,
+section.cloudflare.loading textarea,
+section.cloudflare.loading label.switch .slider {
+	cursor: not-allowed;
+}
+
+
+
+
+
+@media screen and (max-width:1100px) {
+
+	section.cloudflare > div.row {
+		flex-direction: column;
+	}
+
+	section.cloudflare > div.row > div.wrapper_right {
+		width: 100%;
+		border-left: 0;
+		border-top: 1px solid $color-border_gray;
+	}
+
+}
+
+section.cloudflare .group_wrapper {
+	width: 100%;
+	margin: 10px auto;
+    max-width: 110px;
+	text-align: left;
+	&.full {
+		max-width: initial;
+	}
+}
+
+section.cloudflare .group_wrapper label {
+	font-weight: 100;
+    font-size: 0.9em;
+	cursor: pointer;
+}
+
+section.cloudflare .group_wrapper + input[type="button"],
+section.cloudflare .group_wrapper + input[type="submit"] {
+	margin-top: 25px;
+}
+
+section.cloudflare {
+	div.row > div {
+		width: 100%;
+		input.search {
+			margin: 20px 10px 0px 10px;
+			padding-left: 30px;
+			width: calc(100% - 20px );
+			background-repeat: no-repeat;
+			background-size: 22px;
+			background-position: 5px center;
+		}
+	}
+}
+
+section.cloudflare, .cloudflare_modal {
+	a {
+		color: $color-blue;
+		text-decoration: none;
+		transition: all 200ms;
+		cursor: pointer;
+	}
+	a:hover {
+		color: $color-orange;
+	}
+	a.active {
+		color: $color-orange;
+	}
+	.dashed {
+		border-bottom: dashed 1px;
+		line-height: 2em;
+		font-weight: 600;
+	}
+}
+
+section.cloudflare {
+	.collapsable {
+		flex-wrap: wrap;
+		.wrapper_bottom {
+			border-bottom: solid 1px $color-border_gray;
+			a {
+				vertical-align: -50%;
+				margin-left: 20px;
+			}
+			a:after {
+				font-family: "cloudflare-font";
+				font-size: 1.5em;
+				content: "\F003";
+				vertical-align: -19%;
+			}
+			a.active:after {
+				font-family: "cloudflare-font";
+				content: "\F001";
+			}
+		}
+		[data-tab-content] {
+			width: 100%;
+			padding: 0 25px;
+			height: 0;
+			overflow: hidden;
+			font-weight: 400;
+			color: #383838;
+			line-height: 1.2em;
+			box-sizing: border-box;
+			h3 {
+				font-size: 1.5em;
+				font-weight: 600;
+				line-height: 1.3;
+			}
+			h4 {
+				font-size: 1.2em;
+				font-weight: 600;
+				line-height: 1.3;
+				margin-bottom: 0;
+			}
+			h5 {
+				font-size: 1em;
+				font-weight: 600;
+				line-height: 1.5;
+				margin-bottom: 0;
+			}
+			p {
+				margin: 0;
+				margin-top: 0.5em;
+				line-height: 1.5em;
+			}
+			p + p, ul + h3, ol + h3, ul + h4, ul + h5, ul + h6, ol + h4, ol + h5, ol + h6, ul + p, ol + p {
+				margin-top: 1.5em;
+			}
+			h1 + p, p + h1, p + h2, p + h3, p + h4, p + h5, p + h6 {
+			    margin-top: 1.25em;
+			}
+			a {
+				color: $color-blue;
+				text-decoration: none;
+				transition: all 200ms;
+				&:hover {
+					color: $color-orange;
+				}
+			}
+			code {
+				color: #bd2527;
+			    margin-left: 0.13333em;
+			    margin-right: 0.13333em;
+			    padding: 0 0.4em;
+			    vertical-align: baseline;
+			    display: inline-block;
+			    vertical-align: middle;
+			}
+			code, pre {
+				background-color: #d9d9d9;
+				border: 1px solid #cdcdcd;
+				font-family: monaco, courier, monospace;
+				border-radius: 2px;
+			}
+			ul, ol {
+				margin-top: 1.5em;
+				list-style-position: outside;
+				margin-left: 3em;
+				list-style-type: disc;
+				line-height: 1.5em;
+			}
+			ol {
+				list-style-type: decimal;
+			}
+			li > ul, h4 + ul, h5 + ul, h6 + ul, li > ol, h4 + ol, h5 + ol, h6 + ol {
+				margin-top: 0;
+			}
+			.inline-image {
+				padding: 0px 6px;
+				vertical-align: -2px;
+				width: 64px;
+    			box-sizing: border-box;
+				display: inline-block;
+				min-height: 30px;
+			}
+		}
+		[data-tab-content].active {
+			padding: 25px;
+			height: auto;
+			overflow: auto;
+		}
+	}
+}
+
+
+section.cloudflare.restricted,
+section.cloudflare.empty {
+	background: none;
+	border: none;
+	.section_title, p {
+		padding: 0 !important;
+	}
+	.cloudflare-font {
+	    vertical-align: -2px;
+	    padding-right: 5px;
+	}
+}
+
+section.cloudflare.restricted {
+	.cloudflare-font {
+	    color: $color-red;
+	}
+}
+
+section.cloudflare.empty {
+	.cloudflare-font {
+	    color: $color-orange;
+	}
+}
+
+
+.dynamic_wrapper {
+	display: flex;
+	padding: 10px 5px;
+	height: 54px;
+	> .grow {
+		flex-grow: 1;
+	}
+	> * {
+		margin: 0 5px !important;
+	}
+	> select, input {
+		width: auto !important;
+	}
+	> div[data-dynamic-wrapper] {
+		flex-grow: 1;
+		display: none;
+		&.active {
+			display: flex;
+		}
+		> * {
+			width: 100% !important;
+			margin: 0 5px !important;
+		}
+		> *:first-child {
+ 			margin-left: 0 !important;
+		}
+		> *:last-child {
+			margin-right: 0 !important;
+		}
+	}
+	&.wrappable {
+		flex-wrap: wrap;
+		height: auto;
+		padding-top: 0;
+		> * {
+			margin-top: 10px !important;
+		}
+	}
+}
+
+
+section.cloudflare {
+	.icon-button {
+		background-color: $color-border_gray;
+	    height: 35px;
+	    width: 35px;
+	    min-width: 35px;
+		margin: auto 7px;
+	    text-align: center;
+	    font-size: 1em;
+	    line-height: 35px;
+	    color: $color-text_gray_dark;
+	    border-radius: 2px;
+	    border-bottom: 1px solid #CCC;
+		transition: all 200ms;
+		cursor: pointer;
+		&:hover {
+			background-color: #CCC;
+			border-color: #BABABA;
+		}
+	}
+	.icon-button + .icon-button {
+		margin-left: 0;
+	}
+}
+
+section.tabs-wrapper {
+	max-width: 960px;
+    margin: auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	> [data-tab] {
+		cursor: pointer;
+		position: relative;
+		width: 50%;
+		background: $color-white;
+		color: $color-blue;
+		box-sizing: border-box;
+		padding: 22.5px;
+		text-align: center;
+		font-size: 1.3em;
+		transition: all 200ms;
+		font-weight: 100;
+		font-smoothing: antialiased;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		margin-bottom: 40px;
+		&:before {
+			content: "";
+			position: absolute;
+			left: calc(50% - 15px);
+			bottom: 0px;
+			width: 0;
+			height: 0;
+			border-left: 15px solid transparent;
+			border-right: 15px solid transparent;
+			border-top: 15px solid $color-white;
+			transition: all 200ms;
+		}
+		&.active {
+			color: $color-white;
+			background: $color-blue;
+			&:before {
+				bottom: -15px;
+				border-top: 15px solid $color-blue;
+			}
+		}
+	}
+	> [data-tab-content] {
+		width: 100%;
+		display: none;
+		&.active {
+			display: block;
+		}
+	}
+}
+
+p[class^="option_"] {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    color: #7d7d7d;
+}
+
+
+section.cloudflare {
+	[data-tab-content="advanced"] {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		> *:nth-child( n + 3 ) {
+		    margin-top: 20px;
+		}
+		.wrapper_left {
+			width: 70%;
+		}
+		.wrapper_right {
+			width: 30%;
+			text-align: center;
+		}
+	}
+}

@@ -1,0 +1,44 @@
+.pagination_container {
+	display: inline-flex;
+	float: left;
+	align-items: center;
+	font-size: 1em;
+	height: 100%;
+	span {
+		color: #DBDBDB;
+		padding: 0 5px;
+		box-sizing: border-box;
+		transition: all 200ms;
+		&.next, &.previous {
+			font-family: "cloudflare-font";
+			cursor: pointer;
+			font-size: 1.2em;
+			color: $color-blue;
+			&:hover {
+				color: $color-orange;
+			}
+			&.disabled {
+				color: #A1A1A1;
+				&:hover {
+					color: #A1A1A1;
+				}
+			}
+		}
+		&.page {
+			color: $color-blue;
+			cursor: pointer;
+			&:not(.current):hover {
+				color: $color-orange;
+			}
+		}
+		&.current {
+			color: #A1A1A1;
+			font-weight: 600;
+		}
+		&.showing {
+			color: #818181;
+			font-size: 0.8em;
+			margin-top: 2px;
+		}
+	}
+}

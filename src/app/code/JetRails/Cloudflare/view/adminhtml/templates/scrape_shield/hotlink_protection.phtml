@@ -1,0 +1,48 @@
+<section
+	class="cloudflare scrape_shield hotlink_protection initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="scrape_shield"
+	data-section-name="hotlink_protection" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Hotlink Protection</span>
+			<p>Protect your images from off-site linking.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What does Hotlink Protection do?</h4>
+			<p>Hotlink Protection prevents your images from being used by other sites. This can reduce the bandwidth consumed by your origin server.</p>
+			<p>When Cloudflare receives an image request for your site, we check to ensure the request did not originate from visitors on another site. Visitors to your domain will still be able to download and view images.</p>
+			<p>Hotlink protection has no impact on crawling, but it will prevent the images from being displayed on sites such as Google images, Pinterest, etc.</p>
+			<p>Supported file extensions: gif, ico, jpg, jpeg, and png.</p>
+			<p><strong>Note:</strong> Hotlink Protection will deny access to requests when the HTTP referer does not include your website domain name (and is not blank).</p>
+			<h4>Can I allow hotlinking to specific images?</h4>
+			<p>You can allow certain images to be hotlinked by placing them in a directory named hotlink-ok. The hotlink-ok directory can be placed anywhere on your website.</p>
+			<p><strong>Example:</strong> To allow example.com to use logo.png from %{name}, put logo.png in a new folder called hotlink-ok on %{name}. Any images in the hotlink-ok folder will not be checked for hotlinking.</p>
+			<p>Some examples of URLs that will not be checked for hotlinking:</p>
+			<ul>
+				<li><code>http://%{name}/hotlink-ok/pic.jpg</code></li>
+				<li><code>http://%{name}/images/hotlink-ok/pic.jpg</code></li>
+				<li><code>http://%{name}/hotlink-ok/images/pic.jpg</code></li>
+				<li><code>http://%{name}/images/main-site/hotlink-ok/pic.jpg</code></li>
+			</ul>
+			<br>
+			<h5>Additional Resources</h5>
+			<a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200170026-What-does-enabling-Cloudflare-Hotlink-Protection-do" >What does enabling Cloudflare Hotlink Protection do?</a>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,13 @@
+<h1 class="tab-content" >Network</h1>
+<h2 class="tab-content" >Manage network settings for your website</h2>
+<?php
+
+	echo $block->renderSections ( "network", array (
+		"http_2",
+		"ipv6_compatibility",
+		"websockets",
+		"pseudo_ipv4",
+		"ip_geolocation"
+	));
+
+?>

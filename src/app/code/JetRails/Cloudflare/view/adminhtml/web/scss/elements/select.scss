@@ -1,0 +1,27 @@
+section.cloudflare, .cloudflare_modal {
+	font-smoothing: antialiased;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	select {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		font-size: 1em;
+		width: 100%;
+		color: $color-text_gray_dark;
+		border: solid 1px #BCBCBC;
+		border-radius: 2px;
+		height: 34px;
+		padding: 5px 35px 5px 15px;
+		margin: 5px auto;
+		background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMiIgaGVpZ2h0PSIzNSI+PHBhdGggZmlsbD0iI0JDQkNCQyIgZD0iTTE0LjcgMTUuNUg4LjNsMy4yLTMuMiAzLjIgMy4yem0wIDMuOGwtMy4yIDMuMi0zLjItMy4yaDYuNHpNMCAwaDF2MzVIMFYweiIvPjwvc3ZnPgo=");
+		background-position: center right;
+		background-repeat: no-repeat;
+		background-size: 22px 100%;
+		cursor: pointer;
+		transition: all 200ms;
+		&:hover {
+			border: 1px solid #A3A3A3;
+		}
+	}
+}

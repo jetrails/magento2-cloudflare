@@ -1,0 +1,182 @@
+section.cloudflare {
+	table {
+		border-collapse: initial;
+		// table-layout: fixed;
+		width: 100%;
+		tr {
+			transition: background 500ms;
+			background: #FAFAFA;
+			&:nth-child(even) {
+				background: $color-white;
+			}
+			&:hover {
+				background: #F0F0F0;
+			}
+			th {
+				font-family: "Open Sans";
+				text-align: left;
+				vertical-align: middle;
+				background: $color-border_gray;
+				padding: 13px 10px;
+				padding-left: 14px;
+				color: $color-text_gray_dark;
+				font-weight: 600;
+				&.sort-asc:after {
+					font-family: "cloudflare-font";
+					content: "\F000";
+					margin-left: 5px;
+				}
+				&.sort-desc:after {
+					font-family: "cloudflare-font";
+					content: "\F001";
+					margin-left: 5px;
+				}
+			}
+			td {
+				position: relative;
+				font-family: "Open Sans";
+				text-align: left;
+				vertical-align: middle;
+				padding: 13px 10px;
+				box-sizing: border-box;
+				overflow: hidden;
+				color: $color-text_gray_dark;
+				font-weight: 100;
+				border-bottom: solid 1px $color-border_gray;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				&.type_cfns { border-left: solid 2px $color-blue; color: $color-text_gray_dark; }
+				&.type_a { border-left: solid 2px $color-text_gray_dark; color: $color-text_gray_dark; }
+				&.type_ptr { border-left: solid 2px $color-text_gray_dark; color: $color-text_gray_dark; }
+				&.type_aaaa { border-left: solid 2px $color-text_gray_light; color: $color-text_gray_light; }
+				&.type_cname { border-left: solid 2px #FF7900; color: #FF7900; }
+				&.type_mx { border-left: solid 2px #D91698; color: #D91698; }
+				&.type_loc { border-left: solid 2px #62A1D8; color: #62A1D8; }
+				&.type_srv { border-left: solid 2px #BD2527; color: #BD2527; }
+				&.type_spf { border-left: solid 2px $color-text_gray_dark; color: $color-text_gray_dark; }
+				&.type_txt { border-left: solid 2px $color-green; color: $color-green; }
+				&.type_ns { border-left: solid 2px #9545E5; color: #9545E5; }
+				&.type_caa { border-left: solid 2px #BD2527; color: #BD2527; }
+				&.value {
+					padding: 10px 40px 10px 10px;
+				}
+				.delete_entry {
+					background: $color-border_gray;
+					border-radius: 2px;
+					border-bottom: solid 1px #BABABA;
+					height: 30px;
+					width: 30px;
+					cursor: pointer;
+					transition: all 200ms;
+					text-align: center;
+					font-size: 1em;
+					padding-top: 7px;
+					box-sizing: border-box;
+					&:hover {
+						background: #CCC;
+					}
+				}
+				.priority {
+					position: absolute;
+					right: 0;
+					top: calc( 50% - 0.4em - 6px );
+					font-size: 0.8em;
+					border-radius: 0.7em;
+					line-height: 1.5em;
+					border: solid 1px #777;
+					background: none;
+					padding: 2px 5px;
+					color: #777;
+				}
+				&.no_white_space {
+					white-space: normal;
+					line-height: 1.6em;
+					width: 100%;
+					span {
+						display: block;
+						color: $color-text_gray_light;
+						line-height: 1.4em;
+					}
+				}
+				&.handle {
+					font-family: "cloudflare-font";
+					word-break: unset;
+					white-space: normal;
+					line-height: 0.6;
+					font-size: 1.1em;
+					cursor: ns-resize;
+					padding-top: 17px;
+					max-width: 25px;
+					text-align: center;
+				}
+				span {
+					display: block;
+					color: #838383;
+					font-size: 0.9em;
+					line-height: 1.7em;
+				}
+			}
+			th[data-target="sort"]:hover {
+				background: #CECECE;
+				transition: all 200ms;
+				cursor: pointer;
+			}
+		}
+		&.rules {
+			td:nth-child( 2 ) {
+				min-width: 150px;
+			}
+			td:nth-child( 5 ) {
+				padding: 0;
+			}
+		}
+		&.dns_records {
+			tr {
+				td  {
+					&[colspan] {
+						padding-top: 13px;
+						padding-bottom: 13px;
+					}
+					padding-top: 0px;
+					padding-bottom: 0px;
+					.editable {
+						margin: 4px 0;
+						padding: 14px 5px;
+						background-color: transparent;
+						border-style: none;
+						transition: none;
+						font-size: 1em;
+						border-width: 1px;
+						border-spacing: 1px;
+						overflow: hidden;
+						&:before {
+							color: $color-text_gray_light;
+						}
+						&.type_a:before { content: "points to " }
+						&.type_aaaa:before { content: "points to " }
+						&.type_cname:before { content: "is an alias of " }
+						&.type_mx:before { content: "mail handled by " }
+						&.type_ns:before { content: "managed by " }
+						&.type_ptr:before { content: "points to " }
+						&:hover {
+							border-color: #BCBCBC;
+							border-style: dashed;
+							padding: 13px 4px;
+						}
+						&:focus {
+							border-color: #BCBCBC;
+							border-style: solid;
+							padding: 13px 4px;
+							&:before {
+								content: "";
+							}
+						}
+					}
+					&.status {
+						cursor: pointer;
+					}
+				}
+			}
+		}
+	}
+}

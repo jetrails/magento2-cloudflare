@@ -1,0 +1,9 @@
+.DS_Store
+/.docker-sync/
+/node_modules/
+/build/
+/dist/
+/public_html/
+/Gemfile.lock
+/_*/
+/.sass-cache/

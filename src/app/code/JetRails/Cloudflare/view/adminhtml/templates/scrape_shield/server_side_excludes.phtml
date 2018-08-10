@@ -1,0 +1,44 @@
+<section
+	class="cloudflare scrape_shield server_side_excludes initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="scrape_shield"
+	data-section-name="server_side_excludes" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Server-side Excludes</span>
+			<p>Automatically hide specific content from suspicious visitors.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>How can I hide content using Server-side Excludes?</h4>
+			<p>Place the content you want to hide from suspicious visitors inside the following conditional comment:</p>
+			<ul>
+				<li><code>&lt;!--sse--&gt; &lt;!--/sse--&gt;</code></li>
+			</ul>
+			<p><strong>Example:</strong></p>
+			<ul>
+				<li><code>&lt;!--sse--&gt;Suspicious visitors won't see this!&lt;!--/sse--&gt;</code></li>
+			</ul>
+			<h4>How do I know if Server-side Excludes are working?</h4>
+			<p>You may not see conditional comments in your content when served by Cloudflare. Certain Cloudflare features like HTML minification will remove the conditional comments. This indicates that Server-side Excludes are functioning properly. You will always be able to see your conditional comments in the HTML source on your origin.</p>
+			<p><strong>Note:</strong> Server-side Excludes are only applied to content with a MIME type of <code>text/html</code> or <code>application/xhtml+xml</code>.</p>
+			<br>
+			<h5>Additional Resources</h5>
+			<a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200170036-What-does-Server-Side-Excludes-SSE-do" >What does Server Side Excludes (SSE) do?</a>
+		</div>
+	</div>
+</section>

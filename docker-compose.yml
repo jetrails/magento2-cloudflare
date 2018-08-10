@@ -1,0 +1,105 @@
+version: "2"
+
+volumes:
+    database:
+    app-sync:
+        external: true
+networks:
+    default:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: "192.168.7.0/28"
+services:
+    php-fpm:
+        image: jetrails/magento-alpine:php-fpm-7.1
+        restart: unless-stopped
+        volumes:
+            - app-sync:/var/www/html:rw
+        networks:
+            default:
+                aliases:
+                    - php-fpm.docker.internal
+        environment:
+            - VERBOSE=true
+        links:
+            - mysql
+            - redis
+    php-cli:
+        image: jetrails/magento-alpine:php-cli-7.1
+        volumes:
+            - app-sync:/var/www/html:rw
+        networks:
+            default:
+                aliases:
+                    - php-cli.docker.internal
+        links:
+            - mysql
+            - redis
+    php-cron:
+        image: jetrails/magento-alpine:php-cron-7.1
+        restart: unless-stopped
+        volumes:
+            - app-sync:/var/www/html:rw
+        networks:
+            default:
+                aliases:
+                    - php-cron.docker.internal
+        environment:
+            - VERBOSE=false
+        links:
+            - mysql
+            - redis
+    nginx:
+        image: jetrails/magento-alpine:nginx
+        restart: unless-stopped
+        volumes:
+            - app-sync:/var/www/html:rw
+        networks:
+            default:
+                aliases:
+                    - nginx.docker.internal
+        environment:
+            - VERBOSE=true
+        links:
+            - php-fpm
+        ports:
+            - "443:443"
+    mysql:
+        image: jetrails/magento-alpine:mysql
+        restart: unless-stopped
+        volumes:
+            - database:/var/lib/mysql
+        networks:
+            default:
+                aliases:
+                    - localhost
+                    - mysql.docker.internal
+        environment:
+            - VERBOSE=false
+            - MYSQL_ROOT_PASSWORD=magento
+            - MYSQL_USER_NAME=magento
+            - MYSQL_USER_PASSWORD=magento
+            - MYSQL_DATABASE=magento
+    varnish:
+        image: jetrails/magento-alpine:varnish
+        restart: unless-stopped
+        environment:
+            - VERBOSE=false
+        networks:
+            default:
+                aliases:
+                    - varnish.docker.internal
+        links:
+            - nginx
+        ports:
+            - "80:80"
+    redis:
+        image: jetrails/magento-alpine:redis
+        restart: unless-stopped
+        networks:
+            default:
+                aliases:
+                    - redis.docker.internal
+        environment:
+            - VERBOSE=false

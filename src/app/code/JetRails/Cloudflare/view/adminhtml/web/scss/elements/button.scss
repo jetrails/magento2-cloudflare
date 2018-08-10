@@ -1,0 +1,40 @@
+section.cloudflare, .cloudflare_modal {
+	input[type="button"],
+	input[type="submit"] {
+		box-sizing: border-box;
+		padding: 7px 15px;
+		color: #FFF;
+		background: $color-blue;
+		border-radius: 2px;
+		border: 0;
+		font-size: 1em;
+		margin: 5px 0;
+		transition: all 200ms;
+		cursor: pointer;
+		font-weight: 600;
+		letter-spacing: -0.04em;
+		border-bottom: solid 1px rgba( 0, 0, 0, 0.2 );
+		&.full {
+			width: 100%;
+		}
+		&:hover {
+			background: #215685;
+			&.gray {
+				background: #CCC;
+			}
+			&.red {
+				background: #9E2022;
+			}
+		}
+		&.red {
+			background: #BD2527;
+		}
+		&.gray {
+			background: $color-border_gray;
+			color: $color-text_gray_dark;
+		}
+		&:focus {
+			box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.5);
+		}
+	}
+}

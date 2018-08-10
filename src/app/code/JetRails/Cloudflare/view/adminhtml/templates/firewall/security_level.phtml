@@ -1,0 +1,50 @@
+<section
+	class="cloudflare firewall security_level initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="firewall"
+	data-section-name="security_level" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Security Level</span>
+			<p>Adjust your website’s Security Level to determine which visitors will receive a challenge page.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<select class="trigger-select" name="value" data-target="update" >
+					<option value="off" >Off</option>
+					<option value="essentially_off" >Esentially Off</option>
+					<option value="low" >Low</option>
+					<option value="medium" >Medium</option>
+					<option value="high" >High</option>
+					<option value="under_attack" >I'm Under Attack!</option>
+				</select>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What Security Level should I select?</h4>
+			<p>The Security Level you choose will determine which visitors will be presented with a challenge page. We recommend starting out at Medium.</p>
+			<ul>
+				<li><strong>Essentially off:</strong> Challenges only the most grievous offenders</li>
+				<li><strong>Low:</strong> Challenges only the most threatening visitors</li>
+				<li><strong>Medium:</strong> Challenges both moderate threat visitors and the most threatening visitors</li>
+				<li><strong>High:</strong> Challenges all visitors that have exhibited threatening behavior within the last 14 days</li>
+				<li><strong>I’m Under Attack!:</strong>  Should only be used if your website is under a DDoS attack
+					<ul>
+						<li>Visitors will receive an interstitial page while we analyze their traffic and behavior to make sure they are a legitimate human visitor trying to access your website</li>
+					</ul>
+				</li>
+			</ul>
+			<p><strong>Note:</strong> I’m Under Attack! may affect some actions on your domain. For example, it may block access to your API. You can set a custom security level for any part of your domain using Page Rules.</p>
+			<br><br>
+			<h5>Additional Resources</h5>
+			<a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200170056-What-does-Cloudflare-s-Security-Level-mean" >What does Cloudflare's Security Level mean?</a>
+		</div>
+	</div>
+</section>

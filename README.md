@@ -11,7 +11,7 @@
 </p>
 
 ## Documentation
-The user guide can be found in the [docs](docs) folder.  The user guide goes through the installation process as well as explains all the features that comes with this plugin. For furthur support, please email [development@jetrails.com](mailto://development@jetrails.com).
+The user guide can be found [here](https://jetrails.github.io/magento2-cloudflare).  The user guide goes through the installation process as well as explains all the features that comes with this extension. For further support, please email [development@jetrails.com](mailto://development@jetrails.com).
 
 ## Build System
 This extension uses __Gulp__ as it's build system.  Gulp is a package that can be easily downloaded using __NPM__ or __Yarn__.  Once this repository is cloned, run `npm install gulp -g` followed by `npm install` or `yarn install` to install Gulp and all Gulp modules used within this build system.  Please refer to the following table for a description of some useful Gulp commands. A typical Gulp command takes the following form: `gulp <command>`.

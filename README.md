@@ -1,5 +1,5 @@
 # Magento 2 — Cloudflare
-> Interact with popular Cloudflare features though Magento's backend portal
+> Interact with popular Cloudflare features though Magento's backend portal.
 
 ![](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)
 ![](https://img.shields.io/badge/Version-1.0.0-orange.svg?style=for-the-badge)
@@ -7,11 +7,11 @@
 ![](https://img.shields.io/badge/Magento-2-orange.svg?style=for-the-badge)
 
 <p align="center" >
-	<img src="https://jetrails.github.io/magento2-cloudflare/assets/images/static/screenshot.png" width="100%" />
+	<img src="docs/images/preview.png" width="100%" />
 </p>
 
 ## Documentation
-The user guide can be found [here](https://jetrails.github.io/magento2-cloudflare).  The user guide goes through the installation process as well as explains all the features that comes with this extension. For further support, please email [development@jetrails.com](mailto://development@jetrails.com).
+The user guide can be found [here](https://learn.jetrails.com/article/magento-2-cloudflare-extension).  The user guide goes through the installation process as well as explains all the features that comes with this extension. For further support, please email [development@jetrails.com](mailto://development@jetrails.com).
 
 ## Build System
 This extension uses __Gulp__ as it's build system.  Gulp is a package that can be easily downloaded using __NPM__ or __Yarn__.  Once this repository is cloned, run `npm install gulp -g` followed by `npm install` or `yarn install` to install Gulp and all Gulp modules used within this build system.  Please refer to the following table for a description of some useful Gulp commands. A typical Gulp command takes the following form: `gulp <command>`.

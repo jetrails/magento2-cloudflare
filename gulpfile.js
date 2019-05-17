@@ -108,7 +108,6 @@ gulp.task ( "watch", ["deploy"], () => {
 
 gulp.task ( "package", [ "clean", "bump", "build" ], ( callback ) => {
 	let options = {
-		"template": "conf/package.xml",
 		"version": PACKAGE_VERSION
 	}
 	gulp.src (`${BUILD_DIR}/**/*`)

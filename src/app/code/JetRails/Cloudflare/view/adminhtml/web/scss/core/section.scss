@@ -464,6 +464,13 @@ section.cloudflare.empty {
 		> *:last-child {
 			margin-right: 0 !important;
 		}
+		> label.text {
+			max-width: 50px;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			height: 35px;
+		}
 	}
 	&.wrappable {
 		flex-wrap: wrap;

@@ -1,0 +1,36 @@
+<section
+	class="cloudflare network true_client_ip_header initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="network"
+	data-section-name="true_client_ip_header" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >True-Client-IP Header</span>
+			<p>Cloudflare will send the end user’s IP address in the True-Client-IP header.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What is True-Client-IP?</h4>
+			<p>If True-Client-IP is enabled, Cloudflare will add a <code>True-Client-IP</code> header in the request sent to the origin with the IP address of the end user.</p>
+			<p>By default, Cloudflare sends back packets with a Cloudflare IP address. True-Client-IP is a solution that allows Cloudflare users to see the end user’s IP address, even when the traffic to the origin is sent directly from Cloudflare.</p>
+			<p>This feature supplements our current <code>CF-Connecting-IP</code> and <code>X-Forwarded-For</code> headers.</p>
+			<p>For all plans, Cloudflare always sends the original visitor IP using the <code>CF-Connecting-IP</code> and <code>X-Forwarded-For</code> headers. This feature adds a third header, <code>True-Client-IP</code>, for compatibility with another vendor.</p>
+			<p><a href="https://support.cloudflare.com/hc/en-us/articles/200170986-How-does-Cloudflare-handle-HTTP-Request-headers" >How does Cloudflare handle HTTP request headers?</a></p>
+			<p><a href="https://support.cloudflare.com/hc/en-us/articles/200170786-Why-do-my-server-logs-show-Cloudflare-s-IPs-using-Cloudflare" >Why am I seeing Cloudflare IPs in my webserver logs?.</a></p>
+		</div>
+	</div>
+</section>

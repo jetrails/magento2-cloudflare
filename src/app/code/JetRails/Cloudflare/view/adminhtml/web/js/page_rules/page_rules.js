@@ -15,24 +15,41 @@ function valueToLabel ( value ) {
 	let lookup = {
 		"pick_a_setting": "Pick a Setting",
 		"always_online": "Always Online",
+		"minify": "Auto Minify",
 		"browser_cache_ttl": "Browser Cache TTL",
 		"browser_check": "Browser Integrity Check",
+		"bypass_cache_on_cookie": "Bypass Cache on Cookie",
+		"cache_by_device_type": "Cache By Device Type",
 		"cache_deception_armor": "Cache Deception Armor",
 		"cache_level": "Cache Level",
+		"cache_on_cookie": "Cache on Cookie",
 		"disable_apps": "Disable Apps",
 		"disable_performance": "Disable Performance",
 		"disable_security": "Disable Security",
 		"edge_cache_ttl": "Edge Cache TTL",
 		"email_obfuscation": "Email Obfuscation",
-		"forwarding_url": "Forward URL",
+		"forwarding_url": "Forwarding URL",
+		"host_header_override": "Host Header Override",
 		"ip_geolocation": "IP Geolocation Header",
+		"mirage": "Mirage",
 		"explicit_cache_control": "Origin Cache Control",
+		"origin_error_page_pass_thru": "Origin Error Page Pass-thru",
+		"polish": "Polish",
+		"sort_query_string_for_cache": "Query String Sort",
+		"resolve_override": "Resolve Override",
+		"respect_strong_etag": "Respect Strong ETags",
+		"response_buffering": "Response Buffering",
 		"rocket_loader": "Rocket Loader",
 		"security_level": "Security Level",
 		"server_side_exclude": "Server Side Excludes",
 		"ssl": "SSL",
+		"true_client_ip_header": "True Client IP Header",
+		"waf": "Web Application Firewall",
 		"status_code": "Status Code",
-		"url": "Url"
+		"url": "Url",
+		"html": "HTML",
+		"js": "JS",
+		"css": "CSS"
 	}
 	if ( value in lookup ) {
 		return lookup [ value ]
@@ -45,26 +62,49 @@ function createRow ( previousExists = false, values = [] ) {
 	var row = $("<div class='dynamic_wrapper collection' >")
 		.append ( modal.createSelect ( "setting", [
 			{ label: "Pick a Setting", value: "pick_a_setting", disabled: true, selected: true },
-			{ label: "Always Online", value: "always_online" },
-			{ label: "Browser Cache TTL", value: "browser_cache_ttl" },
-			{ label: "Browser Integrity Check", value: "browser_check" },
-			{ label: "Cache Deception Armor", value: "cache_deception_armor" },
-			{ label: "Cache Level", value: "cache_level" },
-			{ label: "Disable Apps", value: "disable_apps" },
-			{ label: "Disable Performance", value: "disable_performance" },
-			{ label: "Disable Security", value: "disable_security" },
-			{ label: "Edge Cache TTL", value: "edge_cache_ttl" },
-			{ label: "Email Obfuscation", value: "email_obfuscation" },
-			{ label: "Forward URL", value: "forwarding_url", disabled: previousExists },
-			{ label: "IP Geolocation Header", value: "ip_geolocation" },
-			{ label: "Origin Cache Control", value: "explicit_cache_control" },
-			{ label: "Rocket Loader", value: "rocket_loader" },
-			{ label: "Security Level", value: "security_level" },
-			{ label: "Server Side Excludes", value: "server_side_exclude" },
-			{ label: "SSL", value: "ssl" },
+			{ label: valueToLabel ("always_online"), value: "always_online" },
+			{ label: valueToLabel ("minify"), value: "minify" },
+			{ label: valueToLabel ("browser_cache_ttl"), value: "browser_cache_ttl" },
+			{ label: valueToLabel ("browser_check"), value: "browser_check" },
+			{ label: valueToLabel ("bypass_cache_on_cookie"), value: "bypass_cache_on_cookie" },
+			{ label: valueToLabel ("cache_by_device_type"), value: "cache_by_device_type" },
+			{ label: valueToLabel ("cache_deception_armor"), value: "cache_deception_armor" },
+			{ label: valueToLabel ("cache_level"), value: "cache_level" },
+			{ label: valueToLabel ("cache_on_cookie"), value: "cache_on_cookie" },
+			{ label: valueToLabel ("disable_apps"), value: "disable_apps" },
+			{ label: valueToLabel ("disable_performance"), value: "disable_performance" },
+			{ label: valueToLabel ("disable_security"), value: "disable_security" },
+			{ label: valueToLabel ("edge_cache_ttl"), value: "edge_cache_ttl" },
+			{ label: valueToLabel ("email_obfuscation"), value: "email_obfuscation" },
+			{ label: valueToLabel ("forwarding_url"), value: "forwarding_url", disabled: previousExists },
+			{ label: valueToLabel ("host_header_override"), value: "host_header_override" },
+			{ label: valueToLabel ("ip_geolocation"), value: "ip_geolocation" },
+			{ label: valueToLabel ("mirage"), value: "mirage" },
+			{ label: valueToLabel ("explicit_cache_control"), value: "explicit_cache_control" },
+			{ label: valueToLabel ("origin_error_page_pass_thru"), value: "origin_error_page_pass_thru" },
+			{ label: valueToLabel ("polish"), value: "polish" },
+			{ label: valueToLabel ("sort_query_string_for_cache"), value: "sort_query_string_for_cache" },
+			{ label: valueToLabel ("resolve_override"), value: "resolve_override" },
+			{ label: valueToLabel ("respect_strong_etag"), value: "respect_strong_etag" },
+			{ label: valueToLabel ("response_buffering"), value: "response_buffering" },
+			{ label: valueToLabel ("rocket_loader"), value: "rocket_loader" },
+			{ label: valueToLabel ("security_level"), value: "security_level" },
+			{ label: valueToLabel ("server_side_exclude"), value: "server_side_exclude" },
+			{ label: valueToLabel ("ssl"), value: "ssl" },
+			{ label: valueToLabel ("true_client_ip_header"), value: "true_client_ip_header" },
+			{ label: valueToLabel ("waf"), value: "waf" },
 		]).addClass ("dynamic-trigger").val ( values.length > 0 ? values [ 0 ] : "pick_a_setting" ) )
 		.append (
 			$(`<div data-dynamic-wrapper="always_online" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="minify" >`)
+				.append (`<label class="text" >HTML</label>`)
+				.append ( modal.createSwitch ("html") )
+				.append (`<label class="text" >CSS</label>`)
+				.append ( modal.createSwitch ("css") )
+				.append (`<label class="text" >JS</label>`)
+				.append ( modal.createSwitch ("js") )
 		)
 		.append (
 			$(`<div data-dynamic-wrapper="browser_cache_ttl" >`).html ( modal.createSelect ( "value", [
@@ -97,6 +137,12 @@ function createRow ( previousExists = false, values = [] ) {
 			$(`<div data-dynamic-wrapper="browser_check" >`).append ( modal.createSwitch ("value") )
 		)
 		.append (
+			$(`<div data-dynamic-wrapper="bypass_cache_on_cookie" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="cache_by_device_type" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
 			$(`<div data-dynamic-wrapper="cache_deception_armor" >`).append ( modal.createSwitch ("value") )
 		)
 		.append (
@@ -108,6 +154,9 @@ function createRow ( previousExists = false, values = [] ) {
 				{ label: "Standard", value: "aggressive" },
 				{ label: "Cache Everything", value: "cache_everything" }
 			]))
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="cache_on_cookie" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
 		)
 		.append (
 			$(`<div data-dynamic-wrapper="disable_apps" >`).html ("<p>Apps are disabled</p>")
@@ -153,10 +202,41 @@ function createRow ( previousExists = false, values = [] ) {
 				.append ( modal.createInput ( "text", "url", "Enter destination URL" ) )
 		)
 		.append (
+			$(`<div data-dynamic-wrapper="host_header_override" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
 			$(`<div data-dynamic-wrapper="ip_geolocation" >`).append ( modal.createSwitch ("value") )
 		)
 		.append (
+			$(`<div data-dynamic-wrapper="mirage" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
 			$(`<div data-dynamic-wrapper="explicit_cache_control" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="origin_error_page_pass_thru" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="polish" >`).append (
+				modal.createSelect ( "value", [
+					{ label: "Select Value", value: "", disabled: true, selected: true },
+					{ label: "Off", value: "off" },
+					{ label: "Lossless", value: "lossless" },
+					{ label: "Lossy", value: "lossy" }
+				])
+			)
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="sort_query_string_for_cache" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="resolve_override" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="respect_strong_etag" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="response_buffering" >`).append ( modal.createSwitch ("value") )
 		)
 		.append (
 			$(`<div data-dynamic-wrapper="rocket_loader" >`).append (
@@ -185,6 +265,12 @@ function createRow ( previousExists = false, values = [] ) {
 				{ label: "Strict", value: "strict" }
 			]))
 		)
+		.append (
+			$(`<div data-dynamic-wrapper="true_client_ip_header" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			$(`<div data-dynamic-wrapper="waf" >`).append ( modal.createSwitch ("value") )
+		)
 		.append ( close.click ( () => { $(close).parent ().remove () } ) )
 	if ( values.length > 0 ) {
 		$(row).find (`[data-dynamic-wrapper="${values[0]}"]`).addClass ("active")
@@ -194,6 +280,14 @@ function createRow ( previousExists = false, values = [] ) {
 			if ( values [0] == "forwarding_url" ) {
 				$(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='status_code']").val ( values [ 1 ] )
 				$(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='url']").val ( values [ 2 ] )
+			}
+			else if ( values [0] == "minify" ) {
+				$(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='html']")
+					.prop ( "checked", values [ 1 ].html == "on" )
+				$(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='css']")
+					.prop ( "checked", values [ 1 ].css == "on" )
+				$(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='js']")
+					.prop ( "checked", values [ 1 ].js == "on" )
 			}
 			else if ( ( value == "on" || value == "off" ) && values[0] != "ssl" && values[0] != "rocket_loader" ) {
 				$(target).prop ( "checked", value == "on" )
@@ -291,10 +385,10 @@ $(document).on ( "cloudflare.page_rules.page_rules.initialize", function ( event
 		$(table).find ("tbody").sortable ({
 			handle: ".handle",
 			helper: ( e, ui ) => {
-			    ui.children ().each ( () => {
-			        $(this).width ( $(this).width () )
-			    })
-			    return ui
+				ui.children ().each ( () => {
+					$(this).width ( $(this).width () )
+				})
+				return ui
 			},
 			stop: ( e, ui ) => {
 				ui.item.parent ().find ("tr").each ( ( i, e ) => {
@@ -321,7 +415,7 @@ $(document).on ( "cloudflare.page_rules.page_rules.initialize", function ( event
 						notification.showMessages ( response )
 					}
 				})
-		    }
+			}
 		})
 	}
 	else {
@@ -412,6 +506,11 @@ $(document).on ( "cloudflare.page_rules.page_rules.edit", function ( event, data
 				if ( id == "forwarding_url" ) value = {
 					url: $(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='url']").eq ( 0 ).val (),
 					status_code: $(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='status_code']").eq ( 0 ).val ()
+				}
+				if ( id == "minify" ) value = {
+					html: $(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='html']").eq ( 0 ).is (":checked") ? "on" : "off",
+					css: $(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='css']").eq ( 0 ).is (":checked") ? "on" : "off",
+					js: $(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='js']").eq ( 0 ).is (":checked") ? "on" : "off"
 				}
 				return { id, value }
 			}))
@@ -514,6 +613,11 @@ $(document).on ( "cloudflare.page_rules.page_rules.create", function ( event, da
 				if ( id == "forwarding_url" ) value = {
 					url: $(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='url']").eq ( 0 ).val (),
 					status_code: $(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='status_code']").eq ( 0 ).val ()
+				}
+				if ( id == "minify" ) value = {
+					html: $(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='html']").eq ( 0 ).val (),
+					css: $(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='css']").eq ( 0 ).val (),
+					js: $(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='js']").eq ( 0 ).val ()
 				}
 				return { id, value }
 			}))

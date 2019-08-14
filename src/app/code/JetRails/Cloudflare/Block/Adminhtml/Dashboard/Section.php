@@ -13,7 +13,7 @@
 	 * folder. This block class has methods that give the template access to a
 	 * valid form key for AJAX communications. This block class also returns a
 	 * custom endpoint for every section based on the binded template's path.
-	 * @version     1.0.0
+	 * @version     1.1.0
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved
@@ -50,25 +50,23 @@
 
 		/**
 		 * This method uses the data helper to get the currently saved
-		 * authentication email address. If non exists, then empty string is
+		 * authentication zone id. If non exists, then empty string is
 		 * used.
-		 * @return  string                            Returns saved auth email
+		 * @return  string                            Returns saved auth zone
 		 */
-		public function getAuthEmail () {
-			$email = $this->_dataHelper->getAuthEmail ();
-			return empty ( $email ) ? "" : $email;
+		public function getAuthZone () {
+			$zone = $this->_dataHelper->getAuthZone ();
+			return empty ( $zone ) ? "" : $zone;
 		}
 
 		/**
-		 * This method looks at the currently saved email address and token, it
-		 * then attempts to authenticate these values and return the state of
+		 * This method looks at the currently saved zone id and token, it then
+		 * attempts to authenticate these values and return the state of
 		 * authentication in the form of a state string.
 		 * @return  string                            Returns if auth is valid
 		 */
 		public function getValidationState () {
-			$email = $this->_dataHelper->getAuthEmail ();
-			$token = $this->_dataHelper->getAuthToken ();
-			$state = $this->_configurationModel->validateAuth ( $email, $token );
+			$state = $this->_configurationModel->validateAuth ();
 			return $state ? "Valid" : "Invalid";
 		}
 

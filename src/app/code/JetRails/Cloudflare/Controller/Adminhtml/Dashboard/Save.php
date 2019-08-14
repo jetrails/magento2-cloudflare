@@ -9,7 +9,7 @@
 	/**
 	 * This class extends from Magento's default controller action class and it
 	 * is specific to the actions that can be used under the dashboard resource.
-	 * @version     1.0.0
+	 * @version     1.1.0
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved
@@ -42,14 +42,14 @@
 		/**
 		 * This action is used only by the overview/configuration section and
 		 * therefore access to the resource is checked right away. It takes in
-		 * an email and a token and saves it with the use of the cloudflare/data
+		 * an zone and a token and saves it with the use of the cloudflare/data
 		 * helper class.
 		 * @return  void
 		 */
 		public function execute () {
-			$email = $this->getRequest ()->getPost ("email");
+			$zone = $this->getRequest ()->getPost ("zone");
 			$token = $this->getRequest ()->getPost ("token");
-			$this->_dataHelper->setAuthEmail ( $email );
+			$this->_dataHelper->setAuthZone ( $zone );
 			$this->_dataHelper->setAuthToken ( $token );
 			$this->_redirect ("*/*/view");
 		}

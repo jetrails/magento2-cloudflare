@@ -21,7 +21,7 @@
 			<div>
 				<form method="POST" action="<?php echo $block->getUrl ("cloudflare/dashboard/save") ?>" >
 					<input name="form_key" type="hidden" value="<?php echo $block->getFormKey () ?>" />
-					<input name="email" type="email" placeholder="Email Address" value="<?php echo $block->getAuthEmail () ?>" />
+					<input name="zone" type="text" placeholder="Zone ID" value="<?php echo $block->getAuthZone () ?>" />
 					<input name="token" type="password" placeholder="API Token" autocomplete="nope" autofill="off" />
 					<input class="full" type="submit" value="Save Credentials" />
 				</form>
@@ -35,7 +35,7 @@
 		</div>
 		<div data-tab-content="help" >
 			<h3>Configure Cloudflare API</h3>
-			<p>In order for this module to work, access to Cloudflare's API must be configured.  The text box labeled <strong>Email Address</strong> will contain the email address of the concerning Cloudflare account. The textbox labeled <strong>API Token</strong> will contain the API key that Cloudflare supplies.  In order to get the API key from Cloudflare follow <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200167836-Where-do-I-find-my-Cloudflare-API-key" target="_blank" >these instructions</a>.</p>
+			<p>In order for this module to work, access to Cloudflare's API must be configured.  The text box labeled <strong>Email Address</strong> will contain the zone address of the concerning Cloudflare account. The textbox labeled <strong>API Token</strong> will contain the API key that Cloudflare supplies.  In order to get the API key from Cloudflare follow <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200167836-Where-do-I-find-my-Cloudflare-API-key" target="_blank" >these instructions</a>.</p>
 			<p>If the credentials that you have supplied are valid, then you will see that <strong>Credential Validation</strong> will be set to <strong>Valid</strong>. You will need to make sure that the store's domain is also set up with Cloudflare. If the site is currently added to the associated Cloudflare account, then you will see that <strong>Zone ID</strong> will display a valid zone id from Cloudflare.  Otherwise you will see an error message.</p>
 		</div>
 	</div>

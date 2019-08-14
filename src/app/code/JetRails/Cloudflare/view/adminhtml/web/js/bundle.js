@@ -13115,7 +13115,7 @@ $(document).on ( "cloudflare.dns.dns_records.upload", function ( event, data ) {
 		.on ( "submit", ( event ) => {
 			event.preventDefault ()
 			$(prompt.components.modal).addClass ("loading")
-			let formData = new FormData ( form )
+			let formData = new FormData ( form [ 0 ] )
 			formData.set ( "form_key", data.form.key )
 			formData.set ( "file", ($(fileInput)) [ 0 ].files [ 0 ] )
 			$.ajax ({

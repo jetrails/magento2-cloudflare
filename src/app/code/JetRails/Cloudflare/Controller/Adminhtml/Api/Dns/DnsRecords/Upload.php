@@ -9,7 +9,7 @@
 	 * base functionality for interfacing with a getter model. This action
 	 * simply loads the initial value through the Cloudflare API. The rest of
 	 * this class extends on that functionality and adds more endpoints.
-	 * @version     1.1.0
+	 * @version     1.1.1
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved
@@ -24,9 +24,13 @@
 		 * @return  void
 		 */
 		public function execute () {
-			$file = $_FILES ["file"] ["tmp_name"];
-			if ( file_exists ( $file ) ) {
-				$response = $this->_api->import ( $_FILES ["file"] );
+			$uploader = $this->_objectManager->create (
+				"Magento\MediaStorage\Model\File\Uploader",
+				[ "fileId" => "file" ]
+			);
+			$file = $uploader->validateFile ();
+			if ( file_exists ( $file ["tmp_name"] ) ) {
+				$response = $this->_api->import ( $file );
 				return $this->_sendResponse ( $response, false );
 			}
 			else {

@@ -9,7 +9,7 @@
 	 * action. The main action in this class is the toggle action which takes
 	 * the passed value and casts it into a boolean value. That value is then
 	 * passed straight to the API model.
-	 * @version     1.1.0
+	 * @version     1.1.1
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

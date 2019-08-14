@@ -2,6 +2,7 @@
 
 	namespace JetRails\Cloudflare\Helper\Adminhtml;
 
+	use stdClass;
 	use Magento\Framework\App\Cache\TypeListInterface;
 	use Magento\Framework\App\Cache\Type\Config as ConfigType;
 	use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -16,11 +17,11 @@
 
 	/**
 	 * This class is a helper class and it primarily deals with getting and
-	 * setting the authentication email and token that is used to access the
+	 * setting the authentication zone and token that is used to access the
 	 * Cloudflare API. It also deals with loading all the domain names that are
 	 * found within this Magento installation and which domain is currently
 	 * selected.
-	 * @version     1.0.0
+	 * @version     1.1.0
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved
@@ -29,10 +30,10 @@
 	class Data extends AbstractHelper {
 
 		/**
-		 * @var     string       XPATH_AUTH_EMAIL     Path to auth email setting
+		 * @var     string       XPATH_AUTH_ZONE      Path to auth zone setting
 		 * @var     string       XPATH_AUTH_TOKEN     Path to auth token setting
 		 */
-		const XPATH_AUTH_EMAIL = "cloudflare/configuration/auth_email";
+		const XPATH_AUTH_ZONE  = "cloudflare/configuration/auth_zone";
 		const XPATH_AUTH_TOKEN = "cloudflare/configuration/auth_token";
 
 		protected $_cacheTypeList;
@@ -65,16 +66,21 @@
 		}
 
 		/**
-		 * This method gets the value for the authorization email and decrypts
+		 * This method gets the value for the authorization zone and decrypts
 		 * it. It then returns that result to the caller.
-		 * @return  string                            CF Authorization email
+		 * @return  string                            CF Authorization zone
 		 */
-		public function getAuthEmail () {
-			$email = $this->_configReader->getValue (
-				self::XPATH_AUTH_EMAIL,
+		public function getAuthZone () {
+			$zone = $this->_configReader->getValue (
+				self::XPATH_AUTH_ZONE,
 				ScopeInterface::SCOPE_STORE
 			);
-			return $this->_encryptor->decrypt ( $email );
+			$zones = $this->_encryptor->decrypt ( $zone );
+			$zones = json_decode ( $zones );
+			$domain = $this->getDomainName ();
+			$isObject = $zones instanceof stdClass;
+			$hasProp = $zones && property_exists ( $zones, "$domain" );
+			return $isObject && $hasProp ? $zones->$domain : null;
 		}
 
 		/**
@@ -87,30 +93,55 @@
 				self::XPATH_AUTH_TOKEN,
 				ScopeInterface::SCOPE_STORE
 			);
-			return $this->_encryptor->decrypt ( $token );
+			$tokens = $this->_encryptor->decrypt ( $token );
+			$tokens = json_decode ( $tokens );
+			$domain = $this->getDomainName ();
+			$isObject = $tokens instanceof stdClass;
+			$hasProp = $tokens && property_exists ( $tokens, "$domain" );
+			return $isObject && $hasProp ? $tokens->$domain : null;
 		}
 
 		/**
-		 * This method takes in a new email, saves that email internally, and
-		 * that email is then used for CF authentication.
-		 * @param   string       email                Set CF auth email to this
+		 * This method takes in a new zone, saves that zone internally, and
+		 * that zone is then used for CF authentication.
+		 * @param   string       zone                Set CF auth zone to this
 		 */
-		public function setAuthEmail ( $email ) {
-			$email = trim ( strval ( $email ) );
-			$email = $this->_encryptor->encrypt ( $email );
-			$this->_configWriter->save ( self::XPATH_AUTH_EMAIL, $email );
+		public function setAuthZone ( $zone ) {
+			$old = $this->_configReader->getValue (
+				self::XPATH_AUTH_ZONE,
+				ScopeInterface::SCOPE_STORE
+			);
+			$old = $this->_encryptor->decrypt ( $old );
+			$old = json_decode ( $old );
+			if ( !( $old instanceof stdClass ) ) $old = new stdClass ();
+			$domain = $this->getDomainName ();
+			$zone = trim ( strval ( $zone ) );
+			$old->$domain = $zone;
+			$old = json_encode ( $old );
+			$old = $this->_encryptor->encrypt ( $old );
+			$this->_configWriter->save ( self::XPATH_AUTH_ZONE, $old );
 			$this->_cacheTypeList->cleanType ( ConfigType::TYPE_IDENTIFIER );
 		}
 
 		/**
-		 * This method takes in a new email, saves that token internally, and
+		 * This method takes in a new zone, saves that token internally, and
 		 * that token is then used for CF authentication.
 		 * @param   string       token                Set CF auth token to this
 		 */
 		public function setAuthToken ( $token ) {
+			$old = $this->_configReader->getValue (
+				self::XPATH_AUTH_TOKEN,
+				ScopeInterface::SCOPE_STORE
+			);
+			$old = $this->_encryptor->decrypt ( $old );
+			$old = json_decode ( $old );
+			if ( !( $old instanceof stdClass ) ) $old = new stdClass ();
+			$domain = $this->getDomainName ();
 			$token = trim ( strval ( $token ) );
-			$token = $this->_encryptor->encrypt ( $token );
-			$this->_configWriter->save ( self::XPATH_AUTH_TOKEN, $token );
+			$old->$domain = $token;
+			$old = json_encode ( $old );
+			$old = $this->_encryptor->encrypt ( $old );
+			$this->_configWriter->save ( self::XPATH_AUTH_TOKEN, $old );
 			$this->_cacheTypeList->cleanType ( ConfigType::TYPE_IDENTIFIER );
 		}
 

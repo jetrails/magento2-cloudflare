@@ -40,6 +40,9 @@
 							<resource
 								id="JetRails_Cloudflare::development_mode"
 								title="Development Mode" />
+							<resource
+								id="JetRails_Cloudflare::enable_query_string_sort"
+								title="Enable Query String Sort" />
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::dns"
@@ -73,8 +76,20 @@
 								id="JetRails_Cloudflare::minimum_tls_version"
 								title="Minimum TLS Version" />
 							<resource
+								id="JetRails_Cloudflare::onion_routing"
+								title="Onion Routing" />
+							<resource
 								id="JetRails_Cloudflare::tls_13"
 								title="TLS 1.3" />
+							<resource
+								id="JetRails_Cloudflare::challenge_passage"
+								title="Challenge Passage" />
+							<resource
+								id="JetRails_Cloudflare::browser_integrity_check"
+								title="Browser Integrity Check" />
+							<resource
+								id="JetRails_Cloudflare::privacy_pass_support"
+								title="Privacy Pass Support" />
 							<resource
 								id="JetRails_Cloudflare::automatic_https_rewrites"
 								title="Automatic HTTPS Rewrites" />
@@ -99,6 +114,12 @@
 							id="JetRails_Cloudflare::speed"
 							title="Speed" >
 							<resource
+								id="JetRails_Cloudflare::image_resizing"
+								title="Image Resizing" />
+							<resource
+								id="JetRails_Cloudflare::enhanced_http2_prioritization"
+								title="Enhanced HTTP/2 Prioritization" />
+							<resource
 								id="JetRails_Cloudflare::auto_minify"
 								title="Auto Minify" />
 							<resource
@@ -113,6 +134,9 @@
 							<resource
 								id="JetRails_Cloudflare::rocket_loader"
 								title="Rocker Loader" />
+							<resource
+								id="JetRails_Cloudflare::prefetching_urls_from_http_headers"
+								title="Prefetching URLs From HTTP Headers." />
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::page_rule"
@@ -152,6 +176,15 @@
 							<resource
 								id="JetRails_Cloudflare::ip_geolocation"
 								title="IP Geolocation" />
+							<resource
+								id="JetRails_Cloudflare::maximum_upload_size"
+								title="Maximum Upload Size" />
+							<resource
+								id="JetRails_Cloudflare::response_buffering"
+								title="Response Buffering" />
+							<resource
+								id="JetRails_Cloudflare::true_client_ip_header"
+								title="True-Client-IP Header" />
 						</resource>
 					</resource>
 				</resource>

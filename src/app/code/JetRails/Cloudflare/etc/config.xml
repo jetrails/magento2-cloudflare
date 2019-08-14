@@ -6,7 +6,7 @@
 	<default>
 		<cloudflare>
 			<configuration>
-				<auth_email></auth_email>
+				<auth_zone></auth_zone>
 				<auth_token></auth_token>
 			</configuration>
 		</cloudflare>

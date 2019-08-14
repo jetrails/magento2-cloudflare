@@ -1,10 +1,10 @@
+# Files
 .DS_Store
-/.docker-sync/
-/node_modules/
-/build/
-/dist/
-/public_html/
-/Gemfile.lock
-/_*/
-/.sass-cache/
-/assets/
+*.tar.gz
+
+# Directories
+.docker-sync
+node_modules
+build
+dist
+public_html

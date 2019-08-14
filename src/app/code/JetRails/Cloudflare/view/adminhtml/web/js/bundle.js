@@ -10439,6 +10439,40 @@ return jQuery;
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
+const notification = __webpack_require__ (2)
+
+function initialize ( event, data ) {
+	var value = data.response.result.value == "on"
+	$(data.section).find ("[name='mode']").prop ( "checked", value )
+}
+
+function toggle ( event, data ) {
+	var state = $(data.section).find ("[name='mode']:checked").length > 0
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key, "state": state },
+		success: ( response ) => {
+			if ( !response.success ) {
+				$(data.section)
+					.find ("[name='mode']")
+					.prop ( "checked", !state )
+			}
+			notification.showMessages ( response )
+			$(data.section).removeClass ("loading")
+		}
+	})
+}
+
+module.exports = { initialize, toggle }
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
 
 function addMessage ( type, message ) {
 	if ( $(".cloudflare_notification").length == 0 ) {
@@ -10521,45 +10555,11 @@ module.exports = {
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (1)
-
-function initialize ( event, data ) {
-	var value = data.response.result.value == "on"
-	$(data.section).find ("[name='mode']").prop ( "checked", value )
-}
-
-function toggle ( event, data ) {
-	var state = $(data.section).find ("[name='mode']:checked").length > 0
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key, "state": state },
-		success: ( response ) => {
-			if ( !response.success ) {
-				$(data.section)
-					.find ("[name='mode']")
-					.prop ( "checked", !state )
-			}
-			notification.showMessages ( response )
-			$(data.section).removeClass ("loading")
-		}
-	})
-}
-
-module.exports = { initialize, toggle }
-
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 
 function loadSections ( additional = "" ) {
 	$("section.cloudflare.initialize" + additional ).each ( ( index, section ) => {
@@ -10605,7 +10605,7 @@ module.exports = {
 
 const $ = __webpack_require__ (0)
 const cloudflare = __webpack_require__ (3)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 
 function initialize ( event, data ) {
 	$(data.section).find ("[name='value']").val ( data.response.result.value )
@@ -11600,20 +11600,20 @@ return $.widget;
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 const cloudflare = __webpack_require__ (3)
 const global = __webpack_require__ (7)
 const requireAll = ( r ) => { r.keys ().forEach ( r ) }
 
 requireAll ( __webpack_require__(11) )
 requireAll ( __webpack_require__(13) )
-requireAll ( __webpack_require__(19) )
-requireAll ( __webpack_require__(29) )
-requireAll ( __webpack_require__(35) )
-requireAll ( __webpack_require__(38) )
-requireAll ( __webpack_require__(43) )
+requireAll ( __webpack_require__(20) )
+requireAll ( __webpack_require__(31) )
+requireAll ( __webpack_require__(39) )
+requireAll ( __webpack_require__(42) )
 requireAll ( __webpack_require__(49) )
 requireAll ( __webpack_require__(55) )
+requireAll ( __webpack_require__(64) )
 
 $(window).on ( "load", function () {
 
@@ -11769,7 +11769,7 @@ webpackContext.id = 11;
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 
 $(document).on ( "cloudflare.overview.status.initialize", function ( event, data ) {
 	if ( data.response.result.paused ) {
@@ -11837,7 +11837,8 @@ var map = {
 	"./browser_cache_expiration.js": 15,
 	"./caching_level.js": 16,
 	"./development_mode.js": 17,
-	"./purge_cache.js": 18
+	"./enable_query_string_sort.js": 18,
+	"./purge_cache.js": 19
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -11860,7 +11861,7 @@ webpackContext.id = 13;
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
 
 $(document).on ( "cloudflare.caching.always_online.initialize", switchElement.initialize )
 $(document).on ( "cloudflare.caching.always_online.toggle", switchElement.toggle )
@@ -11882,7 +11883,7 @@ $(document).on ( "cloudflare.caching.browser_cache_expiration.update", selectEle
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 
 $(document).on ( "cloudflare.caching.caching_level.initialize", ( event, data ) => {
 	var label = data.response.result.value
@@ -11909,7 +11910,7 @@ $(document).on ( "cloudflare.caching.caching_level.update", ( event, data ) => {
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
 
 $(document).on ( "cloudflare.caching.development_mode.initialize", switchElement.initialize )
 $(document).on ( "cloudflare.caching.development_mode.toggle", switchElement.toggle )
@@ -11920,8 +11921,19 @@ $(document).on ( "cloudflare.caching.development_mode.toggle", switchElement.tog
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.caching.enable_query_string_sort.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.caching.enable_query_string_sort.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
 const modal = __webpack_require__ (5)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 
 $(document).on ( "cloudflare.caching.purge_cache.individual", ( event, data ) => {
 	let textarea = modal
@@ -11980,19 +11992,20 @@ $(document).on ( "cloudflare.caching.purge_cache.everything", ( event, data ) =>
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./always_use_https.js": 20,
-	"./authenticated_origin_pulls.js": 21,
-	"./automatic_https_rewrites.js": 22,
-	"./disable_universal_ssl.js": 23,
-	"./http_strict_transport_security.js": 24,
-	"./minimum_tls_version.js": 25,
-	"./opportunistic_encryption.js": 26,
-	"./ssl.js": 27,
-	"./tls_13.js": 28
+	"./always_use_https.js": 21,
+	"./authenticated_origin_pulls.js": 22,
+	"./automatic_https_rewrites.js": 23,
+	"./disable_universal_ssl.js": 24,
+	"./http_strict_transport_security.js": 25,
+	"./minimum_tls_version.js": 26,
+	"./onion_routing.js": 27,
+	"./opportunistic_encryption.js": 28,
+	"./ssl.js": 29,
+	"./tls_13.js": 30
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -12008,28 +12021,17 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 19;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.crypto.always_use_https.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.crypto.always_use_https.toggle", switchElement.toggle )
-
+webpackContext.id = 20;
 
 /***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
 
-$(document).on ( "cloudflare.crypto.authenticated_origin_pulls.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.crypto.authenticated_origin_pulls.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.crypto.always_use_https.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.crypto.always_use_https.toggle", switchElement.toggle )
 
 
 /***/ }),
@@ -12037,10 +12039,10 @@ $(document).on ( "cloudflare.crypto.authenticated_origin_pulls.toggle", switchEl
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
 
-$(document).on ( "cloudflare.crypto.automatic_https_rewrites.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.crypto.automatic_https_rewrites.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.crypto.authenticated_origin_pulls.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.crypto.authenticated_origin_pulls.toggle", switchElement.toggle )
 
 
 /***/ }),
@@ -12048,7 +12050,18 @@ $(document).on ( "cloudflare.crypto.automatic_https_rewrites.toggle", switchElem
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (1)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.crypto.automatic_https_rewrites.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.crypto.automatic_https_rewrites.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
 const common = __webpack_require__ (3)
 
@@ -12104,13 +12117,13 @@ $(document).on ( "cloudflare.crypto.disable_universal_ssl.toggle", function ( ev
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
 const common = __webpack_require__ (3)
 const modal = __webpack_require__ (5)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 
 function maxAgeLabel ( value ) {
 	if ( value >= 31536000 ) return "12 months"
@@ -12268,7 +12281,7 @@ $(document).on ( "cloudflare.crypto.http_strict_transport_security.update", func
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -12279,18 +12292,29 @@ $(document).on ( "cloudflare.crypto.minimum_tls_version.update", selectElement.u
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.crypto.onion_routing.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.crypto.onion_routing.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
 
 $(document).on ( "cloudflare.crypto.opportunistic_encryption.initialize", switchElement.initialize )
 $(document).on ( "cloudflare.crypto.opportunistic_encryption.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -12301,7 +12325,7 @@ $(document).on ( "cloudflare.crypto.ssl.update", selectElement.update )
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -12312,15 +12336,17 @@ $(document).on ( "cloudflare.crypto.tls_13.update", selectElement.update )
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./auto_minify.js": 30,
-	"./brotli.js": 31,
-	"./mirage.js": 32,
-	"./polish.js": 33,
-	"./rocket_loader.js": 34
+	"./auto_minify.js": 32,
+	"./brotli.js": 33,
+	"./enhanced_http2_prioritization.js": 34,
+	"./image_resizing.js": 35,
+	"./mirage.js": 36,
+	"./polish.js": 37,
+	"./rocket_loader.js": 38
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -12336,15 +12362,15 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 29;
+webpackContext.id = 31;
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
 const cloudflare = __webpack_require__ (3)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 
 $(document).on ( "cloudflare.speed.auto_minify.initialize", ( event, data ) => {
 	var jsState = data.response.result.value.js === "on"
@@ -12373,33 +12399,55 @@ $(document).on ( "cloudflare.speed.auto_minify.change", ( event, data ) => {
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
 
 $(document).on ( "cloudflare.speed.brotli.initialize", switchElement.initialize )
 $(document).on ( "cloudflare.speed.brotli.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.enhanced_http2_prioritization.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.speed.enhanced_http2_prioritization.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.image_resizing.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.speed.image_resizing.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
 
 $(document).on ( "cloudflare.speed.mirage.initialize", switchElement.initialize )
 $(document).on ( "cloudflare.speed.mirage.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 33 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 
 $(document).on ( "cloudflare.speed.polish.initialize", ( event, data ) => {
 	var value = data.response.state.result.value
@@ -12429,23 +12477,23 @@ $(document).on ( "cloudflare.speed.polish.change", ( event, data ) => {
 
 
 /***/ }),
-/* 34 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
 
 $(document).on ( "cloudflare.speed.rocket_loader.initialize", switchElement.initialize )
 $(document).on ( "cloudflare.speed.rocket_loader.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 35 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./cloudflare_nameservers.js": 36,
-	"./dns_records.js": 37
+	"./cloudflare_nameservers.js": 40,
+	"./dns_records.js": 41
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -12461,14 +12509,14 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 35;
+webpackContext.id = 39;
 
 /***/ }),
-/* 36 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 
 $(document).on ( "cloudflare.dns.cloudflare_nameservers.initialize", function ( event, data ) {
 	$(data.section).find ("table tr:not(:first)").remove ()
@@ -12485,13 +12533,13 @@ $(document).on ( "cloudflare.dns.cloudflare_nameservers.initialize", function ( 
 
 
 /***/ }),
-/* 37 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
 const cloudflare = __webpack_require__ (3)
 const common = __webpack_require__ (3)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
 const global = __webpack_require__ (7)
 
@@ -13193,14 +13241,16 @@ $(document).on ( "click", ".cloudflare td.ttl", ( event ) => {
 
 
 /***/ }),
-/* 38 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./access_rules.js": 39,
-	"./challenge_passage.js": 40,
-	"./security_level.js": 41,
-	"./user_agent_blocking.js": 42
+	"./access_rules.js": 43,
+	"./browser_integrity_check.js": 44,
+	"./challenge_passage.js": 45,
+	"./privacy_pass_support.js": 46,
+	"./security_level.js": 47,
+	"./user_agent_blocking.js": 48
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -13216,16 +13266,16 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 38;
+webpackContext.id = 42;
 
 /***/ }),
-/* 39 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
 const cloudflare = __webpack_require__ (3)
 const common = __webpack_require__ (3)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
 
 function filterResults ( term, results ) {
@@ -13544,7 +13594,18 @@ $(document).on ( "cloudflare.firewall.access_rules.previous_page", function ( ev
 
 
 /***/ }),
-/* 40 */
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.firewall.browser_integrity_check.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.firewall.browser_integrity_check.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13555,7 +13616,18 @@ $(document).on ( "cloudflare.firewall.challenge_passage.update", selectElement.u
 
 
 /***/ }),
-/* 41 */
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.firewall.privacy_pass_support.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.firewall.privacy_pass_support.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13566,12 +13638,12 @@ $(document).on ( "cloudflare.firewall.security_level.update", selectElement.upda
 
 
 /***/ }),
-/* 42 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
 const common = __webpack_require__ (3)
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
 
 function populateResult ( section ) {
@@ -13869,11 +13941,11 @@ $(document).on ( "cloudflare.firewall.user_agent_blocking.previous_page", functi
 
 
 /***/ }),
-/* 43 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./page_rules.js": 44
+	"./page_rules.js": 50
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -13889,22 +13961,22 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 43;
+webpackContext.id = 49;
 
 /***/ }),
-/* 44 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__);
 
 
 
-const notification = __webpack_require__ (1)
+const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
 const common = __webpack_require__ (3)
 const global = __webpack_require__ (7)
@@ -13918,24 +13990,41 @@ function valueToLabel ( value ) {
 	let lookup = {
 		"pick_a_setting": "Pick a Setting",
 		"always_online": "Always Online",
+		"minify": "Auto Minify",
 		"browser_cache_ttl": "Browser Cache TTL",
 		"browser_check": "Browser Integrity Check",
+		"bypass_cache_on_cookie": "Bypass Cache on Cookie",
+		"cache_by_device_type": "Cache By Device Type",
 		"cache_deception_armor": "Cache Deception Armor",
 		"cache_level": "Cache Level",
+		"cache_on_cookie": "Cache on Cookie",
 		"disable_apps": "Disable Apps",
 		"disable_performance": "Disable Performance",
 		"disable_security": "Disable Security",
 		"edge_cache_ttl": "Edge Cache TTL",
 		"email_obfuscation": "Email Obfuscation",
-		"forwarding_url": "Forward URL",
+		"forwarding_url": "Forwarding URL",
+		"host_header_override": "Host Header Override",
 		"ip_geolocation": "IP Geolocation Header",
+		"mirage": "Mirage",
 		"explicit_cache_control": "Origin Cache Control",
+		"origin_error_page_pass_thru": "Origin Error Page Pass-thru",
+		"polish": "Polish",
+		"sort_query_string_for_cache": "Query String Sort",
+		"resolve_override": "Resolve Override",
+		"respect_strong_etag": "Respect Strong ETags",
+		"response_buffering": "Response Buffering",
 		"rocket_loader": "Rocket Loader",
 		"security_level": "Security Level",
 		"server_side_exclude": "Server Side Excludes",
 		"ssl": "SSL",
+		"true_client_ip_header": "True Client IP Header",
+		"waf": "Web Application Firewall",
 		"status_code": "Status Code",
-		"url": "Url"
+		"url": "Url",
+		"html": "HTML",
+		"js": "JS",
+		"css": "CSS"
 	}
 	if ( value in lookup ) {
 		return lookup [ value ]
@@ -13948,26 +14037,49 @@ function createRow ( previousExists = false, values = [] ) {
 	var row = __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<div class='dynamic_wrapper collection' >")
 		.append ( modal.createSelect ( "setting", [
 			{ label: "Pick a Setting", value: "pick_a_setting", disabled: true, selected: true },
-			{ label: "Always Online", value: "always_online" },
-			{ label: "Browser Cache TTL", value: "browser_cache_ttl" },
-			{ label: "Browser Integrity Check", value: "browser_check" },
-			{ label: "Cache Deception Armor", value: "cache_deception_armor" },
-			{ label: "Cache Level", value: "cache_level" },
-			{ label: "Disable Apps", value: "disable_apps" },
-			{ label: "Disable Performance", value: "disable_performance" },
-			{ label: "Disable Security", value: "disable_security" },
-			{ label: "Edge Cache TTL", value: "edge_cache_ttl" },
-			{ label: "Email Obfuscation", value: "email_obfuscation" },
-			{ label: "Forward URL", value: "forwarding_url", disabled: previousExists },
-			{ label: "IP Geolocation Header", value: "ip_geolocation" },
-			{ label: "Origin Cache Control", value: "explicit_cache_control" },
-			{ label: "Rocket Loader", value: "rocket_loader" },
-			{ label: "Security Level", value: "security_level" },
-			{ label: "Server Side Excludes", value: "server_side_exclude" },
-			{ label: "SSL", value: "ssl" },
+			{ label: valueToLabel ("always_online"), value: "always_online" },
+			{ label: valueToLabel ("minify"), value: "minify" },
+			{ label: valueToLabel ("browser_cache_ttl"), value: "browser_cache_ttl" },
+			{ label: valueToLabel ("browser_check"), value: "browser_check" },
+			{ label: valueToLabel ("bypass_cache_on_cookie"), value: "bypass_cache_on_cookie" },
+			{ label: valueToLabel ("cache_by_device_type"), value: "cache_by_device_type" },
+			{ label: valueToLabel ("cache_deception_armor"), value: "cache_deception_armor" },
+			{ label: valueToLabel ("cache_level"), value: "cache_level" },
+			{ label: valueToLabel ("cache_on_cookie"), value: "cache_on_cookie" },
+			{ label: valueToLabel ("disable_apps"), value: "disable_apps" },
+			{ label: valueToLabel ("disable_performance"), value: "disable_performance" },
+			{ label: valueToLabel ("disable_security"), value: "disable_security" },
+			{ label: valueToLabel ("edge_cache_ttl"), value: "edge_cache_ttl" },
+			{ label: valueToLabel ("email_obfuscation"), value: "email_obfuscation" },
+			{ label: valueToLabel ("forwarding_url"), value: "forwarding_url", disabled: previousExists },
+			{ label: valueToLabel ("host_header_override"), value: "host_header_override" },
+			{ label: valueToLabel ("ip_geolocation"), value: "ip_geolocation" },
+			{ label: valueToLabel ("mirage"), value: "mirage" },
+			{ label: valueToLabel ("explicit_cache_control"), value: "explicit_cache_control" },
+			{ label: valueToLabel ("origin_error_page_pass_thru"), value: "origin_error_page_pass_thru" },
+			{ label: valueToLabel ("polish"), value: "polish" },
+			{ label: valueToLabel ("sort_query_string_for_cache"), value: "sort_query_string_for_cache" },
+			{ label: valueToLabel ("resolve_override"), value: "resolve_override" },
+			{ label: valueToLabel ("respect_strong_etag"), value: "respect_strong_etag" },
+			{ label: valueToLabel ("response_buffering"), value: "response_buffering" },
+			{ label: valueToLabel ("rocket_loader"), value: "rocket_loader" },
+			{ label: valueToLabel ("security_level"), value: "security_level" },
+			{ label: valueToLabel ("server_side_exclude"), value: "server_side_exclude" },
+			{ label: valueToLabel ("ssl"), value: "ssl" },
+			{ label: valueToLabel ("true_client_ip_header"), value: "true_client_ip_header" },
+			{ label: valueToLabel ("waf"), value: "waf" },
 		]).addClass ("dynamic-trigger").val ( values.length > 0 ? values [ 0 ] : "pick_a_setting" ) )
 		.append (
 			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="always_online" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="minify" >`)
+				.append (`<label class="text" >HTML</label>`)
+				.append ( modal.createSwitch ("html") )
+				.append (`<label class="text" >CSS</label>`)
+				.append ( modal.createSwitch ("css") )
+				.append (`<label class="text" >JS</label>`)
+				.append ( modal.createSwitch ("js") )
 		)
 		.append (
 			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="browser_cache_ttl" >`).html ( modal.createSelect ( "value", [
@@ -14000,6 +14112,12 @@ function createRow ( previousExists = false, values = [] ) {
 			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="browser_check" >`).append ( modal.createSwitch ("value") )
 		)
 		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="bypass_cache_on_cookie" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_by_device_type" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
 			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_deception_armor" >`).append ( modal.createSwitch ("value") )
 		)
 		.append (
@@ -14011,6 +14129,9 @@ function createRow ( previousExists = false, values = [] ) {
 				{ label: "Standard", value: "aggressive" },
 				{ label: "Cache Everything", value: "cache_everything" }
 			]))
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_on_cookie" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
 		)
 		.append (
 			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="disable_apps" >`).html ("<p>Apps are disabled</p>")
@@ -14056,10 +14177,41 @@ function createRow ( previousExists = false, values = [] ) {
 				.append ( modal.createInput ( "text", "url", "Enter destination URL" ) )
 		)
 		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="host_header_override" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
 			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="ip_geolocation" >`).append ( modal.createSwitch ("value") )
 		)
 		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="mirage" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
 			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="explicit_cache_control" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="origin_error_page_pass_thru" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="polish" >`).append (
+				modal.createSelect ( "value", [
+					{ label: "Select Value", value: "", disabled: true, selected: true },
+					{ label: "Off", value: "off" },
+					{ label: "Lossless", value: "lossless" },
+					{ label: "Lossy", value: "lossy" }
+				])
+			)
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="sort_query_string_for_cache" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="resolve_override" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="respect_strong_etag" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="response_buffering" >`).append ( modal.createSwitch ("value") )
 		)
 		.append (
 			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="rocket_loader" >`).append (
@@ -14088,6 +14240,12 @@ function createRow ( previousExists = false, values = [] ) {
 				{ label: "Strict", value: "strict" }
 			]))
 		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="true_client_ip_header" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="waf" >`).append ( modal.createSwitch ("value") )
+		)
 		.append ( close.click ( () => { __WEBPACK_IMPORTED_MODULE_0_jquery___default()(close).parent ().remove () } ) )
 	if ( values.length > 0 ) {
 		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).addClass ("active")
@@ -14097,6 +14255,14 @@ function createRow ( previousExists = false, values = [] ) {
 			if ( values [0] == "forwarding_url" ) {
 				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='status_code']").val ( values [ 1 ] )
 				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='url']").val ( values [ 2 ] )
+			}
+			else if ( values [0] == "minify" ) {
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='html']")
+					.prop ( "checked", values [ 1 ].html == "on" )
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='css']")
+					.prop ( "checked", values [ 1 ].css == "on" )
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='js']")
+					.prop ( "checked", values [ 1 ].js == "on" )
 			}
 			else if ( ( value == "on" || value == "off" ) && values[0] != "ssl" && values[0] != "rocket_loader" ) {
 				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(target).prop ( "checked", value == "on" )
@@ -14194,10 +14360,10 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_r
 		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody").sortable ({
 			handle: ".handle",
 			helper: ( e, ui ) => {
-			    ui.children ().each ( () => {
-			        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).width ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).width () )
-			    })
-			    return ui
+				ui.children ().each ( () => {
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).width ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).width () )
+				})
+				return ui
 			},
 			stop: ( e, ui ) => {
 				ui.item.parent ().find ("tr").each ( ( i, e ) => {
@@ -14224,7 +14390,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_r
 						notification.showMessages ( response )
 					}
 				})
-		    }
+			}
 		})
 	}
 	else {
@@ -14315,6 +14481,11 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_r
 				if ( id == "forwarding_url" ) value = {
 					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='url']").eq ( 0 ).val (),
 					status_code: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='status_code']").eq ( 0 ).val ()
+				}
+				if ( id == "minify" ) value = {
+					html: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='html']").eq ( 0 ).is (":checked") ? "on" : "off",
+					css: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='css']").eq ( 0 ).is (":checked") ? "on" : "off",
+					js: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='js']").eq ( 0 ).is (":checked") ? "on" : "off"
 				}
 				return { id, value }
 			}))
@@ -14418,6 +14589,11 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_r
 					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='url']").eq ( 0 ).val (),
 					status_code: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='status_code']").eq ( 0 ).val ()
 				}
+				if ( id == "minify" ) value = {
+					html: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='html']").eq ( 0 ).val (),
+					css: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='css']").eq ( 0 ).val (),
+					js: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='js']").eq ( 0 ).val ()
+				}
 				return { id, value }
 			}))
 		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).addClass ("loading")
@@ -14475,7 +14651,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "change", ".cloudf
 
 
 /***/ }),
-/* 45 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -14500,10 +14676,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 		// AMD. Register as an anonymous module.
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 			__webpack_require__(0),
-			__webpack_require__(46),
-			__webpack_require__(47),
+			__webpack_require__(52),
+			__webpack_require__(53),
 			__webpack_require__(8),
-			__webpack_require__(48),
+			__webpack_require__(54),
 			__webpack_require__(6),
 			__webpack_require__(9)
 		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
@@ -16038,7 +16214,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 
 /***/ }),
-/* 46 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -16273,7 +16449,7 @@ return $.widget( "ui.mouse", {
 
 
 /***/ }),
-/* 47 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -16321,7 +16497,7 @@ return $.extend( $.expr[ ":" ], {
 
 
 /***/ }),
-/* 48 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -16375,95 +16551,18 @@ return $.fn.scrollParent = function( includeHidden ) {
 
 
 /***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./http_2.js": 50,
-	"./ip_geolocation.js": 51,
-	"./ipv6_compatibility.js": 52,
-	"./pseudo_ipv4.js": 53,
-	"./websockets.js": 54
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 49;
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.network.http_2.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.network.http_2.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.network.ip_geolocation.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.network.ip_geolocation.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.network.ipv6_compatibility.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.network.ipv6_compatibility.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const selectElement = __webpack_require__ (4)
-
-$(document).on ( "cloudflare.network.pseudo_ipv4.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.network.pseudo_ipv4.update", selectElement.update )
-
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.network.websockets.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.network.websockets.toggle", switchElement.toggle )
-
-
-/***/ }),
 /* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./email_address_obfuscation.js": 56,
-	"./hotlink_protection.js": 57,
-	"./server_side_excludes.js": 58
+	"./http_2.js": 56,
+	"./ip_geolocation.js": 57,
+	"./ipv6_compatibility.js": 58,
+	"./maximum_upload_size.js": 59,
+	"./pseudo_ipv4.js": 60,
+	"./response_buffering.js": 61,
+	"./true_client_ip_header.js": 62,
+	"./websockets.js": 63
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -16486,10 +16585,10 @@ webpackContext.id = 55;
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
 
-$(document).on ( "cloudflare.scrape_shield.email_address_obfuscation.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.scrape_shield.email_address_obfuscation.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.network.http_2.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.network.http_2.toggle", switchElement.toggle )
 
 
 /***/ }),
@@ -16497,10 +16596,10 @@ $(document).on ( "cloudflare.scrape_shield.email_address_obfuscation.toggle", sw
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
 
-$(document).on ( "cloudflare.scrape_shield.hotlink_protection.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.scrape_shield.hotlink_protection.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.network.ip_geolocation.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.network.ip_geolocation.toggle", switchElement.toggle )
 
 
 /***/ }),
@@ -16508,7 +16607,120 @@ $(document).on ( "cloudflare.scrape_shield.hotlink_protection.toggle", switchEle
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (2)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.network.ipv6_compatibility.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.network.ipv6_compatibility.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const selectElement = __webpack_require__ (4)
+
+$(document).on ( "cloudflare.network.maximum_upload_size.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.network.maximum_upload_size.update", selectElement.update )
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const selectElement = __webpack_require__ (4)
+
+$(document).on ( "cloudflare.network.pseudo_ipv4.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.network.pseudo_ipv4.update", selectElement.update )
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.network.response_buffering.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.network.response_buffering.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.network.true_client_ip_header.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.network.true_client_ip_header.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.network.websockets.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.network.websockets.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./email_address_obfuscation.js": 65,
+	"./hotlink_protection.js": 66,
+	"./server_side_excludes.js": 67
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 64;
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.scrape_shield.email_address_obfuscation.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.scrape_shield.email_address_obfuscation.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.scrape_shield.hotlink_protection.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.scrape_shield.hotlink_protection.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
 
 $(document).on ( "cloudflare.scrape_shield.server_side_excludes.initialize", switchElement.initialize )
 $(document).on ( "cloudflare.scrape_shield.server_side_excludes.toggle", switchElement.toggle )

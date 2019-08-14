@@ -10,7 +10,7 @@
 	 * all the data is collected and saved within the instance, this class has
 	 * a method to transform all the collected data into a CURL request and
 	 * executes it.
-	 * @version     1.0.0
+	 * @version     1.1.0
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved
@@ -38,7 +38,7 @@
 		/**
 		 * @var     integer      _type                The type of request
 		 * @var     array        _headers             Array defining header vals
-		 * @var 	stdClass     _data                Data to send as a payload
+		 * @var     stdClass     _data                Data to send as a payload
 		 * @var     array        _query               GET data appended to URL
 		 */
 		protected $_type;
@@ -61,9 +61,9 @@
 			$this->_headers = false;
 			$this->_data = false;
 			$this->_query = false;
+			$token = $this->_dataHelper->getAuthToken ();
 			$this->setType ( self::REQUEST_GET );
-			$this->setHeader ( "X-Auth-Email", $this->_dataHelper->getAuthEmail () );
-			$this->setHeader ( "X-Auth-Key", $this->_dataHelper->getAuthToken () );
+			$this->setHeader ( "Authorization", "Bearer " . $token );
 			$this->setHeader ( "Content-Type", "application/json" );
 		}
 
@@ -86,13 +86,12 @@
 		 * This Method simply modifies the two header values that the Cloudflare
 		 * API uses for authentication. The two parameters are used as the
 		 * values.
-		 * @param   string       email                CF authentication email
+		 * @param   string       zone                 CF authentication zone
 		 * @param   string       token                CF authentication token
 		 * @return  void
 		 */
-		public function setAuth ( $email, $token ) {
-			$this->setHeader ( "X-Auth-Email", $email );
-			$this->setHeader ( "X-Auth-Key", $token );
+		public function setAuth ( $token ) {
+			$this->setHeader ( "Authorization", "Bearer $token" );
 		}
 
 		/**

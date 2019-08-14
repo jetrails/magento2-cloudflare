@@ -1,0 +1,54 @@
+<section
+	class="cloudflare network maximum_upload_size initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="network"
+	data-section-name="maximum_upload_size" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Maximum Upload Size</span>
+			<p>The amount of data visitors can upload to your website in a single request.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<select class="trigger-select" name="value" data-target="update" >
+					<option value="100" >100 MB</option>
+					<option value="125" >125 MB (Business+)</option>
+					<option value="150" >150 MB (Business+)</option>
+					<option value="175" >175 MB (Business+)</option>
+					<option value="200" >200 MB (Business+)</option>
+					<option value="225" >225 MB (Enterprise)</option>
+					<option value="250" >250 MB (Enterprise)</option>
+					<option value="275" >275 MB (Enterprise)</option>
+					<option value="300" >300 MB (Enterprise)</option>
+					<option value="325" >325 MB (Enterprise)</option>
+					<option value="350" >350 MB (Enterprise)</option>
+					<option value="375" >375 MB (Enterprise)</option>
+					<option value="400" >400 MB (Enterprise)</option>
+					<option value="425" >425 MB (Enterprise)</option>
+					<option value="450" >450 MB (Enterprise)</option>
+					<option value="475" >475 MB (Enterprise)</option>
+					<option value="500" >500 MB (Enterprise)</option>
+				</select>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What are the Maximum upload size limits for each plan?</h4>
+			<p>Cloudflare limits the maximum amount of data a visitor can upload per request:</p>
+			<ul>
+				<li><strong>Free:</strong> 100MB</li>
+				<li><strong>Pro:</strong> 100MB</li>
+				<li><strong>Business:</strong> 200MB</li>
+				<li><strong>Enterprise:</strong> 500MB</li>
+			</ul>
+			<p><strong>Note:</strong> This setting supersedes upload size limits you may have set at your origin.</p>
+			<p><a href="https://support.cloudflare.com/hc/en-us/articles/201303340-How-can-I-change-the-client-maximum-upload-size" >How can I change the client maximum upload size?.</a></p>
+		</div>
+	</div>
+</section>

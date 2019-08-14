@@ -1,0 +1,34 @@
+<section
+	class="cloudflare firewall browser_integrity_check initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="firewall"
+	data-section-name="browser_integrity_check" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Browser Integrity Check</span>
+			<p>Evaluate HTTP headers from your visitors browser for threats. If a threat is found a block page will be delivered.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What is Browser Integrity Check?</h4>
+			<p>Browser Integrity Check looks for requests with HTTP headers commonly used by spammers, bots, and crawlers such as requests with a missing or non-standard user agent. If a threat is found, Cloudflare will present a <a href="https://support.cloudflare.com/hc/en-us/articles/200171806-Error-1010-The-owner-of-this-website-has-banned-your-access-based-on-your-browser-s-signature" >block page</a>.</p>
+			<p><strong>Note:</strong> Browser Integrity Check may affect some actions on your domain. For example, it may block access to your API. You can selectively enable or disable this feature for any part of your domain using page rules.</p>
+			<h5>Additional Resources</h5>
+			<a href="https://support.cloudflare.com/hc/en-us/articles/200170086-What-does-the-Browser-Integrity-Check-do" >What does the Browser Integrity Check do?</a>
+		</div>
+	</div>
+</section>

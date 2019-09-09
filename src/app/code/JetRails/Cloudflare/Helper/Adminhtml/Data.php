@@ -21,7 +21,7 @@
 	 * Cloudflare API. It also deals with loading all the domain names that are
 	 * found within this Magento installation and which domain is currently
 	 * selected.
-	 * @version     1.1.1
+	 * @version     1.2.0
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved
@@ -105,8 +105,9 @@
 		 * This method takes in a new zone, saves that zone internally, and
 		 * that zone is then used for CF authentication.
 		 * @param   string       zone                Set CF auth zone to this
+		 * @param   string       domain              Domain name
 		 */
-		public function setAuthZone ( $zone ) {
+		public function setAuthZone ( $zone, $domain = false ) {
 			$old = $this->_configReader->getValue (
 				self::XPATH_AUTH_ZONE,
 				ScopeInterface::SCOPE_STORE
@@ -114,7 +115,7 @@
 			$old = $this->_encryptor->decrypt ( $old );
 			$old = json_decode ( $old );
 			if ( !( $old instanceof stdClass ) ) $old = new stdClass ();
-			$domain = $this->getDomainName ();
+			if ( !$domain ) $domain = $this->getDomainName ();
 			$zone = trim ( strval ( $zone ) );
 			$old->$domain = $zone;
 			$old = json_encode ( $old );
@@ -127,8 +128,9 @@
 		 * This method takes in a new zone, saves that token internally, and
 		 * that token is then used for CF authentication.
 		 * @param   string       token                Set CF auth token to this
+		 * @param   string       domain               Domain name
 		 */
-		public function setAuthToken ( $token ) {
+		public function setAuthToken ( $token, $domain = false ) {
 			$old = $this->_configReader->getValue (
 				self::XPATH_AUTH_TOKEN,
 				ScopeInterface::SCOPE_STORE
@@ -136,7 +138,7 @@
 			$old = $this->_encryptor->decrypt ( $old );
 			$old = json_decode ( $old );
 			if ( !( $old instanceof stdClass ) ) $old = new stdClass ();
-			$domain = $this->getDomainName ();
+			if ( !$domain ) $domain = $this->getDomainName ();
 			$token = trim ( strval ( $token ) );
 			$old->$domain = $token;
 			$old = json_encode ( $old );

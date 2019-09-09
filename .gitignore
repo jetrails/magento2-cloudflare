@@ -1,5 +1,6 @@
 # Files
 .DS_Store
+yarn-error.log
 *.tar.gz
 
 # Directories

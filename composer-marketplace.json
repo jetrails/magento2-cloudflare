@@ -17,7 +17,7 @@
 		}
 	],
 	"autoload": {
-		"psr-4": { "JetRails\\Cloudflare\\": "src/app/code/JetRails/Cloudflare" },
-		"files": [ "src/app/code/JetRails/Cloudflare/registration.php" ]
+		"psr-4": { "JetRails\\Cloudflare\\": "" },
+		"files": [ "registration.php" ]
 	}
 }

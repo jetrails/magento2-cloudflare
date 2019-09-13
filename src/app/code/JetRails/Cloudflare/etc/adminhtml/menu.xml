@@ -9,7 +9,7 @@
 			title="JetRails"
 			module="JetRails_Cloudflare"
 			resource="JetRails_Cloudflare::jetrails"
-			sortOrder="0"
+			sortOrder="79"
 		/>
 		<add
 			id="JetRails_Cloudflare::cloudflare"

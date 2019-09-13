@@ -2,8 +2,14 @@
 
 	namespace JetRails\Cloudflare\Console\Command;
 
-	use JetRails\Cloudflare\Helper\Adminhtml\Data;
+	use stdClass;
+	use Magento\Framework\App\Cache\Type\Config as ConfigType;
 	use Magento\Framework\App\Cache\TypeListInterface;
+	use Magento\Framework\App\Config\ScopeConfigInterface;
+	use Magento\Framework\App\Config\Storage\WriterInterface;
+	use Magento\Framework\Encryption\EncryptorInterface;
+	use Magento\Store\Model\ScopeInterface;
+	use Magento\Store\Model\StoreManagerInterface;
 	use Symfony\Component\Console\Command\Command;
 	use Symfony\Component\Console\Input\InputInterface;
 	use Symfony\Component\Console\Input\InputOption;
@@ -12,33 +18,33 @@
 	class SetAuth extends Command {
 
 		/**
-		 * These internal data members include instances of helper classes that are injected into
-		 * the class using dependency injection on runtime.  Also a boolean variable is included
-		 * that defines if the action should be run if the feature is disabled in the store config.
-		 * @var         TypeListInterface   _cacheTypeList      Instance of the TypeListInterface class
-		 * @var         Data                _data               Instance of the Data class
-		 * @var         Logger              _logger             Instance of the Logger class
-		 * @var         Purger              _purger             Instance of the Purger class
-		 * @var         Boolean             _runIfDisabled      Execute method if feature isn't on?
+		 * @var     string       XPATH_AUTH_ZONE      Path to auth zone setting
+		 * @var     string       XPATH_AUTH_TOKEN     Path to auth token setting
 		 */
-		protected $_cacheTypeList;
-		protected $_data;
+		const XPATH_AUTH_ZONE  = "cloudflare/configuration/auth_zone";
+		const XPATH_AUTH_TOKEN = "cloudflare/configuration/auth_token";
 
-		/**
-		 * This constructor is overloaded from the parent class in order to use dependency injection
-		 * to get the dependency classes that we need for this module's command actions to execute.
-		 * @param       Data                data                Instance of the Data class
-		 * @param       TypeListInterface   cacheTypeList       Instance of the TypeListInterface class
-		 */
+		protected $_cacheTypeList;
+		protected $_configReader;
+		protected $_configWriter;
+		protected $_encryptor;
+		protected $_storeManager;
+
 		public function __construct (
-			Data $data,
-			TypeListInterface $cacheTypeList
+			StoreManagerInterface $storeManager,
+			TypeListInterface $cacheTypeList,
+			EncryptorInterface $encryptor,
+			ScopeConfigInterface $configReader,
+			WriterInterface $configWriter
 		) {
 			// Call the parent constructor
 			parent::__construct ();
 			// Save injected classes internally
+			$this->_storeManager = $storeManager;
 			$this->_cacheTypeList = $cacheTypeList;
-			$this->_data = $data;
+			$this->_configReader = $configReader;
+			$this->_configWriter = $configWriter;
+			$this->_encryptor = $encryptor;
 		}
 
 		/**
@@ -75,6 +81,67 @@
 		}
 
 		/**
+		 * This method looks though all the stores that are setup in Magento. It
+		 * then extracts the domain name from the store's base URL.
+		 * @return  array                             All domains for all stores
+		 */
+		private function _getDomainNames () {
+			$domains = array ();
+			$stores = $this->_storeManager->getStores ();
+			foreach ( $stores as $store ) {
+				$domain = parse_url ( $store->getBaseUrl () ) ["host"];
+				array_push ( $domains, $domain );
+			}
+			$domains = array_unique ( $domains );
+			sort ( $domains );
+			return $domains;
+		}
+
+		/**
+		 * This method takes in a new zone, saves that zone internally, and
+		 * that zone is then used for CF authentication.
+		 * @param   string       zone                Set CF auth zone to this
+		 * @param   string       domain              Domain name
+		 */
+		private function _setAuthZone ( $zone, $domain ) {
+			$old = $this->_configReader->getValue (
+				self::XPATH_AUTH_ZONE,
+				ScopeInterface::SCOPE_STORE
+			);
+			$old = $this->_encryptor->decrypt ( $old );
+			$old = json_decode ( $old );
+			if ( !( $old instanceof stdClass ) ) $old = new stdClass ();
+			$zone = trim ( strval ( $zone ) );
+			$old->$domain = $zone;
+			$old = json_encode ( $old );
+			$old = $this->_encryptor->encrypt ( $old );
+			$this->_configWriter->save ( self::XPATH_AUTH_ZONE, $old );
+			$this->_cacheTypeList->cleanType ( ConfigType::TYPE_IDENTIFIER );
+		}
+
+		/**
+		 * This method takes in a new zone, saves that token internally, and
+		 * that token is then used for CF authentication.
+		 * @param   string       token                Set CF auth token to this
+		 * @param   string       domain               Domain name
+		 */
+		private function _setAuthToken ( $token, $domain ) {
+			$old = $this->_configReader->getValue (
+				self::XPATH_AUTH_TOKEN,
+				ScopeInterface::SCOPE_STORE
+			);
+			$old = $this->_encryptor->decrypt ( $old );
+			$old = json_decode ( $old );
+			if ( !( $old instanceof stdClass ) ) $old = new stdClass ();
+			$token = trim ( strval ( $token ) );
+			$old->$domain = $token;
+			$old = json_encode ( $old );
+			$old = $this->_encryptor->encrypt ( $old );
+			$this->_configWriter->save ( self::XPATH_AUTH_TOKEN, $old );
+			$this->_cacheTypeList->cleanType ( ConfigType::TYPE_IDENTIFIER );
+		}
+
+		/**
 		 * This method is here because it interfaces with the abstract parent class.  It takes in an
 		 * input and output interface and it runs the command.
 		 * @param       InputInterface      input               The input interface
@@ -97,9 +164,7 @@
 				$output->writeln ("Error: please pass token name with --token option.");
 				return $this;
 			}
-			$domains = array_map ( function ( $entry ) {
-				return $entry ["name"];
-			}, $this->_data->getDomainNames () );
+			$domains = $this->_getDomainNames ();
 			if ( !in_array ( $domain, $domains ) ) {
 				$output->writeln ("Error: invalid domain name, available options are:");
 				$output->writeln ("");
@@ -109,8 +174,8 @@
 				$output->writeln ("");
 				return $this;
 			}
-			$this->_data->setAuthZone ( $zone, $domain );
-			$this->_data->setAuthToken ( $token, $domain );
+			$this->_setAuthZone ( $zone, $domain );
+			$this->_setAuthToken ( $token, $domain );
 			$output->writeln ("Successfully saved zone and token for domain $domain.");
 		}
 

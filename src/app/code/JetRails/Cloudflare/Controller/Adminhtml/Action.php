@@ -3,7 +3,7 @@
 	namespace JetRails\Cloudflare\Controller\Adminhtml;
 
 	use Magento\Backend\App\Action\Context;
-	use Magento\Framework\App\Action\Action as CoreAction;
+	use Magento\Backend\App\Action as CoreAction;
 	use Magento\Framework\App\ObjectManager;
 	use Magento\Framework\Json\Helper\Data as JsonData;
 	use Magento\Framework\App\Request\Http;
@@ -63,6 +63,7 @@
 		 */
 		protected function _isAllowed () {
 			$resource = $this->_getResourceName ();
+			$resource = preg_replace ( "/^.+\//m", "", $resource );
 			return $this->_authorization
 				->isAllowed ("JetRails_Cloudflare::$resource");
 		}

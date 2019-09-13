@@ -4,7 +4,7 @@
 
 	use JetRails\Cloudflare\Helper\Adminhtml\Data as DataHelper;
 	use Magento\Backend\App\Action\Context;
-	use Magento\Framework\App\Action\Action;
+	use Magento\Backend\App\Action;
 
 	/**
 	 * This class extends from Magento's default controller action class and it

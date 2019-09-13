@@ -3,7 +3,7 @@
 	namespace JetRails\Cloudflare\Controller\Adminhtml\Dashboard;
 
 	use Magento\Backend\App\Action\Context;
-	use Magento\Framework\App\Action\Action;
+	use Magento\Backend\App\Action;
 	use Magento\Framework\View\Result\PageFactory;
 
 	/**
@@ -36,7 +36,7 @@
 		 */
 		protected function _isAllowed () {
 			return $this->_authorization
-				->isAllowed ("JetRails_Cloudflare::dashboard");
+				->isAllowed ("JetRails_Cloudflare::cloudflare");
 		}
 
 		/**

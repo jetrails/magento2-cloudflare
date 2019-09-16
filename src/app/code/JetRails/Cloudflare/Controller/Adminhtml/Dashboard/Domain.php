@@ -40,7 +40,7 @@
 		 */
 		protected function _isAllowed () {
 			return $this->_authorization
-				->isAllowed ("JetRails_Cloudflare::configuration");
+				->isAllowed ("JetRails_Cloudflare::cloudflare");
 		}
 
 		/**

@@ -1,4 +1,4 @@
-# Magento 2 — Cloudflare
+# Magento 2 — Cloudflare — By [JetRails](https://jetrails.com)
 > Interact with popular Cloudflare features though Magento's backend portal.
 
 ![](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)

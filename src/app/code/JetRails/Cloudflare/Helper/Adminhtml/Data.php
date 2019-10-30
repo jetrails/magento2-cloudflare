@@ -21,7 +21,7 @@
 	 * Cloudflare API. It also deals with loading all the domain names that are
 	 * found within this Magento installation and which domain is currently
 	 * selected.
-	 * @version     1.2.1
+	 * @version     1.2.2
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved
@@ -179,13 +179,13 @@
 			$stores = $this->_storeManager->getStores ();
 			foreach ( $stores as $store ) {
 				$domain = parse_url ( $store->getBaseUrl () ) ["host"];
+				preg_match ( "/\.?([^.]+\.[^.]+)$/im", $domain, $matches );
+				$domain = $matches [ 1 ];
 				array_push ( $domains, $domain );
 			}
 			$domains = array_unique ( $domains );
 			sort ( $domains );
 			$domains = array_map ( function ( $domain ) use ( $selection ) {
-				preg_match ( "/\.?([^.]+\.[^.]+)$/i", $domain, $matches );
-				$domain = $matches [ 1 ];
 				return array (
 					"name" => $domain,
 					"active" => $domain == $selection,

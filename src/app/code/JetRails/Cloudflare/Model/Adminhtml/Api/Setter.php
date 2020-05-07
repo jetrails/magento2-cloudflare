@@ -12,7 +12,7 @@
 	 * the getting of the setting. This class implements the setting part. All
 	 * setters have a data type that the passed value is cast to. This is set
 	 * using class data members.
-	 * @version     1.2.2
+	 * @version     1.2.3
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

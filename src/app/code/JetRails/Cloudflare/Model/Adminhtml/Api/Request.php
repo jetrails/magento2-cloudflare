@@ -22,7 +22,7 @@
 		 * This class constant defines the API endpoint to Cloudflare's API. It
 		 * is used as a base to append to and modify the endpoint.
 		 */
-		const CLOUDFLARE_API_ENDPOINT = "https://api.cloudflare.com/client/v4/";
+		const CLOUDFLARE_API_ENDPOINT = "https://api.cloudflare.com/client/v4";
 
 		/**
 		 * These class constants define which kind of request must be created.

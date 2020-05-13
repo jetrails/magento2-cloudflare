@@ -57,6 +57,7 @@ gulp.task ( "build-styles", ["init"], ( callback ) => {
 		.pipe ( sass ({ includePaths: `${SOURCE_DIR}/app/code/${PACKAGE_PATH}/view/adminhtml/web/scss` }) )
 		.pipe ( minify () )
 		.pipe ( concat ("bundle.min.css") )
+		.pipe ( replace ( /src\/app\/code\/JetRails\/Cloudflare\/view\/adminhtml\/web\/scss\//g, "" ) )
 		.pipe ( gulp.dest (`${BUILD_DIR}/app/code/${PACKAGE_PATH}/view/adminhtml/web/css`) )
 		.pipe ( gulp.dest (`${SOURCE_DIR}/app/code/${PACKAGE_PATH}/view/adminhtml/web/css`) )
 		.on ( "done", callback )

@@ -2,7 +2,7 @@
 > Interact with popular Cloudflare features though Magento's backend portal.
 
 ![](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)
-![](https://img.shields.io/badge/Version-1.2.3-orange.svg?style=for-the-badge)
+![](https://img.shields.io/badge/Version-1.2.4-orange.svg?style=for-the-badge)
 ![](https://img.shields.io/badge/Stability-Stable-orange.svg?style=for-the-badge)
 ![](https://img.shields.io/badge/Magento-2-orange.svg?style=for-the-badge)
 

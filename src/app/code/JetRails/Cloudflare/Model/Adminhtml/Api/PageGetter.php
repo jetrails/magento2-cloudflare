@@ -11,7 +11,7 @@
 	 * that it attempts to load all the records across all the pages of records
 	 * that Cloudflare has. Once all the records have been accumulated, then the
 	 * full set is returned to the caller.
-	 * @version     1.2.3
+	 * @version     1.2.4
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

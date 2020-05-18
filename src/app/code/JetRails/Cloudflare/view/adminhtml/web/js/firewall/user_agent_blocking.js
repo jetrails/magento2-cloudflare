@@ -167,8 +167,8 @@ $(document).on ( "cloudflare.firewall.user_agent_blocking.create", function ( ev
 				"value": agent
 			},
 			success: function ( response ) {
+				$(prompt.components.modal).removeClass ("loading")
 				if ( response.success ) {
-					$(prompt.components.modal).removeClass ("loading")
 					prompt.close ()
 				}
 				notification.showMessages ( response )
@@ -201,8 +201,8 @@ $(document).on ( "cloudflare.firewall.user_agent_blocking.edit", function ( even
 				"value": $(modal).find ("[name='agent']").val ()
 			},
 			success: ( response ) => {
+				$(modal).removeClass ("loading")
 				if ( response.success ) {
-					$(modal).removeClass ("loading")
 					prompt.close ()
 				}
 				notification.showMessages ( response )

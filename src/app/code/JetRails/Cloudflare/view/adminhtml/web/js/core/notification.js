@@ -60,6 +60,9 @@ function addError ( message ) {
 }
 
 function showMessages ( data ) {
+	if ( data.error ) {
+		data.errors = [{ code: data.code, message: data.error }]
+	}
 	if ( data.errors ) {
 		addError ( data.errors.map ( i => `${i.code}: ${i.message}` ) )
 	}

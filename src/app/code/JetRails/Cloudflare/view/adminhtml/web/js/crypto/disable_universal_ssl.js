@@ -22,6 +22,7 @@ function triggerChange ( data ) {
 		type: "POST",
 		data: { "form_key": data.form.key, "state": value },
 		success: function ( response ) {
+			notification.showMessages ( response )
 			$("section.cloudflare.crypto.ssl").addClass ("loading")
 			common.loadSections (".crypto.disable_universal_ssl")
 		}

@@ -35,7 +35,7 @@ function secondsToAppropriate ( seconds ) {
 
 function filterResults ( term, results ) {
 	let searchTerm = ( term + "" ).toLowerCase ().trim ()
-	return results.filter ( entry => {
+	return !results ? [] : results.filter ( entry => {
 		return ( entry.name + "" ).toLowerCase ().indexOf ( searchTerm ) > -1 ||
 			   ( entry.content + "" ).toLowerCase ().indexOf ( searchTerm ) > -1
 	})
@@ -216,6 +216,7 @@ $(document).on ( "cloudflare.dns.dns_records.delete", function ( event, data ) {
 			type: "POST",
 			data: { "form_key": data.form.key, "id": id },
 			success: function ( response ) {
+				notification.showMessages ( response )
 				common.loadSections (".dns_records")
 			}
 		})
@@ -537,6 +538,7 @@ $(document).on ( "cloudflare.dns.dns_records.export", function ( event, data ) {
 		type: "POST",
 		data: { "form_key": data.form.key },
 		success: function ( response ) {
+			notification.showMessages ( response )
 			let blob = new Blob ( [ response ], { type: "octet/stream" } )
 			let url = window.URL.createObjectURL ( blob )
 			let a = document.createElement ("a")
@@ -588,6 +590,7 @@ $(document).on ( "cloudflare.dns.dns_records.upload", function ( event, data ) {
 				contentType: false,
 				processData: false,
 				success: ( response ) => {
+					notification.showMessages ( response )
 					if ( response.success && response.result.recs_added == response.result.total_records_parsed ) {
 						prompt.close ()
 						$(data.section).addClass ("loading")
@@ -675,6 +678,7 @@ $(document).on ( "change", ".editable, .proxied, td.ttl", ( event ) => {
 				"priority": priority == "" ? 0 : priority
 			},
 			success: ( response ) => {
+				notification.showMessages ( response )
 				$(section).find ("[contenteditable]").prop ( "contenteditable", true )
 				common.loadSections (".dns.dns_records")
 			}

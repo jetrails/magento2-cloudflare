@@ -24,7 +24,7 @@
 		public function execute () {
 			$files = $this->_request->getParam ("files");
 			$response = $this->_api->purgeIndividual ( $files );
-			if ( $response->success ) {
+			if ( isset ( $response->success ) && $response->success ) {
 				$response->messages = array_merge (
 					array (
 						"Successfully purged assets. Please allow up to 30 " .

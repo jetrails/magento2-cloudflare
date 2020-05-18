@@ -105,6 +105,12 @@ section.cloudflare > div.row > div.wrapper_right {
 	padding: 25px;
 }
 
+section.cloudflare > div.row > div.wrapper_right > div > .error {
+	margin-bottom: 15px;
+	font-size: 1.1em;
+	color: red;
+}
+
 section.cloudflare > div.row > div.wrapper_right > div {
 	width: 100%;
 	text-align: center;

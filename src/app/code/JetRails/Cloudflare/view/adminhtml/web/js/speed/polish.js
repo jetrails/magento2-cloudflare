@@ -1,4 +1,5 @@
 const $ = require ("jquery")
+const common = require ("cloudflare/common")
 const notification = require ("cloudflare/core/notification")
 
 $(document).on ( "cloudflare.speed.polish.initialize", ( event, data ) => {
@@ -22,7 +23,7 @@ $(document).on ( "cloudflare.speed.polish.change", ( event, data ) => {
 		data: { "form_key": data.form.key, "value": value, "webp": webp },
 		success: ( response ) => {
 			notification.showMessages (  response )
-			$(data.section).removeClass ("loading")
+			common.loadSections (".polish")
 		}
 	})
 })

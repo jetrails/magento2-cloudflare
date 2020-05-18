@@ -229,6 +229,7 @@ $(document).on ( "cloudflare.firewall.access_rules.add", function ( event, data 
 			"note": note
 		},
 		success: function ( response ) {
+			notification.showMessages ( response )
 			$(data.section).addClass ("loading")
 			$(data.section).find ("[name='value']").val ("")
 			$(data.section).find ("[name='mode']").val ("block")
@@ -252,6 +253,7 @@ $(document).on ( "cloudflare.firewall.access_rules.delete", function ( event, da
 			type: "POST",
 			data: { "form_key": data.form.key, "id": id },
 			success: function ( response ) {
+				notification.showMessages ( response )
 				common.loadSections (".access_rules")
 			}
 		})
@@ -269,6 +271,7 @@ $(document).on ( "cloudflare.firewall.access_rules.mode", function ( event, data
 		type: "POST",
 		data: { "form_key": data.form.key, "id": id, "mode": mode },
 		success: function ( response ) {
+			notification.showMessages ( response )
 			common.loadSections (".access_rules")
 		}
 	})
@@ -292,6 +295,7 @@ $(document).on ( "cloudflare.firewall.access_rules.edit", function ( event, data
 			type: "POST",
 			data: { "form_key": data.form.key, "id": $(data.trigger).data ("id"), "note": notes.val () },
 			success: function ( response ) {
+				notification.showMessages ( response )
 				common.loadSections (".access_rules")
 			}
 		})

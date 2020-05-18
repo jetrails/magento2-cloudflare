@@ -1,6 +1,7 @@
 const $ = require ("jquery")
 const cloudflare = require ("cloudflare/common")
 const notification = require ("cloudflare/core/notification")
+const common = require ("cloudflare/common")
 
 $(document).on ( "cloudflare.speed.auto_minify.initialize", ( event, data ) => {
 	var jsState = data.response.result.value.js === "on"
@@ -21,8 +22,8 @@ $(document).on ( "cloudflare.speed.auto_minify.change", ( event, data ) => {
 		type: "POST",
 		data: { "form_key": data.form.key, "js": jsVal, "css": cssVal, "html": htmlVal },
 		success: ( response ) => {
-			$(data.section).removeClass ("loading")
 			notification.showMessages ( response )
+			common.loadSections (".auto_minify")
 		}
 	})
 })

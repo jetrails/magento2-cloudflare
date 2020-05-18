@@ -455,6 +455,7 @@ $(document).on ( "cloudflare.page_rules.page_rules.delete", function ( event, da
 			type: "POST",
 			data: { "form_key": data.form.key, "id": id },
 			success: function ( response ) {
+				notification.showMessages ( response )
 				common.loadSections (".page_rules")
 			}
 		})

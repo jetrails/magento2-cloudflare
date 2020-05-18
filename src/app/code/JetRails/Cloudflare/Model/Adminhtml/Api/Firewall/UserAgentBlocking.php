@@ -116,10 +116,16 @@
 			$endpoint = $this->getEndpoint ("firewall/ua_rules/usage");
 			$this->_requestModel->setType ( Request::REQUEST_GET );
 			$result = $this->_requestModel->resolve ( $endpoint );
-			$result = array_filter ( $result->result, function ( $i ) {
-				return $i->scope === "zone";
-			});
-			return $result [ 0 ];
+			if ( isset ( $result->result ) ) {
+				$result = array_filter ( $result->result, function ( $i ) {
+					return $i->scope === "zone";
+				});
+				return $result [ 0 ];
+			}
+			return [
+				"used" => 0,
+				"max" => 0
+			];
 		}
 
 	}

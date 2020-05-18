@@ -11,6 +11,36 @@ function loadSections ( additional = "" ) {
 			},
 			success: ( response ) => {
 				$(section).removeClass ("loading")
+				hasErrors = response => {
+					if ( "code" in response && response.code == 1009 ) {
+						return true
+					}
+					if ( "success" in response ) {
+						return response.success === false
+					}
+					if ( "state" in response && "success" in response.state ) {
+						return response.state.success === false
+					}
+					if ( "webp" in response && "success" in response.webp ) {
+						return response.webp.success === false
+					}
+					return false
+				}
+				if ( hasErrors ( response ) ) {
+					$(section).find (".row:nth-child( n + 2 )").remove ()
+					$(section).find (".wrapper_bottom").remove ()
+					$(section).find (".wrapper_right").remove ()
+					$(section).find (".wrapper_left *:nth-child( n + 3 )").remove ()
+					$(section).find (".row").append (`
+						<div class="wrapper_right" >
+							<div>
+								<h5 class="error" >Authorization Error</h5>
+								<p>It appears that the configured Cloudflare token does not have sufficient permissions to render this section.</p>
+							</div>
+						</div>
+					`)
+					return
+				}
 				notification.showMessages ( response )
 				var event = {
 					"target": {

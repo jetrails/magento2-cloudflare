@@ -150,6 +150,7 @@ $(document).on ( "cloudflare.crypto.http_strict_transport_security.update", func
 			type: "POST",
 			data: { "form_key": data.form.key, "value": config },
 			success: function ( response ) {
+				notification.showMessages ( response )
 				configure.close ()
 				common.loadSections (".crypto.http_strict_transport_security")
 			}

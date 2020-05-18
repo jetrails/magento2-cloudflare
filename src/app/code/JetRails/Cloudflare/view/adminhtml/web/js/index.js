@@ -39,7 +39,7 @@ $(window).on ( "load", function () {
 		oldAjax.apply ( null, arguments )
 	}
 
-	cloudflare.loadSections ()
+	cloudflare.loadSections (".overview")
 
 	$(".proxied").each ( ( index ) => {
 		$(this).data ( "value", /proxied_on/.test ( $(this).attr ("src") ) )
@@ -137,4 +137,6 @@ $(document).on ( "click", ".cloudflare-dashboard ul.tabs li", function () {
 	$(".cloudflare-dashboard .tabs li").removeClass ("selected")
 	$(`.cloudflare-dashboard .content[data-target='${target}']`).addClass ("selected")
 	$(this).addClass ("selected")
+	$(`.initialize.${target}`).addClass ("loading")
+	cloudflare.loadSections (`.${target}`)
 })

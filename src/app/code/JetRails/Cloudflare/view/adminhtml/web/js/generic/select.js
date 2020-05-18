@@ -1,5 +1,5 @@
 const $ = require ("jquery")
-const cloudflare = require ("cloudflare/common")
+const common = require ("cloudflare/common")
 const notification = require ("cloudflare/core/notification")
 
 function initialize ( event, data ) {
@@ -21,7 +21,7 @@ function update ( event, data ) {
 			}
 			else {
 				let targetSection = `${data.target.tab}.${data.target.section}`
-				cloudflare.loadSections (`.cloudflare.${targetSection}`)
+				common.loadSections (`.cloudflare.${targetSection}`)
 			}
 		}
 	})

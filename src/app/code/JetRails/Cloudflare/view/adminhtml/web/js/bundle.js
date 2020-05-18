@@ -11145,7 +11145,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const cloudflare = __webpack_require__ (3)
+const common = __webpack_require__ (3)
 const notification = __webpack_require__ (2)
 
 function initialize ( event, data ) {
@@ -11167,7 +11167,7 @@ function update ( event, data ) {
 			}
 			else {
 				let targetSection = `${data.target.tab}.${data.target.section}`
-				cloudflare.loadSections (`.cloudflare.${targetSection}`)
+				common.loadSections (`.cloudflare.${targetSection}`)
 			}
 		}
 	})
@@ -12142,7 +12142,7 @@ return $.widget;
 
 const $ = __webpack_require__ (0)
 const notification = __webpack_require__ (2)
-const cloudflare = __webpack_require__ (3)
+const common = __webpack_require__ (3)
 const global = __webpack_require__ (7)
 const requireAll = ( r ) => { r.keys ().forEach ( r ) }
 
@@ -12181,7 +12181,7 @@ $(window).on ( "load", function () {
 		oldAjax.apply ( null, arguments )
 	}
 
-	cloudflare.loadSections (".overview")
+	common.loadSections (".overview")
 
 	$(".proxied").each ( ( index ) => {
 		$(this).data ( "value", /proxied_on/.test ( $(this).attr ("src") ) )
@@ -12280,7 +12280,7 @@ $(document).on ( "click", ".cloudflare-dashboard ul.tabs li", function () {
 	$(`.cloudflare-dashboard .content[data-target='${target}']`).addClass ("selected")
 	$(this).addClass ("selected")
 	$(`.initialize.${target}`).addClass ("loading")
-	cloudflare.loadSections (`.${target}`)
+	common.loadSections (`.${target}`)
 })
 
 
@@ -12427,6 +12427,7 @@ $(document).on ( "cloudflare.caching.browser_cache_expiration.update", selectEle
 
 const $ = __webpack_require__ (0)
 const notification = __webpack_require__ (2)
+const common = __webpack_require__ (3)
 
 $(document).on ( "cloudflare.caching.caching_level.initialize", ( event, data ) => {
 	var label = data.response.result.value
@@ -12442,7 +12443,7 @@ $(document).on ( "cloudflare.caching.caching_level.update", ( event, data ) => {
 		data: { "form_key": data.form.key, "value": newValue },
 		success: ( response ) => {
 			notification.showMessages ( response )
-			$(data.section).removeClass ("loading")
+			common.loadSections (".caching_level")
 		}
 	})
 })
@@ -12914,7 +12915,6 @@ webpackContext.id = 31;
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const cloudflare = __webpack_require__ (3)
 const notification = __webpack_require__ (2)
 const common = __webpack_require__ (3)
 
@@ -13084,7 +13084,6 @@ $(document).on ( "cloudflare.dns.cloudflare_nameservers.initialize", function ( 
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const cloudflare = __webpack_require__ (3)
 const common = __webpack_require__ (3)
 const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
@@ -13330,7 +13329,7 @@ $(document).on ( "cloudflare.dns.dns_records.create", function ( event, data ) {
 			if ( response.success ) {
 				$(data.section).find ("[name='name'],[name='content']").val ("")
 				$(data.section).addClass ("loading")
-				cloudflare.loadSections (".dns.dns_records")
+				common.loadSections (".dns.dns_records")
 			}
 		}
 	})
@@ -13679,7 +13678,7 @@ $(document).on ( "cloudflare.dns.dns_records.upload", function ( event, data ) {
 					if ( response.success && response.result.recs_added == response.result.total_records_parsed ) {
 						prompt.close ()
 						$(data.section).addClass ("loading")
-						cloudflare.loadSections (".dns.dns_records")
+						common.loadSections (".dns.dns_records")
 					}
 					else if ( response.success ) {
 						$(prompt.components.modal).removeClass ("loading")
@@ -13691,7 +13690,7 @@ $(document).on ( "cloudflare.dns.dns_records.upload", function ( event, data ) {
 							$(messagesContainer).append ( $("<div>").text ( message.message ) )
 						})
 						if ( response.result.recs_added > 0 ) {
-							cloudflare.loadSections (".dns.dns_records")
+							common.loadSections (".dns.dns_records")
 						}
 					}
 					else {
@@ -13824,7 +13823,6 @@ webpackContext.id = 42;
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const cloudflare = __webpack_require__ (3)
 const common = __webpack_require__ (3)
 const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)

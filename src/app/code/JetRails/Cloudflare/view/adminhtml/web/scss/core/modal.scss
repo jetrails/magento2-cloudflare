@@ -272,12 +272,15 @@
 			}
 		}
 		&.loading {
-			> .container {
+			pointer-events: none;
+			.container {
 				overflow: hidden;
 			}
-			> .container:after {
+			.container:after {
 				visibility: visible;
 				background-color: rgba( 0, 0, 0, 0.5 );
+				cursor: not-allowed;
+				content: "";
 			}
 		}
 	}

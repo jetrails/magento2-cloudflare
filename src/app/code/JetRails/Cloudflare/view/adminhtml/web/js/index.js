@@ -1,6 +1,6 @@
 const $ = require ("jquery")
 const notification = require ("cloudflare/core/notification")
-const cloudflare = require ("cloudflare/common")
+const common = require ("cloudflare/common")
 const global = require ("cloudflare/global")
 const requireAll = ( r ) => { r.keys ().forEach ( r ) }
 
@@ -39,7 +39,7 @@ $(window).on ( "load", function () {
 		oldAjax.apply ( null, arguments )
 	}
 
-	cloudflare.loadSections (".overview")
+	common.loadSections (".overview")
 
 	$(".proxied").each ( ( index ) => {
 		$(this).data ( "value", /proxied_on/.test ( $(this).attr ("src") ) )
@@ -138,5 +138,5 @@ $(document).on ( "click", ".cloudflare-dashboard ul.tabs li", function () {
 	$(`.cloudflare-dashboard .content[data-target='${target}']`).addClass ("selected")
 	$(this).addClass ("selected")
 	$(`.initialize.${target}`).addClass ("loading")
-	cloudflare.loadSections (`.${target}`)
+	common.loadSections (`.${target}`)
 })

@@ -1,5 +1,4 @@
 const $ = require ("jquery")
-const cloudflare = require ("cloudflare/common")
 const common = require ("cloudflare/common")
 const notification = require ("cloudflare/core/notification")
 const modal = require ("cloudflare/core/modal")
@@ -245,7 +244,7 @@ $(document).on ( "cloudflare.dns.dns_records.create", function ( event, data ) {
 			if ( response.success ) {
 				$(data.section).find ("[name='name'],[name='content']").val ("")
 				$(data.section).addClass ("loading")
-				cloudflare.loadSections (".dns.dns_records")
+				common.loadSections (".dns.dns_records")
 			}
 		}
 	})
@@ -594,7 +593,7 @@ $(document).on ( "cloudflare.dns.dns_records.upload", function ( event, data ) {
 					if ( response.success && response.result.recs_added == response.result.total_records_parsed ) {
 						prompt.close ()
 						$(data.section).addClass ("loading")
-						cloudflare.loadSections (".dns.dns_records")
+						common.loadSections (".dns.dns_records")
 					}
 					else if ( response.success ) {
 						$(prompt.components.modal).removeClass ("loading")
@@ -606,7 +605,7 @@ $(document).on ( "cloudflare.dns.dns_records.upload", function ( event, data ) {
 							$(messagesContainer).append ( $("<div>").text ( message.message ) )
 						})
 						if ( response.result.recs_added > 0 ) {
-							cloudflare.loadSections (".dns.dns_records")
+							common.loadSections (".dns.dns_records")
 						}
 					}
 					else {

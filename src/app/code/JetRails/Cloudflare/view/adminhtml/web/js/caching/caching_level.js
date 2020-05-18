@@ -1,5 +1,6 @@
 const $ = require ("jquery")
 const notification = require ("cloudflare/core/notification")
+const common = require ("cloudflare/common")
 
 $(document).on ( "cloudflare.caching.caching_level.initialize", ( event, data ) => {
 	var label = data.response.result.value
@@ -15,7 +16,7 @@ $(document).on ( "cloudflare.caching.caching_level.update", ( event, data ) => {
 		data: { "form_key": data.form.key, "value": newValue },
 		success: ( response ) => {
 			notification.showMessages ( response )
-			$(data.section).removeClass ("loading")
+			common.loadSections (".caching_level")
 		}
 	})
 })

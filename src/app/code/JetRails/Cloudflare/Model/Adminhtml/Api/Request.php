@@ -171,6 +171,7 @@
 		 */
 		public function resolve ( $endpoint, $decode = true ) {
 			$endpoint = $this->_getEndpoint ($endpoint);
+			$this->setAuth ( $this->_dataHelper->getAuthToken () ); // For CLI
 			$handle = curl_init ();
 			curl_setopt ( $handle, CURLOPT_URL, $endpoint );
 			curl_setopt ( $handle, CURLOPT_RETURNTRANSFER, true );

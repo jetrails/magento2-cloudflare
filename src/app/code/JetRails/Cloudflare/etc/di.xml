@@ -7,6 +7,10 @@
 		<arguments>
 			<argument name="commands" xsi:type="array" >
 				<item name="cloudflare:set-auth" xsi:type="object" >JetRails\Cloudflare\Console\Command\SetAuth</item>
+				<item name="cloudflare:caching:development-mode:get" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\DevelopmentMode\Get</item>
+				<item name="cloudflare:caching:development-mode:set" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\DevelopmentMode\Set</item>
+				<item name="cloudflare:caching:purge-cache:everything" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Everything</item>
+				<item name="cloudflare:caching:purge-cache:individual" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Individual</item>
 			</argument>
 		</arguments>
 	</type>

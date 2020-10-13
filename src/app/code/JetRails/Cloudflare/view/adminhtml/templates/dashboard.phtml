@@ -69,9 +69,6 @@
 				<?php echo $block->getTabContent ("overview") ?>
 			</div>
 			<?php if ( $block->isValidAuth () && $block->isValidZone () ): ?>
-				<div class="content" data-target="caching" >
-					<?php echo $block->getTabContent ("caching") ?>
-				</div>
 				<div class="content" data-target="dns" >
 					<?php echo $block->getTabContent ("dns") ?>
 				</div>
@@ -83,6 +80,9 @@
 				</div>
 				<div class="content" data-target="speed" >
 					<?php echo $block->getTabContent ("speed") ?>
+				</div>
+				<div class="content" data-target="caching" >
+					<?php echo $block->getTabContent ("caching") ?>
 				</div>
 				<div class="content" data-target="page_rules" >
 					<?php echo $block->getTabContent ("page_rules") ?>

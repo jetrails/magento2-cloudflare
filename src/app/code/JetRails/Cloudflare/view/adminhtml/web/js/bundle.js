@@ -12187,7 +12187,8 @@ $(window).on ( "load", function () {
 		oldAjax.apply ( null, arguments )
 	}
 
-	common.loadSections (".overview")
+	// common.loadSections (`.${window.localStorage.getItem ("cloudflare.tab") || "overview"}`)
+	$(`.cloudflare-dashboard .tabs [data-tab='${window.localStorage.getItem ("cloudflare.tab") || "overview"}']`).trigger ("click")
 
 	$(".proxied").each ( ( index ) => {
 		$(this).data ( "value", /proxied_on/.test ( $(this).attr ("src") ) )
@@ -12286,6 +12287,7 @@ $(document).on ( "click", ".cloudflare-dashboard ul.tabs li", function () {
 	$(`.cloudflare-dashboard .content[data-target='${target}']`).addClass ("selected")
 	$(this).addClass ("selected")
 	$(`.initialize.${target}`).addClass ("loading")
+	window.localStorage.setItem ( "cloudflare.tab", target )
 	common.loadSections (`.${target}`)
 })
 

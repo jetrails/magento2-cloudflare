@@ -32,9 +32,11 @@
 		/**
 		 * @var     string       _dataKey             The key name for val obj
 		 * @var     integer      _settingType         Enum value that is chosen
+		 * @var     boolean      _usePatchToSet       Should use PATCH method to set
 		 */
 		protected $_dataKey = "value";
 		protected $_settingType = self::TYPE_STRING;
+		protected $_usePatchToSet = true;
 		protected $_requestModel;
 		protected $_configurationModel;
 
@@ -74,7 +76,7 @@
 			$value = $this->_castValue ( $value );
 			$zoneId = $this->_configurationModel->getZoneId ();
 			$endpoint = sprintf ( "zones/%s/%s", $zoneId, $this->_endpoint );
-			$this->_requestModel->setType ( Request::REQUEST_PATCH );
+			$this->_requestModel->setType ( $this->_usePatchToSet ? Request::REQUEST_PATCH : Request::REQUEST_PUT );
 			$this->_requestModel->setData ( array ( "$this->_dataKey" => $value ) );
 			return $this->_requestModel->resolve ( $endpoint );
 		}

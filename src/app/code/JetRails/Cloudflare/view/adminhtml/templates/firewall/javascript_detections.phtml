@@ -1,0 +1,35 @@
+<section
+	class="cloudflare firewall javascript_detections initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="firewall"
+	data-section-name="javascript_detections" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >JavaScript Detections</span>
+			<p>Use lightweight, invisible JavaScript detections to improve Bot Management products.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What does this feature do?</h4>
+			<p>If you have enabled JavaScript Detections, Cloudflare will inject a small amount of invisible code into client devices. This code is run asynchronously and does not collect personally-identifiable information. Cloudflare will fingerprint the client device (determining browser type, GPU, and more) to determine whether or not the client is making automated requests. This improves the efficacy of Bot Management and Bot Fight Mode.</p>
+			<h4>What traffic is affected?</h4>
+			<p>JavaScript is only injected in response to requests for HTML pages or page views, excluding AJAX calls. API &amp; mobile traffic is unaffected. Once code is injected, it is not injected again until its 30-minute session life expires.</p>
+			<h4>What else should I know?</h4>
+			<p>If you have a Content Security Policy (CSP), you may need to update it. For more details on CSPs and JavaScript Detections, <a href="https://support.cloudflare.com/hc/en-us/articles/360045224651-Understanding-JavaScript-fingerprinting-for-Bot-Management" >view our support article</a>.</p>
+		</div>
+	</div>
+</section>

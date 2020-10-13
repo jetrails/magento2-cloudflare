@@ -12574,8 +12574,8 @@ webpackContext.id = 20;
 const $ = __webpack_require__ (0)
 const switchElement = __webpack_require__ (1)
 
-$(document).on ( "cloudflare.crypto.always_use_https.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.crypto.always_use_https.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.ssl_tls.always_use_https.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.always_use_https.toggle", switchElement.toggle )
 
 
 /***/ }),
@@ -12585,8 +12585,8 @@ $(document).on ( "cloudflare.crypto.always_use_https.toggle", switchElement.togg
 const $ = __webpack_require__ (0)
 const switchElement = __webpack_require__ (1)
 
-$(document).on ( "cloudflare.crypto.authenticated_origin_pulls.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.crypto.authenticated_origin_pulls.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.ssl_tls.authenticated_origin_pulls.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.authenticated_origin_pulls.toggle", switchElement.toggle )
 
 
 /***/ }),
@@ -12596,8 +12596,8 @@ $(document).on ( "cloudflare.crypto.authenticated_origin_pulls.toggle", switchEl
 const $ = __webpack_require__ (0)
 const switchElement = __webpack_require__ (1)
 
-$(document).on ( "cloudflare.crypto.automatic_https_rewrites.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.crypto.automatic_https_rewrites.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.ssl_tls.automatic_https_rewrites.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.automatic_https_rewrites.toggle", switchElement.toggle )
 
 
 /***/ }),
@@ -12609,7 +12609,7 @@ const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
 const common = __webpack_require__ (3)
 
-$(document).on ( "cloudflare.crypto.disable_universal_ssl.initialize", function ( event, data ) {
+$(document).on ( "cloudflare.ssl_tls.disable_universal_ssl.initialize", function ( event, data ) {
 	if ( !data.response.result.enabled ) {
 		$(data.section).find ("[name='button']").val ("Enable Universal SSL")
 		$(data.section).find ("[name='button']").data ( "action", "enable" )
@@ -12629,13 +12629,13 @@ function triggerChange ( data ) {
 		data: { "form_key": data.form.key, "state": value },
 		success: function ( response ) {
 			notification.showMessages ( response )
-			$("section.cloudflare.crypto.ssl").addClass ("loading")
-			common.loadSections (".crypto.disable_universal_ssl")
+			$("section.cloudflare.ssl_tls.ssl").addClass ("loading")
+			common.loadSections (".ssl_tls.disable_universal_ssl")
 		}
 	})
 }
 
-$(document).on ( "cloudflare.crypto.disable_universal_ssl.toggle", function ( event, data ) {
+$(document).on ( "cloudflare.ssl_tls.disable_universal_ssl.toggle", function ( event, data ) {
 	if ( $(data.trigger).data ("action") == "disable" ) {
 		let agreement = new modal.Modal ( 800 )
 		agreement.addTitle ("Acknowledgement")
@@ -12681,7 +12681,7 @@ function maxAgeLabel ( value ) {
 	return "0 (Disable)"
 }
 
-$(document).on ( "cloudflare.crypto.http_strict_transport_security.initialize", function ( event, data ) {
+$(document).on ( "cloudflare.ssl_tls.http_strict_transport_security.initialize", function ( event, data ) {
 	let options = data.response.result.value.strict_transport_security
 	$(data.section).data ( "options", options )
 	if ( options.enabled ) {
@@ -12808,7 +12808,7 @@ function createConfigure ( options, callback ) {
 	configure.show ()
 }
 
-$(document).on ( "cloudflare.crypto.http_strict_transport_security.update", function ( event, data ) {
+$(document).on ( "cloudflare.ssl_tls.http_strict_transport_security.update", function ( event, data ) {
 	createAcknowledgement ( $(data.section).data ("options"), ( configure, config ) => {
 		$(data.section).addClass ("loading")
 		$(configure.components.modal).addClass ("loading")
@@ -12819,7 +12819,7 @@ $(document).on ( "cloudflare.crypto.http_strict_transport_security.update", func
 			success: function ( response ) {
 				notification.showMessages ( response )
 				configure.close ()
-				common.loadSections (".crypto.http_strict_transport_security")
+				common.loadSections (".ssl_tls.http_strict_transport_security")
 			}
 		})
 	})
@@ -12833,8 +12833,8 @@ $(document).on ( "cloudflare.crypto.http_strict_transport_security.update", func
 const $ = __webpack_require__ (0)
 const selectElement = __webpack_require__ (4)
 
-$(document).on ( "cloudflare.crypto.minimum_tls_version.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.crypto.minimum_tls_version.update", selectElement.update )
+$(document).on ( "cloudflare.ssl_tls.minimum_tls_version.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.minimum_tls_version.update", selectElement.update )
 
 
 /***/ }),
@@ -12844,8 +12844,8 @@ $(document).on ( "cloudflare.crypto.minimum_tls_version.update", selectElement.u
 const $ = __webpack_require__ (0)
 const switchElement = __webpack_require__ (1)
 
-$(document).on ( "cloudflare.crypto.onion_routing.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.crypto.onion_routing.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.ssl_tls.onion_routing.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.onion_routing.toggle", switchElement.toggle )
 
 
 /***/ }),
@@ -12855,8 +12855,8 @@ $(document).on ( "cloudflare.crypto.onion_routing.toggle", switchElement.toggle 
 const $ = __webpack_require__ (0)
 const switchElement = __webpack_require__ (1)
 
-$(document).on ( "cloudflare.crypto.opportunistic_encryption.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.crypto.opportunistic_encryption.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.ssl_tls.opportunistic_encryption.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.opportunistic_encryption.toggle", switchElement.toggle )
 
 
 /***/ }),
@@ -12866,8 +12866,8 @@ $(document).on ( "cloudflare.crypto.opportunistic_encryption.toggle", switchElem
 const $ = __webpack_require__ (0)
 const selectElement = __webpack_require__ (4)
 
-$(document).on ( "cloudflare.crypto.ssl.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.crypto.ssl.update", selectElement.update )
+$(document).on ( "cloudflare.ssl_tls.ssl.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.ssl.update", selectElement.update )
 
 
 /***/ }),
@@ -12877,8 +12877,8 @@ $(document).on ( "cloudflare.crypto.ssl.update", selectElement.update )
 const $ = __webpack_require__ (0)
 const selectElement = __webpack_require__ (4)
 
-$(document).on ( "cloudflare.crypto.tls_13.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.crypto.tls_13.update", selectElement.update )
+$(document).on ( "cloudflare.ssl_tls.tls_13.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.tls_13.update", selectElement.update )
 
 
 /***/ }),

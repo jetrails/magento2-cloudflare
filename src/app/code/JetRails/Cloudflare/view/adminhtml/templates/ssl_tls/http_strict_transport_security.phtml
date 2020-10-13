@@ -1,0 +1,50 @@
+<section
+	class="cloudflare ssl_tls http_strict_transport_security initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="ssl_tls"
+	data-section-name="http_strict_transport_security" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >HTTP Strict Transport Security (HSTS)</span>
+			<p>Enforce web security policy for your website.</p>
+			<p style="display:none" class="option_enabled" >Status: <span><span/></p>
+			<p style="display:none" class="option_max_age" >Max-Age: <span><span/></p>
+			<p style="display:none" class="option_include_sub_domains" >Include Sub-Domains: <span><span/></p>
+			<p style="display:none" class="option_preload" >Preload: <span><span/></p>
+			<p style="display:none" class="option_no_sniff" >No-Sniff: <span><span/></p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<input name="button" class="trigger" data-target="update" type="button" value="Enable HSTS" />
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h5>What is HTTP Strict Transport Security?</h5>
+			<p>HTTP Strict Transport Security (HSTS, RFC 6797) is a header which allows a website to specify and enforce security policy in client web browsers. This policy enforcement protects secure websites from downgrade attacks, SSL stripping, and cookie hijacking. It allows a web server to declare a policy that browsers will only connect using secure HTTPS connections, and ensures end users do not “click through” critical security warnings. HSTS is an important security mechanism for high security websites. HSTS headers are only respected when served over HTTPS connections, not HTTP.</p>
+			<p>HSTS generally has the following behavior in user web browsers:</p>
+			<ul>
+				<li>Insecure HTTP links become secure HTTPS links</li>
+				<li>SSL certificate warnings or other errors show an error message and cannot be bypassed by the user</li>
+			</ul>
+			<h4>Considerations</h4>
+			<p>One critical consideration when using HSTS on Cloudflare is that once HSTS is turned on, your website must continue to have a valid HTTPS configuration conforming with the HSTS header to avoid making the website inaccessible to users. If SSL is disabled through other means (“grey clouding” a Flexible SSL website, or moving a website off Cloudflare), it is possible the website will be inaccessible to users for the duration of cached max-age headers, or until HTTPS is re-established and an HSTS header with value 0 is served. Consequently, HSTS configuration requires reading and acknowledging understanding of a warning message.</p>
+			<h4>Max-Age Header</h4>
+			<p>HSTS includes a “max-age” parameter which specifies the duration HSTS will continue to be cached and enforced by the web browser. This parameter generally is set at 6 months by default, however you must use a minimum of 12 months if you wish to be included in the HSTS Preload list (see below). The special value of “0” means HSTS is disabled and will no longer be cached by the client web browser. For the amount of time specified in the max-age header after a website is successfully accessed over HTTPS, the browser will enforce this HSTS policy, requiring HTTPS with correctly-configured certificates.</p>
+			<h4>Including Subdomains with HSTS</h4>
+			<p>Cloudflare supports the “includeSubDomains” parameter in HSTS headers. This parameter applies the HSTS policy from a parent domain (such as example.com) to subdomains (such as www.development.example.com or api.example.com). Caution is encouraged with this header, as if any subdomains do not work with HTTPS they will become inaccessible.</p>
+			<h4>HSTS Preload</h4>
+			<p>Cloudflare supports HSTS preload. This flag signals to web browsers that a website’s HSTS configuration is eligible for preloading, that is, inclusion into the browser’s core configuration. Without preload, HSTS is only set after an initial successful HTTPS request, and thus if an attacker can intercept and downgrade that first request, HSTS can be bypassed. With preload, this attack is prevented.</p>
+			<p>Once HSTS is configured, you must visit each browser’s preload submission URL manually. For Chrome, Firefox/Mozilla and Safari use the <a target="blank" href="https://hstspreload.appspot.com/">Chrome preload list</a>. Microsoft IE HSTS support is being updated.</p>
+			<br>
+			<h5>Additional Resources</h5>
+			<p><a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/204183088-Does-Cloudflare-offer-HSTS-HTTP-Strict-Transport-Security-">Does Cloudflare offer HSTS (HTTP Strict Transport Security)?</a></p>
+		</div>
+	</div>
+</section>

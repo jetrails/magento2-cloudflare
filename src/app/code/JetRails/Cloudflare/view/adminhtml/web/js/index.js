@@ -6,7 +6,7 @@ const requireAll = ( r ) => { r.keys ().forEach ( r ) }
 
 requireAll ( require.context ("cloudflare/overview", true, /\.js$/ ) )
 requireAll ( require.context ("cloudflare/caching", true, /\.js$/ ) )
-requireAll ( require.context ("cloudflare/crypto", true, /\.js$/ ) )
+requireAll ( require.context ("cloudflare/ssl_tls", true, /\.js$/ ) )
 requireAll ( require.context ("cloudflare/speed", true, /\.js$/ ) )
 requireAll ( require.context ("cloudflare/dns", true, /\.js$/ ) )
 requireAll ( require.context ("cloudflare/firewall", true, /\.js$/ ) )

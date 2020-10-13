@@ -1,0 +1,35 @@
+<section
+	class="cloudflare ssl_tls minimum_tls_version initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="ssl_tls"
+	data-section-name="minimum_tls_version" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Minimum TLS Version</span>
+			<p>Only allow HTTPS connections from visitors that support the selected TLS protocol version or newer.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div class="group_wrapper full" >
+				<select name="value" data-target="update" class="trigger-select selection" >
+					<option value="1.0" >TLS 1.0 (Default)</option>
+					<option value="1.1" >TLS 1.1</option>
+					<option value="1.2" >TLS 1.2</option>
+					<option value="1.3" >TLS 1.3</option>
+				</select>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What is the Minimum TLS Version?</h4>
+			<p>The minimum TLS version setting specifies the earliest version of TLS a visitor must support in order to connect to your domain using TLS. For example, if TLS 1.1 is selected, visitors attempting to connect with TLS 1.0 will be rejected while visitors attempting to connect using TLS 1.1, 1.2, or 1.3 (if enabled) will be allowed to connect.</p>
+			<h4>Why would I specify a minimum TLS version?</h4>
+			<p>Some security standards, such as PCI DSS 3.2, enforce strong cryptographic standards where strong cryptography is defined as TLS 1.1 or newer. As an example, specifying TLS 1.1 can help your domain become compliant with PCI DSS 3.2</p>
+		</div>
+	</div>
+</section>

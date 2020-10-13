@@ -55,8 +55,8 @@
 								title="Cloudflare Nameservers" />
 						</resource>
 						<resource
-							id="JetRails_Cloudflare::crypto"
-							title="Crypto" >
+							id="JetRails_Cloudflare::ssl_tls"
+							title="SSL/TLS" >
 							<resource
 								id="JetRails_Cloudflare::ssl"
 								title="SSL" />

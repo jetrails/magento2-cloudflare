@@ -1,0 +1,43 @@
+<section
+	class="cloudflare ssl_tls ssl initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="ssl_tls"
+	data-section-name="ssl" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >SSL</span>
+			<p>Encrypt communication to and from your website <a target="blank" href="https://www.cloudflare.com/ssl" >using SSL</a>.</p>
+			<p>It may take up to 24 hours after the site becomes active on Cloudflare for new certificates to issue.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<div class="group_wrapper full" >
+					<select name="value" data-target="update" class="trigger-select selection" >
+						<option value="off" >Off</option>
+						<option value="flexible" >Flexible</option>
+						<option value="full" >Full</option>
+						<option value="strict" >Full (strict)</option>
+						<option value="origin_pull" >Strict (SSL-Only Origin Pull)</option>
+					</select>
+				</div>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>Why isn’t my site working over HTTPS?</h4>
+			<p>If you have recently signed up for Cloudflare, and your certificate status above shows “Authorizing Certificate”, HTTPS is not yet available for your site because Cloudflare does not have a certificate for it. Provisioning typically takes around 15 minutes for paid plans and up to 24 hours for Free. Contact Support if you do not have a certificate after that time.<br>If the status above shows “Active Certificate” there are <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200170566-Why-isn-t-SSL-working-for-my-site">several other common problems that can appear</a> when accessing your site over HTTPS.</p>
+			<h4>What SSL setting should I use?</h4>
+			<p>This setting controls <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/200170416">how Cloudflare’s servers connect to your origin for HTTPS requests</a>. We recommend enabling the Full SSL (Strict) setting if possible. Common use cases for each are:</p>
+			<p><strong>Off:</strong> No visitors will be able to view your site over HTTPS; they will be redirected to HTTP.</p>
+			<p><strong>Flexible SSL:</strong> You cannot configure HTTPS support on your origin, even with a certificate that is not valid for your site. Visitors will be able to access your site over HTTPS, but connections to your origin will be made over HTTP. Note: You may <a target="blank" href="https://support.cloudflare.com/hc/en-us/articles/115000219871">encounter a redirect loop with some origin configurations</a>.</p>
+			<p><strong>Full SSL:</strong> Your origin supports HTTPS, but the certificate installed does not match your domain or is self-signed. Cloudflare will connect to your origin over HTTPS, but will not validate the certificate.</p>
+			<p><strong>Full SSL (strict):</strong> Your origin has a valid certificate (not expired and signed by a trusted CA or Cloudflare Origin CA) installed. Cloudflare will connect over HTTPS and verify the cert on each request.</p>
+		</div>
+	</div>
+</section>

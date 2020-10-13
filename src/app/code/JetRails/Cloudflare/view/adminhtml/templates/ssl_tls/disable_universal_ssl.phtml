@@ -1,0 +1,41 @@
+<section
+	class="cloudflare ssl_tls disable_universal_ssl initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="ssl_tls"
+	data-section-name="disable_universal_ssl" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Disable Universal SSL</span>
+			<p>Disabling Universal SSL removes any currently active Universal SSL certificates for your zone from the edge and prevents any future Universal SSL certificates from being ordered. If there are no dedicated certificates or custom certificates uploaded for the domain, visitors will be unable to access the domain over HTTPS.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<input name="button" class="trigger" data-target="toggle" data-action="disable" type="button" value="Disable Universal SSL" />
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What is Universal SSL?</h4>
+			<p><a target="blank" href="https://blog.cloudflare.com/introducing-universal-ssl/" >Universal SSL</a> is the set of certificates that Cloudflare freely orders for all domains on Cloudflare so that visitors can access domains on Cloudflare safely and securely using the <a target="blank" target="blank" href="https://blog.cloudflare.com/introducing-http2/" >latest technologies</a>.</p>
+			<h4>Why would I disable Universal SSL?</h4>
+			<p>Some site owners may want to manage their own SSL certificates in order to be compliant with their own standard operating procedures or policies. Alternately, others may only want to trust specific Certification Authorities (CA) outside the CAs Cloudflare currently partners with to issue Universal SSL certificates.</p>
+			<h4>What happens when I disable Universal SSL?</h4>
+			<p>Any Universal SSL certificates available will be removed from our edge and no longer available for the domain. No new Universal SSL certificates will be ordered for the domain until Universal SSL is re-enabled. </p>
+			<p>The following Cloudflare features, when enabled after disabling Universal SSL, may result in visitors being unable to visit your domain unless you have uploaded a custom certificate or purchased a dedicated certificate:</p>
+			<ul>
+				<li>HSTS</li>
+				<li>Always Use HTTPS</li>
+				<li>Opportunistic Encryption</li>
+				<li>Any Page Rules redirecting traffic to HTTPS</li>
+			</ul>
+			<p>Similarly, any HTTP redirect to HTTPS at the origin while the Cloudflare proxy is enabled will result in users being unable to visit your site without a valid certificate at Cloudflare’s edge. </p>
+			<p>If you do not have a valid custom or dedicated certificate at Cloudflare’s edge and are unsure if any of the above Cloudflare settings are enabled or if any HTTP redirects exist at your origin, we advise leaving Universal SSL enabled for your domain. For more help, please check our <a target="blank" href="https://support.cloudflare.com/hc/en-us/categories/200276247" >knowledge base</a>.</p>
+		</div>
+	</div>
+</section>

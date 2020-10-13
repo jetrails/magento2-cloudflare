@@ -1,6 +1,6 @@
 h1.tab-content {
 	font-family: "Open Sans", Helvetica, Arial, sans-serif;
-	font-weight: 400;
+	font-weight: 600;
 	color: $color-text_gray_dark;
 	margin-bottom: 0;
 	font-size: 28px;
@@ -15,7 +15,7 @@ h2.tab-content {
 	font-family: "Open Sans", Helvetica, Arial, sans-serif;
 	font-weight: 100;
 	color: $color-text_gray_light !important;
-	font-size: 22px;
+	font-size: 20px;
 	max-width: 960px;
 	margin: 0 auto 0;
 	font-smoothing: antialiased;
@@ -30,8 +30,7 @@ section.cloudflare {
 	color: $color-text_gray_dark;
 	margin: 15px auto;
 	border: 1px solid $color-border_gray;
-	border-bottom: 0;
-	border-radius: 2px;
+	border-radius: 5px;
 	box-sizing: border-box;
 	max-width: 960px;
 	display: block;
@@ -132,8 +131,8 @@ section.cloudflare > div.row > div.wrapper_right {
 }
 
 section.cloudflare > div.row > div.wrapper_left > span.section_title {
-	font-weight: 400;
-	font-size: 1.4em;
+	font-weight: 600;
+	font-size: 1.3em;
 	padding: 0 25px;
 }
 
@@ -154,7 +153,7 @@ section.cloudflare, .cloudflare_modal {
 	    font-weight: 100;
 		color: $color-text_gray_dark;
 		border: solid 1px $color-border_gray;
-		border-radius: 2px;
+		border-radius: 5px;
 		margin: 5px 0;
 		max-height: 200px;
 		transition: all 200ms;
@@ -307,8 +306,11 @@ section.cloudflare, .cloudflare_modal {
 section.cloudflare {
 	.collapsable {
 		flex-wrap: wrap;
+		margin-bottom: -1px;
 		.wrapper_bottom {
 			border-bottom: solid 1px $color-border_gray;
+			border-bottom-right-radius: 5px;
+			border-bottom-left-radius: 5px;
 			a {
 				vertical-align: -50%;
 				margin-left: 20px;
@@ -382,7 +384,7 @@ section.cloudflare {
 				background-color: #d9d9d9;
 				border: 1px solid #cdcdcd;
 				font-family: monaco, courier, monospace;
-				border-radius: 2px;
+				border-radius: 5px;
 			}
 			ul, ol {
 				margin-top: 1.5em;
@@ -500,7 +502,7 @@ section.cloudflare {
 	    font-size: 1em;
 	    line-height: 35px;
 	    color: $color-text_gray_dark;
-	    border-radius: 2px;
+	    border-radius: 5px;
 	    border-bottom: 1px solid #CCC;
 		transition: all 200ms;
 		cursor: pointer;

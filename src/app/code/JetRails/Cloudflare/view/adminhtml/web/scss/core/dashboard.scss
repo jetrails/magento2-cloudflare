@@ -120,8 +120,9 @@ div.cloudflare-dashboard {
 		display: flex;
 		ul.tabs {
 			background: $color-white;
-			width: 220px;
+			width: 221px;
 			border: none;
+			border-right: solid 1px $color-border_gray;
 			li {
 				height: 65px;
 				display: flex;
@@ -140,8 +141,8 @@ div.cloudflare-dashboard {
 					padding: 0;
 					height: 50px;
 					width: 50px;
-					background: #2968A2;
-					border-radius: 3px;
+					background: #2C7CB0;
+					border-radius: 5px;
 					line-height: 50px;
 					color: #FFF;
 					text-align: center;
@@ -156,7 +157,7 @@ div.cloudflare-dashboard {
 				&.selected {
 					background: $color-fill_gray_dark;
 					span:nth-child( 1 ) {
-						background: #1F4E78;
+						background: #163D57;
 					}
 				}
 			}
@@ -167,7 +168,7 @@ div.cloudflare-dashboard {
 			padding: 0 30px 30px 30px;
 			flex-grow: 1;
 			display: flex;
-			background: $color-fill_gray_dark;
+			background: $color-white;
 			.content {
 				display: none;
 				width: 100%;

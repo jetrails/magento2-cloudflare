@@ -1,9 +1,11 @@
 const $ = require ("jquery")
 const notification = require ("cloudflare/core/notification")
 
-function initialize ( event, data ) {
-	var value = data.response.result.value == "on"
-	$(data.section).find ("[name='mode']").prop ( "checked", value )
+function initializeCustom ( prop = "value", on = "on" ) {
+	return function initialize ( event, data ) {
+		var value = data.response.result [ prop ] == on
+		$(data.section).find ("[name='mode']").prop ( "checked", value )
+	}
 }
 
 function toggle ( event, data ) {
@@ -25,4 +27,8 @@ function toggle ( event, data ) {
 	})
 }
 
-module.exports = { initialize, toggle }
+module.exports = {
+	initialize: initializeCustom (),
+	toggle,
+	initializeCustom,
+}

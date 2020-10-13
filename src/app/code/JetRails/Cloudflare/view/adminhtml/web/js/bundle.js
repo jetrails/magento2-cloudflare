@@ -10949,9 +10949,11 @@ return jQuery;
 const $ = __webpack_require__ (0)
 const notification = __webpack_require__ (2)
 
-function initialize ( event, data ) {
-	var value = data.response.result.value == "on"
-	$(data.section).find ("[name='mode']").prop ( "checked", value )
+function initializeCustom ( prop = "value", on = "on" ) {
+	return function initialize ( event, data ) {
+		var value = data.response.result [ prop ] == on
+		$(data.section).find ("[name='mode']").prop ( "checked", value )
+	}
 }
 
 function toggle ( event, data ) {
@@ -10973,7 +10975,11 @@ function toggle ( event, data ) {
 	})
 }
 
-module.exports = { initialize, toggle }
+module.exports = {
+	initialize: initializeCustom (),
+	toggle,
+	initializeCustom,
+}
 
 
 /***/ }),
@@ -12150,11 +12156,11 @@ requireAll ( __webpack_require__(11) )
 requireAll ( __webpack_require__(13) )
 requireAll ( __webpack_require__(20) )
 requireAll ( __webpack_require__(30) )
-requireAll ( __webpack_require__(38) )
-requireAll ( __webpack_require__(41) )
-requireAll ( __webpack_require__(48) )
-requireAll ( __webpack_require__(54) )
-requireAll ( __webpack_require__(66) )
+requireAll ( __webpack_require__(39) )
+requireAll ( __webpack_require__(42) )
+requireAll ( __webpack_require__(49) )
+requireAll ( __webpack_require__(55) )
+requireAll ( __webpack_require__(67) )
 
 $(window).on ( "load", function () {
 
@@ -12874,13 +12880,14 @@ $(document).on ( "cloudflare.ssl_tls.tls_13.update", selectElement.update )
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./auto_minify.js": 31,
-	"./brotli.js": 32,
-	"./enhanced_http2_prioritization.js": 33,
-	"./image_resizing.js": 34,
-	"./mirage.js": 35,
-	"./polish.js": 36,
-	"./rocket_loader.js": 37
+	"./amp_real_url.js": 31,
+	"./auto_minify.js": 32,
+	"./brotli.js": 33,
+	"./enhanced_http2_prioritization.js": 34,
+	"./image_resizing.js": 35,
+	"./mirage.js": 36,
+	"./polish.js": 37,
+	"./rocket_loader.js": 38
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -12900,6 +12907,17 @@ webpackContext.id = 30;
 
 /***/ }),
 /* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.amp_real_url.initialize", switchElement.initializeCustom ( "enabled", true ) )
+$(document).on ( "cloudflare.speed.amp_real_url.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -12933,7 +12951,7 @@ $(document).on ( "cloudflare.speed.auto_minify.change", ( event, data ) => {
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -12944,7 +12962,7 @@ $(document).on ( "cloudflare.speed.brotli.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -12955,7 +12973,7 @@ $(document).on ( "cloudflare.speed.enhanced_http2_prioritization.toggle", switch
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -12966,7 +12984,7 @@ $(document).on ( "cloudflare.speed.image_resizing.toggle", switchElement.toggle 
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -12977,7 +12995,7 @@ $(document).on ( "cloudflare.speed.mirage.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13012,7 +13030,7 @@ $(document).on ( "cloudflare.speed.polish.change", ( event, data ) => {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13023,12 +13041,12 @@ $(document).on ( "cloudflare.speed.rocket_loader.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./cloudflare_nameservers.js": 39,
-	"./dns_records.js": 40
+	"./cloudflare_nameservers.js": 40,
+	"./dns_records.js": 41
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -13044,10 +13062,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 38;
+webpackContext.id = 39;
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13068,7 +13086,7 @@ $(document).on ( "cloudflare.dns.cloudflare_nameservers.initialize", function ( 
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13779,16 +13797,16 @@ $(document).on ( "click", ".cloudflare td.ttl", ( event ) => {
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./access_rules.js": 42,
-	"./browser_integrity_check.js": 43,
-	"./challenge_passage.js": 44,
-	"./privacy_pass_support.js": 45,
-	"./security_level.js": 46,
-	"./user_agent_blocking.js": 47
+	"./access_rules.js": 43,
+	"./browser_integrity_check.js": 44,
+	"./challenge_passage.js": 45,
+	"./privacy_pass_support.js": 46,
+	"./security_level.js": 47,
+	"./user_agent_blocking.js": 48
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -13804,10 +13822,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 41;
+webpackContext.id = 42;
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14135,7 +14153,7 @@ $(document).on ( "cloudflare.firewall.access_rules.previous_page", function ( ev
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14146,7 +14164,7 @@ $(document).on ( "cloudflare.firewall.browser_integrity_check.toggle", switchEle
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14157,7 +14175,7 @@ $(document).on ( "cloudflare.firewall.challenge_passage.update", selectElement.u
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14168,7 +14186,7 @@ $(document).on ( "cloudflare.firewall.privacy_pass_support.toggle", switchElemen
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14179,7 +14197,7 @@ $(document).on ( "cloudflare.firewall.security_level.update", selectElement.upda
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14482,11 +14500,11 @@ $(document).on ( "cloudflare.firewall.user_agent_blocking.previous_page", functi
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./page_rules.js": 49
+	"./page_rules.js": 50
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -14502,17 +14520,17 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 48;
+webpackContext.id = 49;
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__);
 
 
@@ -15193,7 +15211,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "change", ".cloudf
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -15218,10 +15236,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 		// AMD. Register as an anonymous module.
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 			__webpack_require__(0),
-			__webpack_require__(51),
 			__webpack_require__(52),
-			__webpack_require__(8),
 			__webpack_require__(53),
+			__webpack_require__(8),
+			__webpack_require__(54),
 			__webpack_require__(6),
 			__webpack_require__(9)
 		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
@@ -16756,7 +16774,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -16991,7 +17009,7 @@ return $.widget( "ui.mouse", {
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17039,7 +17057,7 @@ return $.extend( $.expr[ ":" ], {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17093,21 +17111,21 @@ return $.fn.scrollParent = function( includeHidden ) {
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./http_2.js": 55,
-	"./http_3.js": 56,
-	"./ip_geolocation.js": 57,
-	"./ipv6_compatibility.js": 58,
-	"./maximum_upload_size.js": 59,
-	"./onion_routing.js": 60,
-	"./pseudo_ipv4.js": 61,
-	"./response_buffering.js": 62,
-	"./true_client_ip_header.js": 63,
-	"./websockets.js": 64,
-	"./zero_rtt_connection_resumption.js": 65
+	"./http_2.js": 56,
+	"./http_3.js": 57,
+	"./ip_geolocation.js": 58,
+	"./ipv6_compatibility.js": 59,
+	"./maximum_upload_size.js": 60,
+	"./onion_routing.js": 61,
+	"./pseudo_ipv4.js": 62,
+	"./response_buffering.js": 63,
+	"./true_client_ip_header.js": 64,
+	"./websockets.js": 65,
+	"./zero_rtt_connection_resumption.js": 66
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -17123,10 +17141,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 54;
+webpackContext.id = 55;
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17137,7 +17155,7 @@ $(document).on ( "cloudflare.network.http_2.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17148,7 +17166,7 @@ $(document).on ( "cloudflare.network.http_3.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17159,7 +17177,7 @@ $(document).on ( "cloudflare.network.ip_geolocation.toggle", switchElement.toggl
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17170,7 +17188,7 @@ $(document).on ( "cloudflare.network.ipv6_compatibility.toggle", switchElement.t
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17181,7 +17199,7 @@ $(document).on ( "cloudflare.network.maximum_upload_size.update", selectElement.
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17192,7 +17210,7 @@ $(document).on ( "cloudflare.network.onion_routing.toggle", switchElement.toggle
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17203,7 +17221,7 @@ $(document).on ( "cloudflare.network.pseudo_ipv4.update", selectElement.update )
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17214,7 +17232,7 @@ $(document).on ( "cloudflare.network.response_buffering.toggle", switchElement.t
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17225,7 +17243,7 @@ $(document).on ( "cloudflare.network.true_client_ip_header.toggle", switchElemen
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17236,7 +17254,7 @@ $(document).on ( "cloudflare.network.websockets.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17247,13 +17265,13 @@ $(document).on ( "cloudflare.network.zero_rtt_connection_resumption.toggle", swi
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./email_address_obfuscation.js": 67,
-	"./hotlink_protection.js": 68,
-	"./server_side_excludes.js": 69
+	"./email_address_obfuscation.js": 68,
+	"./hotlink_protection.js": 69,
+	"./server_side_excludes.js": 70
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -17269,10 +17287,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 66;
+webpackContext.id = 67;
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17283,7 +17301,7 @@ $(document).on ( "cloudflare.scrape_shield.email_address_obfuscation.toggle", sw
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17294,7 +17312,7 @@ $(document).on ( "cloudflare.scrape_shield.hotlink_protection.toggle", switchEle
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)

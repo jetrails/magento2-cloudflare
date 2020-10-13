@@ -134,6 +134,9 @@
 							<resource
 								id="JetRails_Cloudflare::prefetching_urls_from_http_headers"
 								title="Prefetching URLs From HTTP Headers." />
+							<resource
+								id="JetRails_Cloudflare::amp_real_url"
+								title="AMP Real URL" />
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::page_rule"

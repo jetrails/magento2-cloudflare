@@ -1,0 +1,35 @@
+<section
+	class="cloudflare speed prefetch_urls initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="speed"
+	data-section-name="prefetch_urls" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Prefetch URLs</span>
+			<p>Cloudflare will prefetch any URLs included in the prefetch HTTP header</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What does Prefetching do?</h4>
+			<p>This feature allows Cloudflare to ensure that we have cached objects ready for your users when they make a request. Prefetch serves them at once, versus making separate requests for each object.</p>
+			<p><a href="https://support.cloudflare.com/hc/articles/206776707" >We do this by prefetching the files</a> listed in a manifest file.  The manifest file is returned in an HTTP response header with the rel="prefetch" attribute. The manifest file tells Cloudflare what to load into our cache to ensure that those files are delivered as quickly as possible. This can be helpful if your page has multiple, large assets that you want to serve from cache.</p>
+			<p>Example Prefetch HTTP header:<br><code>Link: &lt;http://www.example.com/manifest.txt&gt;; rel="prefetch"</code></p>
+			<p>Example manifest.txt:<br><code>/static/fetch1</code><br><code>//other.example.com/fetch2</code><br><code>http://another.example.com/fetch3</code></p>
+			<p>The manifest file should contain URIs, protocol-relative URLs or full URLs, separated by new lines. These files must be on your websites that are on Cloudflare.</p>
+		</div>
+	</div>
+</section>

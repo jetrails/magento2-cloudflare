@@ -132,8 +132,8 @@
 								id="JetRails_Cloudflare::rocket_loader"
 								title="Rocker Loader" />
 							<resource
-								id="JetRails_Cloudflare::prefetching_urls_from_http_headers"
-								title="Prefetching URLs From HTTP Headers." />
+								id="JetRails_Cloudflare::prefetch_urls"
+								title="Prefetch URLs" />
 							<resource
 								id="JetRails_Cloudflare::amp_real_url"
 								title="AMP Real URL" />

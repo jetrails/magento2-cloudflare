@@ -1,6 +1,6 @@
 <?php
 
-	namespace JetRails\Cloudflare\Controller\Adminhtml\Api\SslTls\OnionRouting;
+	namespace JetRails\Cloudflare\Controller\Adminhtml\Api\Network\OnionRouting;
 
 	use JetRails\Cloudflare\Controller\Adminhtml\Toggle as BaseToggle;
 

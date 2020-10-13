@@ -76,9 +76,6 @@
 								id="JetRails_Cloudflare::minimum_tls_version"
 								title="Minimum TLS Version" />
 							<resource
-								id="JetRails_Cloudflare::onion_routing"
-								title="Onion Routing" />
-							<resource
 								id="JetRails_Cloudflare::tls_13"
 								title="TLS 1.3" />
 							<resource
@@ -170,6 +167,9 @@
 							<resource
 								id="JetRails_Cloudflare::websockets"
 								title="WebSockets" />
+							<resource
+								id="JetRails_Cloudflare::onion_routing"
+								title="Onion Routing" />
 							<resource
 								id="JetRails_Cloudflare::pseudo_ipv4"
 								title="Pseudo IPv4" />

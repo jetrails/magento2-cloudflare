@@ -1,6 +1,6 @@
 <?php
 
-	namespace JetRails\Cloudflare\Model\Adminhtml\Api\SslTls;
+	namespace JetRails\Cloudflare\Model\Adminhtml\Api\Network;
 
 	use JetRails\Cloudflare\Model\Adminhtml\Api\Setter;
 

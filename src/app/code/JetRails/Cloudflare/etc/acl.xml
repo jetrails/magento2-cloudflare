@@ -110,14 +110,25 @@
 								id="JetRails_Cloudflare::privacy_pass_support"
 								title="Privacy Pass Support" />
 							<resource
-								id="JetRails_Cloudflare::access_rules"
-								title="Access Rules" />
+								id="JetRails_Cloudflare::ip_firewall"
+								title="IP Firewall" >
+								<resource
+									id="JetRails_Cloudflare::access_rules"
+									title="Access Rules" />
+								<resource
+									id="JetRails_Cloudflare::user_agent_blocking"
+									title="User Agent Blocking" />
+								<resource
+									id="JetRails_Cloudflare::unmetered_ddos_mitigation"
+									title="Unmetered DDoS Mitigation" />
+							</resource>
 							<resource
-								id="JetRails_Cloudflare::user_agent_blocking"
-								title="User Agent Blocking" />
-							<resource
-								id="JetRails_Cloudflare::unmetered_ddos_mitigation"
-								title="Unmetered DDoS Mitigation" />
+								id="JetRails_Cloudflare::waf"
+								title="Web Application Firewall" >
+								<resource
+									id="JetRails_Cloudflare::web_application_firewall"
+									title="Web Application Firewall" />
+							</resource>
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::speed"

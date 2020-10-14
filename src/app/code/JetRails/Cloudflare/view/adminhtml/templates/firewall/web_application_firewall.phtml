@@ -1,0 +1,33 @@
+<section
+	class="cloudflare firewall web_application_firewall initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="firewall"
+	data-section-name="web_application_firewall" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Web Application Firewall</span>
+			<p>Provides enhanced security through a built-in ruleset to stop a wide range of application attacks.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<label class="switch" >
+					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
+					<span class="knob" ></span>
+				</label>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<h4>What is a Web Application Firewall?</h4>
+			<p>A <a href="https://support.cloudflare.com/hc/sections/200805127" >Web Application Firewall (WAF)</a> blocks <a href="https://support.cloudflare.com/hc/articles/200172016" >requests that contain malicious content</a>. Our WAF is <a href="https://www.cloudflare.com/waf" >state-of-the-art</a> and provides strong security without impacting performance.<br><strong>Note:</strong> Turning off the WAF will disable all packages including OWASP, Cloudflare Rules, and any custom rules you've set. We don't recommend doing that. If you encounter issues caused by the WAF, this guide explains how to <a href="https://support.cloudflare.com/hc/articles/115000223771" >diagnose and fix them by tuning your WAF configuration</a>.</p>
+			<h4>How does a Web Application Firewall (WAF) protect my website?</h4>
+			<p>Our WAF <a href="https://support.cloudflare.com/hc/articles/200172026" >uses rulesets to block common attacks</a> like cross-site scripting (XSS) and SQL injections. Furthermore, we patch and update our Cloudflare Package Rulesets constantly, so that when a new vulnerability is exposed, you will be protected from it just by having our WAF enabled. The rest will be done by our WAF engineers.</p>
+		</div>
+	</div>
+</section>

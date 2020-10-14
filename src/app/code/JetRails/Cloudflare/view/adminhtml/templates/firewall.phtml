@@ -28,6 +28,12 @@
 		?>
 	</div>
 	<div data-tab-content='web_application_firewall' >
-		<?php echo $block->loadSection ( "core", "coming_soon" ) ?>
+		<?php
+
+			echo $this->renderSections ( "firewall/waf", array (
+				"web_application_firewall"
+			));
+
+		?>
 	</div>
 </section>

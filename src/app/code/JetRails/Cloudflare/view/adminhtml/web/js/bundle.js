@@ -14671,10 +14671,10 @@ $(document).on ( "cloudflare.speed.enhanced_http2_prioritization.toggle", switch
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
+const selectElement = __webpack_require__ (4)
 
-$(document).on ( "cloudflare.speed.image_resizing.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.speed.image_resizing.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.speed.image_resizing.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.speed.image_resizing.update", selectElement.update )
 
 
 /***/ }),

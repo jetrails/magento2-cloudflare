@@ -8,14 +8,15 @@
 		<div class="wrapper_left" >
 			<span class="section_title" >Image Resizing</span>
 			<p>You can resize, adjust quality, and convert images to WebP format, on demand. We cache every derived image at the edge, so you store only the original image.</p>
-			<p>This allows you to adapt images to your site’s layout and your visitors’ screen sizes, quickly and easily, without maintaining a server-side image processing pipeline.</p>
+			<p>This allows you to adapt images to your site's layout and your visitors' screen sizes, quickly and easily, without maintaining a server-side image processing pipeline.</p>
 		</div>
 		<div class="wrapper_right" >
 			<div>
-				<label class="switch" >
-					<input class="trigger" type="checkbox" name="mode" data-target="toggle" />
-					<span class="knob" ></span>
-				</label>
+				<select class="trigger-select" data-target="update" name="value" >
+					<option value="off" >Off</option>
+					<option value="on" >On</option>
+					<option value="open">On — Resize From Any Origin</option>
+				</select>
 			</div>
 			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
 		</div>
@@ -25,10 +26,15 @@
 			<a data-tab="help" >Help</a>
 		</div>
 		<div data-tab-content="help" >
-			<h3>What does Image Resizing do?</h3>
+			<h4>What does Image Resizing do?</h4>
 			<p>Resizing fetches the original image and caches it (following the usual rules of HTTP caching, Cache-Control header, etc.). Requests for multiple different image sizes are likely to reuse the cached original image, without causing extra transfers from the origin server.</p>
 			<p>Resized images follow the same caching rules as the original image and their Cache-Control header is identical. We do not support purging of resized variants.  Purging of the original image URL will also purge all of its resized variants.</p>
-			<p><a href="https://developers.cloudflare.com/images" >Image Resizing documentation</a></p>
+			<h4>What does 'Resize images from any origin' do?</h4>
+			<p> 'Resize images from any origin' will allow Image Resizing to resize images from any URI.<br>I.e. howtospeedupmagento.com will serve resized images originating from any URI, whether howtospeedupmagento.com or elsewhere.</p>
+			<p>By default, Image Resizing will only resize images which originate from this zone, howtospeedupmagento.com.<br>I.e. howtospeedupmagento.com will serve resized images only if the images originate from howtospeedupmagento.com.</p>
+			<h4>Using Workers</h4>
+			<p>'Resize images from any origin' is not valid when using a Worker for Image Resizing. The Worker is expected to apply its own policies dictating which images will be resized.</p>
+			<p><a href="https://developers.cloudflare.com/images/" >Image Resizing documentation</a></p>
 		</div>
 	</div>
 </section>

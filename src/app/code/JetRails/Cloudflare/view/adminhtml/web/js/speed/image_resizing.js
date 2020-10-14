@@ -1,5 +1,5 @@
 const $ = require ("jquery")
-const switchElement = require ("cloudflare/generic/switch")
+const selectElement = require ("cloudflare/generic/select")
 
-$(document).on ( "cloudflare.speed.image_resizing.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.speed.image_resizing.toggle", switchElement.toggle )
+$(document).on ( "cloudflare.speed.image_resizing.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.speed.image_resizing.update", selectElement.update )

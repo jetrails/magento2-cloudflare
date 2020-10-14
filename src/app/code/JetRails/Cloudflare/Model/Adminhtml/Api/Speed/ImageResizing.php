@@ -22,6 +22,6 @@
 		 */
 		protected $_endpoint = "settings/image_resizing";
 		protected $_dataKey = "value";
-		protected $_settingType = self::TYPE_SWITCH;
+		protected $_settingType = self::TYPE_STRING;
 
 	}

@@ -88,6 +88,9 @@
 								id="JetRails_Cloudflare::automatic_https_rewrites"
 								title="Automatic HTTPS Rewrites" />
 							<resource
+								id="JetRails_Cloudflare::certificate_transparency_monitoring"
+								title="Certificate Transparency Monitoring" />
+							<resource
 								id="JetRails_Cloudflare::disable_universal_ssl"
 								title="Disable Universal SSL" />
 						</resource>

@@ -1,20 +1,45 @@
-<h1 class="tab-content" >Speed</h1>
-<h2 class="tab-content" >Manage performance settings for your website</h2>
-<?php
+<section class='tabs-wrapper at_least_one' >
+	<div data-tab='optimization' class="active" >Optimization</div>
+	<div data-tab-content='optimization' class='active' >
+		<h1 class="tab-content" >File Size Optimization</h1>
+		<?php
 
-	echo $block->renderSections ( "speed", array (
-		"image_resizing",
-		"automatic_platform_optimization",
-		"enhanced_http2_prioritization",
-		"tcp_turbo",
-		"auto_minify",
-		"polish",
-		"brotli",
-		"mirage",
-		"rocket_loader",
-		"prefetch_urls",
-		"amp_real_url",
-		"mobile_redirect"
-	));
+			echo $block->renderSections ( "speed/optimization_tab", array (
+				"image_resizing",
+				"polish",
+				"auto_minify",
+				"brotli"
+			));
 
-?>
+		?>
+		<h1 class="tab-content" >Optimized Delivery</h1>
+		<?php
+
+			echo $block->renderSections ( "speed/optimization_tab", array (
+				"automatic_platform_optimization",
+				"enhanced_http2_prioritization",
+				"tcp_turbo",
+				"mirage",
+				"rocket_loader"
+			));
+
+		?>
+		<h1 class="tab-content" >Caching</h1>
+		<?php
+
+			echo $block->renderSections ( "speed/optimization_tab", array (
+				"prefetch_urls"
+			));
+
+		?>
+		<h1 class="tab-content" >Mobile</h1>
+		<?php
+
+			echo $block->renderSections ( "speed/optimization_tab", array (
+				"amp_real_url",
+				"mobile_redirect"
+			));
+
+		?>
+	</div>
+</section>

@@ -1,14 +1,17 @@
-<h1 class="tab-content" >Caching</h1>
-<h2 class="tab-content" >Manage caching settings for your website</h2>
-<?php
+<section class='tabs-wrapper at_least_one' >
+	<div data-tab='configuration' class="active" >Configuration</div>
+	<div data-tab-content='configuration' class='active' >
+		<?php
 
-	echo $block->renderSections ( "caching", array (
-		"purge_cache",
-		"caching_level",
-		"browser_cache_expiration",
-		"always_online",
-		"development_mode",
-		"enable_query_string_sort"
-	));
+			echo $block->renderSections ( "caching/configuration_tab", array (
+				"purge_cache",
+				"caching_level",
+				"browser_cache_expiration",
+				"always_online",
+				"development_mode",
+				"enable_query_string_sort"
+			));
 
-?>
+		?>
+	</div>
+</section>

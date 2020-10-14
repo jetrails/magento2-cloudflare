@@ -61,66 +61,64 @@
 							id="JetRails_Cloudflare::ssl_tls"
 							title="SSL/TLS" >
 							<resource
-								id="JetRails_Cloudflare::ssl_tls_recommender"
-								title="SSL/TLS Recommender" />
+								id="JetRails_Cloudflare::overview_tab"
+								title="Overview" >
+								<resource
+									id="JetRails_Cloudflare::ssl"
+									title="SSL" />
+								<resource
+									id="JetRails_Cloudflare::ssl_tls_recommender"
+									title="SSL/TLS Recommender" />
+							</resource>
 							<resource
-								id="JetRails_Cloudflare::ssl"
-								title="SSL" />
+								id="JetRails_Cloudflare::edge_certificates_tab"
+								title="Edge Certificates" >
+								<resource
+									id="JetRails_Cloudflare::always_use_https"
+									title="Always Use HTTPS" />
+								<resource
+									id="JetRails_Cloudflare::http_strict_transport_security"
+									title="HTTP Strict Transport Security (HSTS)" />
+								<resource
+									id="JetRails_Cloudflare::minimum_tls_version"
+									title="Minimum TLS Version" />
+								<resource
+									id="JetRails_Cloudflare::opportunistic_encryption"
+									title="Opportunistic Encryption" />
+								<resource
+									id="JetRails_Cloudflare::tls_13"
+									title="TLS 1.3" />
+								<resource
+									id="JetRails_Cloudflare::automatic_https_rewrites"
+									title="Automatic HTTPS Rewrites" />
+								<resource
+									id="JetRails_Cloudflare::certificate_transparency_monitoring"
+									title="Certificate Transparency Monitoring" />
+								<resource
+									id="JetRails_Cloudflare::disable_universal_ssl"
+									title="Disable Universal SSL" />
+							</resource>
 							<resource
-								id="JetRails_Cloudflare::always_use_https"
-								title="Always Use HTTPS" />
-							<resource
-								id="JetRails_Cloudflare::http_strict_transport_security"
-								title="HTTP Strict Transport Security (HSTS)" />
-							<resource
-								id="JetRails_Cloudflare::authenticated_origin_pulls"
-								title="Authenticated Origin Pulls" />
-							<resource
-								id="JetRails_Cloudflare::opportunistic_encryption"
-								title="Opportunistic Encryption" />
-							<resource
-								id="JetRails_Cloudflare::minimum_tls_version"
-								title="Minimum TLS Version" />
-							<resource
-								id="JetRails_Cloudflare::tls_13"
-								title="TLS 1.3" />
-							<resource
-								id="JetRails_Cloudflare::automatic_https_rewrites"
-								title="Automatic HTTPS Rewrites" />
-							<resource
-								id="JetRails_Cloudflare::certificate_transparency_monitoring"
-								title="Certificate Transparency Monitoring" />
-							<resource
-								id="JetRails_Cloudflare::disable_universal_ssl"
-								title="Disable Universal SSL" />
+								id="JetRails_Cloudflare::origin_server_tab"
+								title="Origin Server" >
+								<resource
+									id="JetRails_Cloudflare::authenticated_origin_pulls"
+									title="Authenticated Origin Pulls" />
+							</resource>
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::firewall"
 							title="Firewall" >
 							<resource
-								id="JetRails_Cloudflare::security_level"
-								title="Security Level" />
+								id="JetRails_Cloudflare::managed_rules_tab"
+								title="Managed Rules" >
+								<resource
+									id="JetRails_Cloudflare::web_application_firewall"
+									title="Web Application Firewall" />
+							</resource>
 							<resource
-								id="JetRails_Cloudflare::bot_fight_mode"
-								title="Bot Fight Mode" />
-							<resource
-								id="JetRails_Cloudflare::bot_management"
-								title="Bot Management" />
-							<resource
-								id="JetRails_Cloudflare::javascript_detections"
-								title="JavaScript Detections" />
-							<resource
-								id="JetRails_Cloudflare::challenge_passage"
-								title="Challenge Passage" />
-							<resource
-								id="JetRails_Cloudflare::browser_integrity_check"
-								title="Browser Integrity Check" />
-							<resource
-								id="JetRails_Cloudflare::privacy_pass_support"
-								title="Privacy Pass Support" />
-							<resource
-								id="JetRails_Cloudflare::ip_firewall"
-								title="IP Firewall" >
+								id="JetRails_Cloudflare::tools_tab"
+								title="Tools" >
 								<resource
 									id="JetRails_Cloudflare::access_rules"
 									title="Access Rules" />
@@ -132,52 +130,74 @@
 									title="Unmetered DDoS Mitigation" />
 							</resource>
 							<resource
-								id="JetRails_Cloudflare::waf"
-								title="Web Application Firewall" >
+								id="JetRails_Cloudflare::settings_tab"
+								title="Settings" >
 								<resource
-									id="JetRails_Cloudflare::web_application_firewall"
-									title="Web Application Firewall" />
+									id="JetRails_Cloudflare::security_level"
+									title="Security Level" />
+								<resource
+									id="JetRails_Cloudflare::bot_fight_mode"
+									title="Bot Fight Mode" />
+								<resource
+									id="JetRails_Cloudflare::bot_management"
+									title="Bot Management" />
+								<resource
+									id="JetRails_Cloudflare::javascript_detections"
+									title="JavaScript Detections" />
+								<resource
+									id="JetRails_Cloudflare::challenge_passage"
+									title="Challenge Passage" />
+								<resource
+									id="JetRails_Cloudflare::browser_integrity_check"
+									title="Browser Integrity Check" />
+								<resource
+									id="JetRails_Cloudflare::privacy_pass_support"
+									title="Privacy Pass Support" />
 							</resource>
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::speed"
 							title="Speed" >
 							<resource
-								id="JetRails_Cloudflare::image_resizing"
-								title="Image Resizing" />
-							<resource
-								id="JetRails_Cloudflare::automatic_platform_optimization"
-								title="Automatic Platform Optimization for WordPress" />
-							<resource
-								id="JetRails_Cloudflare::enhanced_http2_prioritization"
-								title="Enhanced HTTP/2 Prioritization" />
-							<resource
-								id="JetRails_Cloudflare::tcp_turbo"
-								title="TCP Turbo" />
-							<resource
-								id="JetRails_Cloudflare::auto_minify"
-								title="Auto Minify" />
-							<resource
-								id="JetRails_Cloudflare::polish"
-								title="Polish" />
-							<resource
-								id="JetRails_Cloudflare::brotli"
-								title="Brotli" />
-							<resource
-								id="JetRails_Cloudflare::mirage"
-								title="Mirage" />
-							<resource
-								id="JetRails_Cloudflare::rocket_loader"
-								title="Rocker Loader" />
-							<resource
-								id="JetRails_Cloudflare::prefetch_urls"
-								title="Prefetch URLs" />
-							<resource
-								id="JetRails_Cloudflare::amp_real_url"
-								title="AMP Real URL" />
-							<resource
-								id="JetRails_Cloudflare::mobile_redirect"
-								title="Mobile Redirect" />
+								id="JetRails_Cloudflare::optimization_tab"
+								title="Optimization" >
+								<resource
+									id="JetRails_Cloudflare::image_resizing"
+									title="Image Resizing" />
+								<resource
+									id="JetRails_Cloudflare::automatic_platform_optimization"
+									title="Automatic Platform Optimization for WordPress" />
+								<resource
+									id="JetRails_Cloudflare::enhanced_http2_prioritization"
+									title="Enhanced HTTP/2 Prioritization" />
+								<resource
+									id="JetRails_Cloudflare::tcp_turbo"
+									title="TCP Turbo" />
+								<resource
+									id="JetRails_Cloudflare::auto_minify"
+									title="Auto Minify" />
+								<resource
+									id="JetRails_Cloudflare::polish"
+									title="Polish" />
+								<resource
+									id="JetRails_Cloudflare::brotli"
+									title="Brotli" />
+								<resource
+									id="JetRails_Cloudflare::mirage"
+									title="Mirage" />
+								<resource
+									id="JetRails_Cloudflare::rocket_loader"
+									title="Rocker Loader" />
+								<resource
+									id="JetRails_Cloudflare::prefetch_urls"
+									title="Prefetch URLs" />
+								<resource
+									id="JetRails_Cloudflare::amp_real_url"
+									title="AMP Real URL" />
+								<resource
+									id="JetRails_Cloudflare::mobile_redirect"
+									title="Mobile Redirect" />
+							</resource>
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::page_rule"

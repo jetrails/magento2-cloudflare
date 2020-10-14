@@ -1,19 +1,40 @@
-<h1 class="tab-content" >SSL/TLS</h1>
-<h2 class="tab-content" >Manage cryptography settings for your website</h2>
-<?php
+<section class='tabs-wrapper at_least_one' >
+	<div data-tab='overview' class="active" >Overview</div>
+	<div data-tab='edge_certificates' >Edge Certificates</div>
+	<div data-tab='origin_server' >Origin Server</div>
+	<div data-tab-content='overview' class='active' >
+		<?php
 
-	echo $block->renderSections ( "ssl_tls", array (
-		"ssl_tls_recommender",
-		"ssl",
-		"always_use_https",
-		"http_strict_transport_security",
-		"authenticated_origin_pulls",
-		"opportunistic_encryption",
-		"minimum_tls_version",
-		"tls_13",
-		"automatic_https_rewrites",
-		"certificate_transparency_monitoring",
-		"disable_universal_ssl"
-	));
+			echo $block->renderSections ( "ssl_tls/overview_tab", array (
+				"ssl",
+				"ssl_tls_recommender"
+			));
 
-?>
+		?>
+	</div>
+	<div data-tab-content='edge_certificates' >
+		<?php
+
+			echo $block->renderSections ( "ssl_tls/edge_certificates_tab", array (
+				"always_use_https",
+				"http_strict_transport_security",
+				"minimum_tls_version",
+				"opportunistic_encryption",
+				"tls_13",
+				"automatic_https_rewrites",
+				"certificate_transparency_monitoring",
+				"disable_universal_ssl"
+			));
+
+		?>
+	</div>
+	<div data-tab-content='origin_server' >
+		<?php
+
+			echo $block->renderSections ( "ssl_tls/origin_server_tab", array (
+				"authenticated_origin_pulls"
+			));
+
+		?>
+	</div>
+</section>

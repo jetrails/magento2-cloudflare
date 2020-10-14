@@ -1,25 +1,20 @@
-<h1 class="tab-content" >Firewall</h1>
-<h2 class="tab-content" >Manage access by IP, country, or query rules</h2>
-<?php
-
-	echo $block->renderSections ( "firewall", array (
-		"security_level",
-		"bot_fight_mode",
-		"bot_management",
-		"javascript_detections",
-		"challenge_passage",
-		"browser_integrity_check",
-		"privacy_pass_support"
-	));
-
-?>
 <section class='tabs-wrapper at_least_one' >
-	<div data-tab='ip_firewall' class='active' >IP Firewall</div>
-	<div data-tab='web_application_firewall' >Web Application Firewall</div>
-	<div data-tab-content='ip_firewall' class='active' >
+	<div data-tab='managed_rules' class="active" >Managed Rules</div>
+	<div data-tab='tools' >Tools</div>
+	<div data-tab='settings' >Settings</div>
+	<div data-tab-content='managed_rules' class='active' >
 		<?php
 
-			echo $block->renderSections ( "firewall/ip_firewall", array (
+			echo $block->renderSections ( "firewall/managed_rules_tab", array (
+				"web_application_firewall"
+			));
+
+		?>
+	</div>
+	<div data-tab-content='tools' >
+		<?php
+
+			echo $block->renderSections ( "firewall/tools_tab", array (
 				"access_rules",
 				"user_agent_blocking",
 				"unmetered_ddos_mitigation"
@@ -27,11 +22,17 @@
 
 		?>
 	</div>
-	<div data-tab-content='web_application_firewall' >
+	<div data-tab-content='settings' >
 		<?php
 
-			echo $this->renderSections ( "firewall/waf", array (
-				"web_application_firewall"
+			echo $block->renderSections ( "firewall/settings_tab", array (
+				"security_level",
+				"bot_fight_mode",
+				"bot_management",
+				"javascript_detections",
+				"challenge_passage",
+				"browser_integrity_check",
+				"privacy_pass_support"
 			));
 
 		?>

@@ -3,7 +3,7 @@ h1.tab-content {
 	font-weight: 600;
 	color: $color-text_gray_dark;
 	margin-bottom: 0;
-	font-size: 28px;
+	font-size: 24px;
 	max-width: 960px;
 	margin: 30px auto 0;
 	font-smoothing: antialiased;
@@ -15,7 +15,7 @@ h2.tab-content {
 	font-family: "Open Sans", Helvetica, Arial, sans-serif;
 	font-weight: 100;
 	color: $color-text_gray_light !important;
-	font-size: 20px;
+	font-size: 19px;
 	max-width: 960px;
 	margin: 0 auto 0;
 	font-smoothing: antialiased;
@@ -518,45 +518,30 @@ section.cloudflare {
 
 section.tabs-wrapper {
 	max-width: 960px;
-    margin: auto;
+	margin: auto;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-start;
 	> [data-tab] {
 		cursor: pointer;
 		position: relative;
-		width: 50%;
-		background: $color-white;
-		color: $color-blue;
+		background: transparent;
+		color: $color-text_gray_light;
 		box-sizing: border-box;
-		padding: 22.5px;
+		padding: 15px;
 		text-align: center;
-		font-size: 1.3em;
+		font-size: 1.0em;
 		transition: all 200ms;
-		font-weight: 100;
+		font-weight: 600;
 		font-smoothing: antialiased;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		margin-bottom: 40px;
-		&:before {
-			content: "";
-			position: absolute;
-			left: calc(50% - 15px);
-			bottom: 0px;
-			width: 0;
-			height: 0;
-			border-left: 15px solid transparent;
-			border-right: 15px solid transparent;
-			border-top: 15px solid $color-white;
-			transition: all 200ms;
-		}
+		margin-top: 0px;
+		margin-bottom: 15px;
+		border-bottom: 2px solid transparent;
 		&.active {
-			color: $color-white;
-			background: $color-blue;
-			&:before {
-				bottom: -15px;
-				border-top: 15px solid $color-blue;
-			}
+			color: $color-text_gray_dark;
+			border-bottom: 2px solid $color-blue;
 		}
 	}
 	> [data-tab-content] {

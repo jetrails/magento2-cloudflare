@@ -3,8 +3,14 @@ const notification = require ("cloudflare/core/notification")
 
 function initializeCustom ( prop = "value", on = "on" ) {
 	return function initialize ( event, data ) {
-		var value = data.response.result [ prop ] == on
-		$(data.section).find ("[name='mode']").prop ( "checked", value )
+		let value
+		if ( typeof prop === "object" && prop.constructor.name === "Array" ) {
+			value = prop.reduce ( ( a, e ) => { return a [ e ] }, data.response.result )
+		}
+		else {
+			value = data.response.result [ prop ]
+		}
+		$(data.section).find ("[name='mode']").prop ( "checked", value == on )
 	}
 }
 

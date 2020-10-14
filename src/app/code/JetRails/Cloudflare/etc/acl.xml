@@ -140,6 +140,9 @@
 								id="JetRails_Cloudflare::image_resizing"
 								title="Image Resizing" />
 							<resource
+								id="JetRails_Cloudflare::automatic_platform_optimization"
+								title="Automatic Platform Optimization for WordPress" />
+							<resource
 								id="JetRails_Cloudflare::enhanced_http2_prioritization"
 								title="Enhanced HTTP/2 Prioritization" />
 							<resource

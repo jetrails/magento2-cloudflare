@@ -132,10 +132,10 @@ function createConfigure ( options, callback ) {
 	configure.addButton ({ label: "Save", callback: ( components ) => {
 		callback ( configure, {
 			enabled: $(enabled).find ("[type='checkbox']:checked").length > 0,
-	        max_age: maxAge.val (),
-	        include_subdomains: $(includeSubDomains).find ("[type='checkbox']:checked").length > 0,
-	        preload: $(preload).find ("[type='checkbox']:checked").length > 0,
-	        nosniff: $(noSniff).find ("[type='checkbox']:checked").length > 0
+			max_age: maxAge.val (),
+			include_subdomains: $(includeSubDomains).find ("[type='checkbox']:checked").length > 0,
+			preload: $(preload).find ("[type='checkbox']:checked").length > 0,
+			nosniff: $(noSniff).find ("[type='checkbox']:checked").length > 0
 		})
 	}})
 	configure.show ()

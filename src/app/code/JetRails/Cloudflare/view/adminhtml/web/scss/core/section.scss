@@ -56,8 +56,8 @@ section.cloudflare {
 		width: 100%;
 		background-color: rgba( 0, 0, 0, 0 );
 		background-repeat: no-repeat;
-	    background-position: top right;
-	    background-size: 50px;
+		background-position: top right;
+		background-size: 50px;
 		visibility: hidden;
 		cursor: not-allowed;
 	}
@@ -149,8 +149,8 @@ section.cloudflare, .cloudflare_modal {
 		min-height: 100px;
 		resize: vertical;
 		padding: 10px;
-	    font-size: 0.9em;
-	    font-weight: 100;
+		font-size: 0.9em;
+		font-weight: 100;
 		color: $color-text_gray_dark;
 		border: solid 1px $color-border_gray;
 		border-radius: 5px;
@@ -169,22 +169,22 @@ section.cloudflare, .cloudflare_modal {
 section.cloudflare img.load {
 	transition: all 200ms;
 	height: 20px;
-    position: relative;
-    display: inline;
-    float: left;
+	position: relative;
+	display: inline;
+	float: left;
 }
 
 section.cloudflare p.messages {
 	height: 20px;
-    font-size: 1em;
-    position: relative;
-    display: inline;
-    float: left;
+	font-size: 1em;
+	position: relative;
+	display: inline;
+	float: left;
 }
 
 section.cloudflare p.messages > span {
 	width: 100%;
-    display: block;
+	display: block;
 	margin-top: 0px;
 	opacity: 1;
 	transition: opacity, margin-top 200s;
@@ -251,7 +251,7 @@ section.cloudflare.loading label.switch .slider {
 section.cloudflare .group_wrapper {
 	width: 100%;
 	margin: 10px auto;
-    max-width: 110px;
+	max-width: 110px;
 	text-align: left;
 	&.full {
 		max-width: initial;
@@ -260,7 +260,7 @@ section.cloudflare .group_wrapper {
 
 section.cloudflare .group_wrapper label {
 	font-weight: 100;
-    font-size: 0.9em;
+	font-size: 0.9em;
 	cursor: pointer;
 }
 
@@ -361,7 +361,7 @@ section.cloudflare {
 				margin-top: 1.5em;
 			}
 			h1 + p, p + h1, p + h2, p + h3, p + h4, p + h5, p + h6 {
-			    margin-top: 1.25em;
+				margin-top: 1.25em;
 			}
 			a {
 				color: $color-blue;
@@ -373,12 +373,12 @@ section.cloudflare {
 			}
 			code {
 				color: #bd2527;
-			    margin-left: 0.13333em;
-			    margin-right: 0.13333em;
-			    padding: 0 0.4em;
-			    vertical-align: baseline;
-			    display: inline-block;
-			    vertical-align: middle;
+				margin-left: 0.13333em;
+				margin-right: 0.13333em;
+				padding: 0 0.4em;
+				vertical-align: baseline;
+				display: inline-block;
+				vertical-align: middle;
 			}
 			code, pre {
 				background-color: #d9d9d9;
@@ -403,7 +403,7 @@ section.cloudflare {
 				padding: 0px 6px;
 				vertical-align: -2px;
 				width: 64px;
-    			box-sizing: border-box;
+				box-sizing: border-box;
 				display: inline-block;
 				min-height: 30px;
 			}
@@ -425,20 +425,20 @@ section.cloudflare.empty {
 		padding: 0 !important;
 	}
 	.cloudflare-font {
-	    vertical-align: -2px;
-	    padding-right: 5px;
+		vertical-align: -2px;
+		padding-right: 5px;
 	}
 }
 
 section.cloudflare.restricted {
 	.cloudflare-font {
-	    color: $color-red;
+		color: $color-red;
 	}
 }
 
 section.cloudflare.empty {
 	.cloudflare-font {
-	    color: $color-orange;
+		color: $color-orange;
 	}
 }
 
@@ -467,7 +467,7 @@ section.cloudflare.empty {
 			margin: 0 5px !important;
 		}
 		> *:first-child {
- 			margin-left: 0 !important;
+			margin-left: 0 !important;
 		}
 		> *:last-child {
 			margin-right: 0 !important;
@@ -494,16 +494,16 @@ section.cloudflare.empty {
 section.cloudflare {
 	.icon-button {
 		background-color: $color-border_gray;
-	    height: 35px;
-	    width: 35px;
-	    min-width: 35px;
+		height: 35px;
+		width: 35px;
+		min-width: 35px;
 		margin: auto 7px;
-	    text-align: center;
-	    font-size: 1em;
-	    line-height: 35px;
-	    color: $color-text_gray_dark;
-	    border-radius: 5px;
-	    border-bottom: 1px solid #CCC;
+		text-align: center;
+		font-size: 1em;
+		line-height: 35px;
+		color: $color-text_gray_dark;
+		border-radius: 5px;
+		border-bottom: 1px solid #CCC;
 		transition: all 200ms;
 		cursor: pointer;
 		&:hover {
@@ -554,9 +554,9 @@ section.tabs-wrapper {
 }
 
 p[class^="option_"] {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    color: #7d7d7d;
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+	color: #7d7d7d;
 }
 
 
@@ -566,7 +566,7 @@ section.cloudflare {
 		flex-wrap: wrap;
 		align-items: center;
 		> *:nth-child( n + 3 ) {
-		    margin-top: 20px;
+			margin-top: 20px;
 		}
 		.wrapper_left {
 			width: 70%;

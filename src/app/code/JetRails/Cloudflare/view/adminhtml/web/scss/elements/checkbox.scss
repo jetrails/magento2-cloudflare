@@ -3,16 +3,16 @@ input[type="checkbox"] {
 	visibility: visible;
 	cursor: pointer;
 	&:after {
-	    content: "";
-	    position: absolute;
-	    width: 15px;
-	    height: 15px;
-	    background: #FFF;
-	    margin-top: -1px;
-	    margin-left: -1px;
-	    border: solid 1px #BCBEC0;
-	    border-radius: 5px;
-	    box-sizing: border-box;
+		content: "";
+		position: absolute;
+		width: 15px;
+		height: 15px;
+		background: #FFF;
+		margin-top: -1px;
+		margin-left: -1px;
+		border: solid 1px #BCBEC0;
+		border-radius: 5px;
+		box-sizing: border-box;
 		visibility: visible;
 		transition: all 200ms;
 	}
@@ -21,7 +21,7 @@ input[type="checkbox"] {
 	}
 	&:checked:after {
 		content: "\F009";
-	    font-family: "cloudflare-font";
-	    font-size: 14px;
+		font-family: "cloudflare-font";
+		font-size: 14px;
 	}
 }

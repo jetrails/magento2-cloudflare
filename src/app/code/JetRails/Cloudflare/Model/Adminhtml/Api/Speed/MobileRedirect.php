@@ -52,7 +52,7 @@
 				$setting->result->domains = array_map ( function ( $domain ) {
 					preg_match ( "/^(.*)\..*?\..*$/m", $domain->name, $match );
 					return array (
-						"value" => $match [ 1 ],
+						"value" => count ( $match ) > 1 ? $match [ 1 ] : "",
 						"label" => $domain->name . " (" . $domain->type . ")",
 					);
 				}, $domains->result );

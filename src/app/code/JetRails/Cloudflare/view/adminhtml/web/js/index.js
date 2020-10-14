@@ -39,8 +39,12 @@ $(window).on ( "load", function () {
 		oldAjax.apply ( null, arguments )
 	}
 
-	// common.loadSections (`.${window.localStorage.getItem ("cloudflare.tab") || "overview"}`)
-	$(`.cloudflare-dashboard .tabs [data-tab='${window.localStorage.getItem ("cloudflare.tab") || "overview"}']`).trigger ("click")
+	if ( $(`.cloudflare-dashboard .tabs [data-tab='${window.localStorage.getItem ("cloudflare.tab") || "overview"}']`).length > 0 ) {
+		$(`.cloudflare-dashboard .tabs [data-tab='${window.localStorage.getItem ("cloudflare.tab") || "overview"}']`).trigger ("click")
+	}
+	else {
+		$(`.cloudflare-dashboard .tabs [data-tab='overview']`).trigger ("click")
+	}
 
 	$(".proxied").each ( ( index ) => {
 		$(this).data ( "value", /proxied_on/.test ( $(this).attr ("src") ) )

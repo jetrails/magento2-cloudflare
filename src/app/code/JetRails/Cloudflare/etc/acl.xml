@@ -61,6 +61,9 @@
 							id="JetRails_Cloudflare::ssl_tls"
 							title="SSL/TLS" >
 							<resource
+								id="JetRails_Cloudflare::ssl_tls_recommender"
+								title="SSL/TLS Recommender" />
+							<resource
 								id="JetRails_Cloudflare::ssl"
 								title="SSL" />
 							<resource

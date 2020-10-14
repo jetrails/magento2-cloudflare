@@ -33,7 +33,9 @@
 			$this->_requestModel->setType ( Request::REQUEST_GET );
 			$response = $this->_requestModel->resolve ( $endpoint );
 			if ( $response->success ) {
-				$response->result = $response->result->vanity_name_servers_ips
+				$response->result = true
+					&& property_exists ( $response->result, "vanity_name_servers_ips" )
+					&& $response->result->vanity_name_servers_ips
 					? $response->result->vanity_name_servers_ips
 					: new stdClass ();
 			}

@@ -27,6 +27,12 @@ function loadSections ( additional = "" ) {
 					return false
 				}
 				if ( hasErrors ( response ) ) {
+					var header = "Authorization Error"
+					var message = "It appears that the configured Cloudflare token does not have sufficient permissions to render this section."
+					if ( response && response.errors && response.errors.some ( e => e.message.startsWith ("API Tokens are not supported") ) ) {
+						header = "Unsupported Error"
+						message = "Currently, this API endpoint cannot be used with token authorization. This may change in the future."
+					}
 					$(section).find (".row:nth-child( n + 2 )").remove ()
 					$(section).find (".wrapper_bottom").remove ()
 					$(section).find (".wrapper_right").remove ()
@@ -34,8 +40,8 @@ function loadSections ( additional = "" ) {
 					$(section).find (".row").append (`
 						<div class="wrapper_right" >
 							<div>
-								<h5 class="error" >Authorization Error</h5>
-								<p>It appears that the configured Cloudflare token does not have sufficient permissions to render this section.</p>
+								<h5 class="error" >${header}</h5>
+								<p>${message}</p>
 							</div>
 						</div>
 					`)

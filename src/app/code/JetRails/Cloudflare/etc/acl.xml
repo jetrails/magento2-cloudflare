@@ -143,6 +143,9 @@
 								id="JetRails_Cloudflare::enhanced_http2_prioritization"
 								title="Enhanced HTTP/2 Prioritization" />
 							<resource
+								id="JetRails_Cloudflare::tcp_turbo"
+								title="TCP Turbo" />
+							<resource
 								id="JetRails_Cloudflare::auto_minify"
 								title="Auto Minify" />
 							<resource

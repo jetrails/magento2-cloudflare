@@ -5,25 +5,24 @@
 	use JetRails\Cloudflare\Controller\Adminhtml\Action;
 
 	/**
-	 * This controller has two endpoints. One is used to send an API call to
-	 * Cloudflare and it purges all the cache for the current domain. The other
-	 * endpoint asks the Cloudflare API to purge certain files from a zone.
+	 * This action is used to send an API call to Cloudflare and request to
+	 * purge cache for the current domain.
 	 * @version     1.2.6
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved
 	 * @license     MIT https://opensource.org/licenses/MIT
 	 */
-	class Individual extends Action {
+	class Tag extends Action {
 
 		/**
-		 * This action takes in a list of files from the 'files' parameter and
-		 * it asks the Cloudflare API to purge the cache related to said files.
-		 * @return 	void
+		 * This action simply triggers the Cloudflare API to purge cache related
+		 * to the list of items that are passed.
+		 * @return  void
 		 */
 		public function execute () {
-			$files = $this->_request->getParam ("files");
-			$response = $this->_api->purgeIndividual ( $files );
+			$items = $this->_request->getParam ("items");
+			$response = $this->_api->purgeTags ( $items );
 			if ( isset ( $response->success ) && $response->success ) {
 				$response->messages = array_merge (
 					array (

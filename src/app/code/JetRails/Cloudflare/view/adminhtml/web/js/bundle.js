@@ -11349,6 +11349,21 @@ module.exports = {
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports) {
+
+function getDomainName () {
+	return window.domain
+}
+
+function getSkinBaseUrl ( path = "" ) {
+	return window.skin_base + path
+}
+
+module.exports = { getDomainName, getSkinBaseUrl }
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
@@ -11371,21 +11386,6 @@ $.ui = $.ui || {};
 return $.ui.version = "1.12.1";
 
 } ) );
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-function getDomainName () {
-	return window.domain
-}
-
-function getSkinBaseUrl ( path = "" ) {
-	return window.skin_base + path
-}
-
-module.exports = { getDomainName, getSkinBaseUrl }
 
 
 /***/ }),
@@ -11418,7 +11418,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 			__webpack_require__(64),
 			__webpack_require__(9),
 			__webpack_require__(65),
-			__webpack_require__(6),
+			__webpack_require__(7),
 			__webpack_require__(10)
 		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
@@ -12959,7 +12959,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(6) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(7) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -12998,7 +12998,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(6) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(7) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -13724,7 +13724,7 @@ return $.widget;
 const $ = __webpack_require__ (0)
 const notification = __webpack_require__ (2)
 const common = __webpack_require__ (3)
-const global = __webpack_require__ (7)
+const global = __webpack_require__ (6)
 const requireAll = ( r ) => { r.keys ().forEach ( r ) }
 
 requireAll ( __webpack_require__(12) )
@@ -14065,60 +14065,134 @@ $(document).on ( "cloudflare.caching.enable_query_string_sort.toggle", switchEle
 const $ = __webpack_require__ (0)
 const modal = __webpack_require__ (5)
 const notification = __webpack_require__ (2)
+const global = __webpack_require__ (6)
 
-$(document).on ( "cloudflare.caching.purge_cache.individual", ( event, data ) => {
-	let textarea = modal
-		.createTextarea ( "files", "http://example.com/images/example.jpg" )
-		.css ({
-			"width": "calc(100% - 45px)",
-			"margin": "auto 22.5px",
-			"fontSize": "1.2em"
-		})
+$(document).on ( "cloudflare.caching.purge_cache.custom", ( event, data ) => {
+	const yourSite = global.getDomainName ()
 	let prompt = new modal.Modal ( 800 )
-	prompt.addTitle ( "Purge Individual Files", "You can purge up to 30 files at a time." )
-	prompt.addElement ( $("<p>")
-		.append ( $("<strong>").text ("Note: ") )
-		.append ("Wildcards are not supported with single file purge at this time. You will need to specify the full path to the file.")
+	let choosen = null
+	const createRow = ( value, description ) => {
+		const onClick = () => {
+			choosen = value
+			$(`p.purge_cache-container div`).css ({ display: "none" })
+			$(`p.purge_cache-container div[data-type="${value}"]`).css ({ display: "block" })
+			$(".cloudflare_modal .buttons .purge").css ({ display: "block" })
+		}
+		return $("<tr>")
+			.append ( $("<td>").css ({ verticalAlign: "top" })
+				.append (
+					$("<input>")
+						.attr ( "type", "radio" )
+						.attr ( "name", "type" )
+						.attr ( "value", value )
+						.attr ( "id", `purge_type-${value}` )
+						.on ( "click", onClick )
+				)
+			)
+			.append ( $("<td>")
+				.append (
+					$(`<label for='purge_type-${value}' >`)
+						.css ({ minHeight: 60, display: "block", fontSize: "1.05em" })
+						.html ( description )
+						.on ( "click", onClick )
+				)
+			)
+	}
+	prompt.addTitle ( "Custom Purge" )
+	prompt.addElement ( $("<p>").css ({ paddingBottom: 0 })
+		.append ( $("<strong>").text ("Purge by:") )
+		.append ( $("<table>").css ({ marginTop: 15 })
+			.append ( createRow ( "url", "<b>URL:</b> Any assets in the Cloudflare cache that match the URL(s) exactly will be purged from the cache." ))
+			.append ( createRow ( "hostname", "<b>Hostname:</b> Any assets at URLs with a host that matches one of the provided values will be purged from the cache. (Enterprise only)" ))
+			.append ( createRow ( "tag", "<b>Tag:</b> Any assets served with a Cache-tag response header that matches one of the provided values will be purged from the cache. (Enterprise only)" ))
+			.append ( createRow ( "prefix", "<b>Prefix:</b> Any assets in the directory will be purged from cache. (Enterprise only)" ))
+		)
 	)
-	prompt.addElement ( $("<p>").text ("Separate tags(s) with commas, or list one per line") )
-	prompt.addElement ( textarea )
-	prompt.addButton ({ label: "Purge Individual Files", callback: ( components ) => {
-		$(prompt.components.modal).addClass ("loading")
+	prompt.addElement ( $("<p>").addClass ("purge_cache-container")
+		.append ( $("<div>")
+			.attr ("data-type", "url")
+			.css ({ display: "none" })
+			.append ( $("<p>").text ("You will need to specify the full path to the file. Wildcards are not supported with single URL purge at this time. You can purge up to 30 URLs at a time.") )
+			.append ( $("<p>").text ("Separate URL(s) one per line.") )
+			.append ( modal.createTextarea ( "urls", `Example:\nhttps://www.${yourSite}\nhttps://www.${yourSite}/cat.jpg` ) )
+		)
+		.append ( $("<div>")
+			.attr ("data-type", "hostname")
+			.css ({ display: "none" })
+			.append ( $("<p>").text ("You can purge up to 30 hostnames at a time.") )
+			.append ( $("<p>").text ("Separate hostnames(s) with commas, or one per line.") )
+			.append ( modal.createTextarea ( "hostnames", `Example:\nwww.${yourSite}, blog.${yourSite}, shop.${yourSite}, foo.bar.${yourSite}` ) )
+		)
+		.append ( $("<div>")
+			.attr ("data-type", "tag")
+			.css ({ display: "none" })
+			.append ( $("<p>").text ("You can purge up to 30 tags at a time.") )
+			.append ( $("<p>").text ("Separate tag(s) with commas, or one per line.") )
+			.append ( modal.createTextarea ( "tags", `Example:\ndog, cat, foobar` ) )
+		)
+		.append ( $("<div>")
+			.attr ("data-type", "prefix")
+			.css ({ display: "none" })
+			.append ( $("<p>").text ("You can purge up to 30 prefixes at a time.") )
+			.append ( $("<p>").text ("Separate prefix(s) one per line.") )
+			.append ( modal.createTextarea ( "prefixes", `Example:\nwww.${yourSite}/foo\nwww.${yourSite}/foo/bar\nwww.${yourSite}/foo/bar/baz` ) )
+		)
+	)
+	prompt.addButton ({ label: "Cancel", class: "gray", callback: prompt.close })
+	prompt.addButton ({ label: "Purge", class: "purge", callback: ( components ) => {
+		if ( choosen ) {
+			$(prompt.components.modal).addClass ("loading")
+			$(data.section).addClass ("loading")
+			let items = $(`.purge_cache-container div[data-type="${choosen}"] textarea`).val ()
+				.split ( [ "prefix", "url" ].includes ( choosen ) ? /\s+/ : /[\s,]+/ )
+				.map ( i => i.trim () )
+				.filter ( i => i !== "" )
+			$.ajax ({
+				url: data.form.endpoint.replace ( "custom", choosen ),
+				type: "POST",
+				data: { "form_key": data.form.key, items },
+				success: ( response ) => {
+					if ( response.success ) {
+						prompt.close ()
+					}
+					else {
+						$(prompt.components.modal).removeClass ("loading")
+					}
+					notification.showMessages ( response )
+					$(data.section).removeClass ("loading")
+				}
+			})
+		}
+	}})
+	prompt.show ()
+	$(".cloudflare_modal .buttons .purge").css ({ display: "none" })
+})
+
+$(document).on ( "cloudflare.caching.purge_cache.everything", ( event, data ) => {
+	let confirm = new modal.Modal ()
+	confirm.addTitle ( "Confirm purge everything" )
+	confirm.addElement ( $("<p>").append ("Purge all cached files. Purging your cache may slow your website temporarily.") )
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Purge Everything", class: "red", callback: ( components ) => {
+		$(confirm.components.modal).addClass ("loading")
 		$(data.section).addClass ("loading")
-		let files = $(textarea).val ()
-			.split (/\n|,/)
-			.map ( i => i.trim () )
-			.filter ( i => i !== "" )
 		$.ajax ({
 			url: data.form.endpoint,
 			type: "POST",
-			data: { "form_key": data.form.key, "files": files },
+			data: { "form_key": data.form.key },
 			success: ( response ) => {
 				if ( response.success ) {
-					prompt.close ()
+					confirm.close ()
 				}
 				else {
-					$(prompt.components.modal).removeClass ("loading")
+					$(confirm.components.modal).removeClass ("loading")
 				}
 				notification.showMessages ( response )
 				$(data.section).removeClass ("loading")
 			}
 		})
 	}})
-	prompt.show ()
-})
-
-$(document).on ( "cloudflare.caching.purge_cache.everything", ( event, data ) => {
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key },
-		success: ( response ) => {
-			notification.showMessages ( response )
-			$(data.section).removeClass ("loading")
-		}
-	})
+	confirm.show ()
 })
 
 
@@ -14798,7 +14872,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
 const common = __webpack_require__ (3)
-const global = __webpack_require__ (7)
+const global = __webpack_require__ (6)
 
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.dns.custom_nameservers.initialize", function ( event, data ) {
 	var table = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("table.nameservers")
@@ -14873,7 +14947,7 @@ const $ = __webpack_require__ (0)
 const common = __webpack_require__ (3)
 const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
-const global = __webpack_require__ (7)
+const global = __webpack_require__ (6)
 
 function createTtlSelect ( selected = "1" ) {
 	let select = modal.createSelect ( "ttl_value", [
@@ -16344,7 +16418,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
 const common = __webpack_require__ (3)
-const global = __webpack_require__ (7)
+const global = __webpack_require__ (6)
 
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.firewall.zone_lockdown.initialize", function ( event, data ) {
 	let rulesUsed = data.response.result.filter ( e => !e.paused ).length
@@ -16646,7 +16720,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 			__webpack_require__(0),
 			__webpack_require__(9),
-			__webpack_require__(6),
+			__webpack_require__(7),
 			__webpack_require__(10)
 		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
@@ -16878,7 +16952,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(6) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(7) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -16926,7 +17000,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(6) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(7) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -16997,7 +17071,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const notification = __webpack_require__ (2)
 const modal = __webpack_require__ (5)
 const common = __webpack_require__ (3)
-const global = __webpack_require__ (7)
+const global = __webpack_require__ (6)
 
 function upperCaseFirst ( target ) {
 	target = target + ""

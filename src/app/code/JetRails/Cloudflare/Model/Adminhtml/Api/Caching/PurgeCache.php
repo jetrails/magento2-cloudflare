@@ -43,17 +43,58 @@
 		}
 
 		/**
-		 * This method asks the Cloudflare API to purge all the cache in the
-		 * currently selected zone and that match any of the URLs found in the
-		 * passed array.
-		 * @param   array        urls                 URLs to purge in zone
+		 * Given a list of items, ask Cloudflare to purge cache that matches the
+		 * list of urls.
+		 * @param   array        items                Items to purge
 		 * @return  stdClass                          Cloudflare response
 		 */
-		public function purgeIndividual ( $urls ) {
+		public function purgeUrls ( $items ) {
 			$zoneId = $this->_configurationModel->getZoneId ();
 			$endpoint = sprintf ( "zones/%s/purge_cache", $zoneId );
 			$this->_requestModel->setType ( Request::REQUEST_DELETE );
-			$this->_requestModel->setData ( array ( "files" => $urls ) );
+			$this->_requestModel->setData ( array ( "files" => $items ) );
+			return $this->_requestModel->resolve ( $endpoint );
+		}
+
+		/**
+		 * Given a list of items, ask Cloudflare to purge cache that matches the
+		 * list of hostnames.
+		 * @param   array        items                Items to purge
+		 * @return  stdClass                          Cloudflare response
+		 */
+		public function purgeHosts ( $items ) {
+			$zoneId = $this->_configurationModel->getZoneId ();
+			$endpoint = sprintf ( "zones/%s/purge_cache", $zoneId );
+			$this->_requestModel->setType ( Request::REQUEST_DELETE );
+			$this->_requestModel->setData ( array ( "hosts" => $items ) );
+			return $this->_requestModel->resolve ( $endpoint );
+		}
+
+		/**
+		 * Given a list of items, ask Cloudflare to purge cache that matches the
+		 * list of tags.
+		 * @param   array        items                Items to purge
+		 * @return  stdClass                          Cloudflare response
+		 */
+		public function purgeTags ( $items ) {
+			$zoneId = $this->_configurationModel->getZoneId ();
+			$endpoint = sprintf ( "zones/%s/purge_cache", $zoneId );
+			$this->_requestModel->setType ( Request::REQUEST_DELETE );
+			$this->_requestModel->setData ( array ( "tags" => $items ) );
+			return $this->_requestModel->resolve ( $endpoint );
+		}
+
+		/**
+		 * Given a list of items, ask Cloudflare to purge cache that matches the
+		 * list of prefixes.
+		 * @param   array        items                Items to purge
+		 * @return  stdClass                          Cloudflare response
+		 */
+		public function purgePrefixes ( $items ) {
+			$zoneId = $this->_configurationModel->getZoneId ();
+			$endpoint = sprintf ( "zones/%s/purge_cache", $zoneId );
+			$this->_requestModel->setType ( Request::REQUEST_DELETE );
+			$this->_requestModel->setData ( array ( "prefixes" => $items ) );
 			return $this->_requestModel->resolve ( $endpoint );
 		}
 

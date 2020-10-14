@@ -53,6 +53,9 @@
 							<resource
 								id="JetRails_Cloudflare::cloudflare_nameservers"
 								title="Cloudflare Nameservers" />
+							<resource
+								id="JetRails_Cloudflare::cname_flattening"
+								title="CNAME Flattening" />
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::ssl_tls"

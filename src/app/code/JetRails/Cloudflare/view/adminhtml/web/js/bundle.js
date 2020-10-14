@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11392,4012 +11392,6 @@ module.exports = { getDomainName, getSkinBaseUrl }
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
-	if ( true ) {
-
-		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(6) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {
-
-		// Browser globals
-		factory( jQuery );
-	}
-} ( function( $ ) {
-
-// This file is deprecated
-return $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
-} ) );
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery UI Widget 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Widget
-//>>group: Core
-//>>description: Provides a factory for creating stateful widgets with a common API.
-//>>docs: http://api.jqueryui.com/jQuery.widget/
-//>>demos: http://jqueryui.com/widget/
-
-( function( factory ) {
-	if ( true ) {
-
-		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(6) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {
-
-		// Browser globals
-		factory( jQuery );
-	}
-}( function( $ ) {
-
-var widgetUuid = 0;
-var widgetSlice = Array.prototype.slice;
-
-$.cleanData = ( function( orig ) {
-	return function( elems ) {
-		var events, elem, i;
-		for ( i = 0; ( elem = elems[ i ] ) != null; i++ ) {
-			try {
-
-				// Only trigger remove when necessary to save time
-				events = $._data( elem, "events" );
-				if ( events && events.remove ) {
-					$( elem ).triggerHandler( "remove" );
-				}
-
-			// Http://bugs.jquery.com/ticket/8235
-			} catch ( e ) {}
-		}
-		orig( elems );
-	};
-} )( $.cleanData );
-
-$.widget = function( name, base, prototype ) {
-	var existingConstructor, constructor, basePrototype;
-
-	// ProxiedPrototype allows the provided prototype to remain unmodified
-	// so that it can be used as a mixin for multiple widgets (#8876)
-	var proxiedPrototype = {};
-
-	var namespace = name.split( "." )[ 0 ];
-	name = name.split( "." )[ 1 ];
-	var fullName = namespace + "-" + name;
-
-	if ( !prototype ) {
-		prototype = base;
-		base = $.Widget;
-	}
-
-	if ( $.isArray( prototype ) ) {
-		prototype = $.extend.apply( null, [ {} ].concat( prototype ) );
-	}
-
-	// Create selector for plugin
-	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
-		return !!$.data( elem, fullName );
-	};
-
-	$[ namespace ] = $[ namespace ] || {};
-	existingConstructor = $[ namespace ][ name ];
-	constructor = $[ namespace ][ name ] = function( options, element ) {
-
-		// Allow instantiation without "new" keyword
-		if ( !this._createWidget ) {
-			return new constructor( options, element );
-		}
-
-		// Allow instantiation without initializing for simple inheritance
-		// must use "new" keyword (the code above always passes args)
-		if ( arguments.length ) {
-			this._createWidget( options, element );
-		}
-	};
-
-	// Extend with the existing constructor to carry over any static properties
-	$.extend( constructor, existingConstructor, {
-		version: prototype.version,
-
-		// Copy the object used to create the prototype in case we need to
-		// redefine the widget later
-		_proto: $.extend( {}, prototype ),
-
-		// Track widgets that inherit from this widget in case this widget is
-		// redefined after a widget inherits from it
-		_childConstructors: []
-	} );
-
-	basePrototype = new base();
-
-	// We need to make the options hash a property directly on the new instance
-	// otherwise we'll modify the options hash on the prototype that we're
-	// inheriting from
-	basePrototype.options = $.widget.extend( {}, basePrototype.options );
-	$.each( prototype, function( prop, value ) {
-		if ( !$.isFunction( value ) ) {
-			proxiedPrototype[ prop ] = value;
-			return;
-		}
-		proxiedPrototype[ prop ] = ( function() {
-			function _super() {
-				return base.prototype[ prop ].apply( this, arguments );
-			}
-
-			function _superApply( args ) {
-				return base.prototype[ prop ].apply( this, args );
-			}
-
-			return function() {
-				var __super = this._super;
-				var __superApply = this._superApply;
-				var returnValue;
-
-				this._super = _super;
-				this._superApply = _superApply;
-
-				returnValue = value.apply( this, arguments );
-
-				this._super = __super;
-				this._superApply = __superApply;
-
-				return returnValue;
-			};
-		} )();
-	} );
-	constructor.prototype = $.widget.extend( basePrototype, {
-
-		// TODO: remove support for widgetEventPrefix
-		// always use the name + a colon as the prefix, e.g., draggable:start
-		// don't prefix for widgets that aren't DOM-based
-		widgetEventPrefix: existingConstructor ? ( basePrototype.widgetEventPrefix || name ) : name
-	}, proxiedPrototype, {
-		constructor: constructor,
-		namespace: namespace,
-		widgetName: name,
-		widgetFullName: fullName
-	} );
-
-	// If this widget is being redefined then we need to find all widgets that
-	// are inheriting from it and redefine all of them so that they inherit from
-	// the new version of this widget. We're essentially trying to replace one
-	// level in the prototype chain.
-	if ( existingConstructor ) {
-		$.each( existingConstructor._childConstructors, function( i, child ) {
-			var childPrototype = child.prototype;
-
-			// Redefine the child widget using the same prototype that was
-			// originally used, but inherit from the new version of the base
-			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
-				child._proto );
-		} );
-
-		// Remove the list of existing child constructors from the old constructor
-		// so the old child constructors can be garbage collected
-		delete existingConstructor._childConstructors;
-	} else {
-		base._childConstructors.push( constructor );
-	}
-
-	$.widget.bridge( name, constructor );
-
-	return constructor;
-};
-
-$.widget.extend = function( target ) {
-	var input = widgetSlice.call( arguments, 1 );
-	var inputIndex = 0;
-	var inputLength = input.length;
-	var key;
-	var value;
-
-	for ( ; inputIndex < inputLength; inputIndex++ ) {
-		for ( key in input[ inputIndex ] ) {
-			value = input[ inputIndex ][ key ];
-			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
-
-				// Clone objects
-				if ( $.isPlainObject( value ) ) {
-					target[ key ] = $.isPlainObject( target[ key ] ) ?
-						$.widget.extend( {}, target[ key ], value ) :
-
-						// Don't extend strings, arrays, etc. with objects
-						$.widget.extend( {}, value );
-
-				// Copy everything else by reference
-				} else {
-					target[ key ] = value;
-				}
-			}
-		}
-	}
-	return target;
-};
-
-$.widget.bridge = function( name, object ) {
-	var fullName = object.prototype.widgetFullName || name;
-	$.fn[ name ] = function( options ) {
-		var isMethodCall = typeof options === "string";
-		var args = widgetSlice.call( arguments, 1 );
-		var returnValue = this;
-
-		if ( isMethodCall ) {
-
-			// If this is an empty collection, we need to have the instance method
-			// return undefined instead of the jQuery instance
-			if ( !this.length && options === "instance" ) {
-				returnValue = undefined;
-			} else {
-				this.each( function() {
-					var methodValue;
-					var instance = $.data( this, fullName );
-
-					if ( options === "instance" ) {
-						returnValue = instance;
-						return false;
-					}
-
-					if ( !instance ) {
-						return $.error( "cannot call methods on " + name +
-							" prior to initialization; " +
-							"attempted to call method '" + options + "'" );
-					}
-
-					if ( !$.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
-						return $.error( "no such method '" + options + "' for " + name +
-							" widget instance" );
-					}
-
-					methodValue = instance[ options ].apply( instance, args );
-
-					if ( methodValue !== instance && methodValue !== undefined ) {
-						returnValue = methodValue && methodValue.jquery ?
-							returnValue.pushStack( methodValue.get() ) :
-							methodValue;
-						return false;
-					}
-				} );
-			}
-		} else {
-
-			// Allow multiple hashes to be passed on init
-			if ( args.length ) {
-				options = $.widget.extend.apply( null, [ options ].concat( args ) );
-			}
-
-			this.each( function() {
-				var instance = $.data( this, fullName );
-				if ( instance ) {
-					instance.option( options || {} );
-					if ( instance._init ) {
-						instance._init();
-					}
-				} else {
-					$.data( this, fullName, new object( options, this ) );
-				}
-			} );
-		}
-
-		return returnValue;
-	};
-};
-
-$.Widget = function( /* options, element */ ) {};
-$.Widget._childConstructors = [];
-
-$.Widget.prototype = {
-	widgetName: "widget",
-	widgetEventPrefix: "",
-	defaultElement: "<div>",
-
-	options: {
-		classes: {},
-		disabled: false,
-
-		// Callbacks
-		create: null
-	},
-
-	_createWidget: function( options, element ) {
-		element = $( element || this.defaultElement || this )[ 0 ];
-		this.element = $( element );
-		this.uuid = widgetUuid++;
-		this.eventNamespace = "." + this.widgetName + this.uuid;
-
-		this.bindings = $();
-		this.hoverable = $();
-		this.focusable = $();
-		this.classesElementLookup = {};
-
-		if ( element !== this ) {
-			$.data( element, this.widgetFullName, this );
-			this._on( true, this.element, {
-				remove: function( event ) {
-					if ( event.target === element ) {
-						this.destroy();
-					}
-				}
-			} );
-			this.document = $( element.style ?
-
-				// Element within the document
-				element.ownerDocument :
-
-				// Element is window or document
-				element.document || element );
-			this.window = $( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
-		}
-
-		this.options = $.widget.extend( {},
-			this.options,
-			this._getCreateOptions(),
-			options );
-
-		this._create();
-
-		if ( this.options.disabled ) {
-			this._setOptionDisabled( this.options.disabled );
-		}
-
-		this._trigger( "create", null, this._getCreateEventData() );
-		this._init();
-	},
-
-	_getCreateOptions: function() {
-		return {};
-	},
-
-	_getCreateEventData: $.noop,
-
-	_create: $.noop,
-
-	_init: $.noop,
-
-	destroy: function() {
-		var that = this;
-
-		this._destroy();
-		$.each( this.classesElementLookup, function( key, value ) {
-			that._removeClass( value, key );
-		} );
-
-		// We can probably remove the unbind calls in 2.0
-		// all event bindings should go through this._on()
-		this.element
-			.off( this.eventNamespace )
-			.removeData( this.widgetFullName );
-		this.widget()
-			.off( this.eventNamespace )
-			.removeAttr( "aria-disabled" );
-
-		// Clean up events and states
-		this.bindings.off( this.eventNamespace );
-	},
-
-	_destroy: $.noop,
-
-	widget: function() {
-		return this.element;
-	},
-
-	option: function( key, value ) {
-		var options = key;
-		var parts;
-		var curOption;
-		var i;
-
-		if ( arguments.length === 0 ) {
-
-			// Don't return a reference to the internal hash
-			return $.widget.extend( {}, this.options );
-		}
-
-		if ( typeof key === "string" ) {
-
-			// Handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
-			options = {};
-			parts = key.split( "." );
-			key = parts.shift();
-			if ( parts.length ) {
-				curOption = options[ key ] = $.widget.extend( {}, this.options[ key ] );
-				for ( i = 0; i < parts.length - 1; i++ ) {
-					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
-					curOption = curOption[ parts[ i ] ];
-				}
-				key = parts.pop();
-				if ( arguments.length === 1 ) {
-					return curOption[ key ] === undefined ? null : curOption[ key ];
-				}
-				curOption[ key ] = value;
-			} else {
-				if ( arguments.length === 1 ) {
-					return this.options[ key ] === undefined ? null : this.options[ key ];
-				}
-				options[ key ] = value;
-			}
-		}
-
-		this._setOptions( options );
-
-		return this;
-	},
-
-	_setOptions: function( options ) {
-		var key;
-
-		for ( key in options ) {
-			this._setOption( key, options[ key ] );
-		}
-
-		return this;
-	},
-
-	_setOption: function( key, value ) {
-		if ( key === "classes" ) {
-			this._setOptionClasses( value );
-		}
-
-		this.options[ key ] = value;
-
-		if ( key === "disabled" ) {
-			this._setOptionDisabled( value );
-		}
-
-		return this;
-	},
-
-	_setOptionClasses: function( value ) {
-		var classKey, elements, currentElements;
-
-		for ( classKey in value ) {
-			currentElements = this.classesElementLookup[ classKey ];
-			if ( value[ classKey ] === this.options.classes[ classKey ] ||
-					!currentElements ||
-					!currentElements.length ) {
-				continue;
-			}
-
-			// We are doing this to create a new jQuery object because the _removeClass() call
-			// on the next line is going to destroy the reference to the current elements being
-			// tracked. We need to save a copy of this collection so that we can add the new classes
-			// below.
-			elements = $( currentElements.get() );
-			this._removeClass( currentElements, classKey );
-
-			// We don't use _addClass() here, because that uses this.options.classes
-			// for generating the string of classes. We want to use the value passed in from
-			// _setOption(), this is the new value of the classes option which was passed to
-			// _setOption(). We pass this value directly to _classes().
-			elements.addClass( this._classes( {
-				element: elements,
-				keys: classKey,
-				classes: value,
-				add: true
-			} ) );
-		}
-	},
-
-	_setOptionDisabled: function( value ) {
-		this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
-
-		// If the widget is becoming disabled, then nothing is interactive
-		if ( value ) {
-			this._removeClass( this.hoverable, null, "ui-state-hover" );
-			this._removeClass( this.focusable, null, "ui-state-focus" );
-		}
-	},
-
-	enable: function() {
-		return this._setOptions( { disabled: false } );
-	},
-
-	disable: function() {
-		return this._setOptions( { disabled: true } );
-	},
-
-	_classes: function( options ) {
-		var full = [];
-		var that = this;
-
-		options = $.extend( {
-			element: this.element,
-			classes: this.options.classes || {}
-		}, options );
-
-		function processClassString( classes, checkOption ) {
-			var current, i;
-			for ( i = 0; i < classes.length; i++ ) {
-				current = that.classesElementLookup[ classes[ i ] ] || $();
-				if ( options.add ) {
-					current = $( $.unique( current.get().concat( options.element.get() ) ) );
-				} else {
-					current = $( current.not( options.element ).get() );
-				}
-				that.classesElementLookup[ classes[ i ] ] = current;
-				full.push( classes[ i ] );
-				if ( checkOption && options.classes[ classes[ i ] ] ) {
-					full.push( options.classes[ classes[ i ] ] );
-				}
-			}
-		}
-
-		this._on( options.element, {
-			"remove": "_untrackClassesElement"
-		} );
-
-		if ( options.keys ) {
-			processClassString( options.keys.match( /\S+/g ) || [], true );
-		}
-		if ( options.extra ) {
-			processClassString( options.extra.match( /\S+/g ) || [] );
-		}
-
-		return full.join( " " );
-	},
-
-	_untrackClassesElement: function( event ) {
-		var that = this;
-		$.each( that.classesElementLookup, function( key, value ) {
-			if ( $.inArray( event.target, value ) !== -1 ) {
-				that.classesElementLookup[ key ] = $( value.not( event.target ).get() );
-			}
-		} );
-	},
-
-	_removeClass: function( element, keys, extra ) {
-		return this._toggleClass( element, keys, extra, false );
-	},
-
-	_addClass: function( element, keys, extra ) {
-		return this._toggleClass( element, keys, extra, true );
-	},
-
-	_toggleClass: function( element, keys, extra, add ) {
-		add = ( typeof add === "boolean" ) ? add : extra;
-		var shift = ( typeof element === "string" || element === null ),
-			options = {
-				extra: shift ? keys : extra,
-				keys: shift ? element : keys,
-				element: shift ? this.element : element,
-				add: add
-			};
-		options.element.toggleClass( this._classes( options ), add );
-		return this;
-	},
-
-	_on: function( suppressDisabledCheck, element, handlers ) {
-		var delegateElement;
-		var instance = this;
-
-		// No suppressDisabledCheck flag, shuffle arguments
-		if ( typeof suppressDisabledCheck !== "boolean" ) {
-			handlers = element;
-			element = suppressDisabledCheck;
-			suppressDisabledCheck = false;
-		}
-
-		// No element argument, shuffle and use this.element
-		if ( !handlers ) {
-			handlers = element;
-			element = this.element;
-			delegateElement = this.widget();
-		} else {
-			element = delegateElement = $( element );
-			this.bindings = this.bindings.add( element );
-		}
-
-		$.each( handlers, function( event, handler ) {
-			function handlerProxy() {
-
-				// Allow widgets to customize the disabled handling
-				// - disabled as an array instead of boolean
-				// - disabled class as method for disabling individual parts
-				if ( !suppressDisabledCheck &&
-						( instance.options.disabled === true ||
-						$( this ).hasClass( "ui-state-disabled" ) ) ) {
-					return;
-				}
-				return ( typeof handler === "string" ? instance[ handler ] : handler )
-					.apply( instance, arguments );
-			}
-
-			// Copy the guid so direct unbinding works
-			if ( typeof handler !== "string" ) {
-				handlerProxy.guid = handler.guid =
-					handler.guid || handlerProxy.guid || $.guid++;
-			}
-
-			var match = event.match( /^([\w:-]*)\s*(.*)$/ );
-			var eventName = match[ 1 ] + instance.eventNamespace;
-			var selector = match[ 2 ];
-
-			if ( selector ) {
-				delegateElement.on( eventName, selector, handlerProxy );
-			} else {
-				element.on( eventName, handlerProxy );
-			}
-		} );
-	},
-
-	_off: function( element, eventName ) {
-		eventName = ( eventName || "" ).split( " " ).join( this.eventNamespace + " " ) +
-			this.eventNamespace;
-		element.off( eventName ).off( eventName );
-
-		// Clear the stack to avoid memory leaks (#10056)
-		this.bindings = $( this.bindings.not( element ).get() );
-		this.focusable = $( this.focusable.not( element ).get() );
-		this.hoverable = $( this.hoverable.not( element ).get() );
-	},
-
-	_delay: function( handler, delay ) {
-		function handlerProxy() {
-			return ( typeof handler === "string" ? instance[ handler ] : handler )
-				.apply( instance, arguments );
-		}
-		var instance = this;
-		return setTimeout( handlerProxy, delay || 0 );
-	},
-
-	_hoverable: function( element ) {
-		this.hoverable = this.hoverable.add( element );
-		this._on( element, {
-			mouseenter: function( event ) {
-				this._addClass( $( event.currentTarget ), null, "ui-state-hover" );
-			},
-			mouseleave: function( event ) {
-				this._removeClass( $( event.currentTarget ), null, "ui-state-hover" );
-			}
-		} );
-	},
-
-	_focusable: function( element ) {
-		this.focusable = this.focusable.add( element );
-		this._on( element, {
-			focusin: function( event ) {
-				this._addClass( $( event.currentTarget ), null, "ui-state-focus" );
-			},
-			focusout: function( event ) {
-				this._removeClass( $( event.currentTarget ), null, "ui-state-focus" );
-			}
-		} );
-	},
-
-	_trigger: function( type, event, data ) {
-		var prop, orig;
-		var callback = this.options[ type ];
-
-		data = data || {};
-		event = $.Event( event );
-		event.type = ( type === this.widgetEventPrefix ?
-			type :
-			this.widgetEventPrefix + type ).toLowerCase();
-
-		// The original event may come from any element
-		// so we need to reset the target on the new event
-		event.target = this.element[ 0 ];
-
-		// Copy original event properties over to the new event
-		orig = event.originalEvent;
-		if ( orig ) {
-			for ( prop in orig ) {
-				if ( !( prop in event ) ) {
-					event[ prop ] = orig[ prop ];
-				}
-			}
-		}
-
-		this.element.trigger( event, data );
-		return !( $.isFunction( callback ) &&
-			callback.apply( this.element[ 0 ], [ event ].concat( data ) ) === false ||
-			event.isDefaultPrevented() );
-	}
-};
-
-$.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
-	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
-		if ( typeof options === "string" ) {
-			options = { effect: options };
-		}
-
-		var hasOptions;
-		var effectName = !options ?
-			method :
-			options === true || typeof options === "number" ?
-				defaultEffect :
-				options.effect || defaultEffect;
-
-		options = options || {};
-		if ( typeof options === "number" ) {
-			options = { duration: options };
-		}
-
-		hasOptions = !$.isEmptyObject( options );
-		options.complete = callback;
-
-		if ( options.delay ) {
-			element.delay( options.delay );
-		}
-
-		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
-			element[ method ]( options );
-		} else if ( effectName !== method && element[ effectName ] ) {
-			element[ effectName ]( options.duration, options.easing, callback );
-		} else {
-			element.queue( function( next ) {
-				$( this )[ method ]();
-				if ( callback ) {
-					callback.call( element[ 0 ] );
-				}
-				next();
-			} );
-		}
-	};
-} );
-
-return $.widget;
-
-} ) );
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (2)
-const common = __webpack_require__ (3)
-const global = __webpack_require__ (7)
-const requireAll = ( r ) => { r.keys ().forEach ( r ) }
-
-requireAll ( __webpack_require__(11) )
-requireAll ( __webpack_require__(13) )
-requireAll ( __webpack_require__(20) )
-requireAll ( __webpack_require__(32) )
-requireAll ( __webpack_require__(45) )
-requireAll ( __webpack_require__(49) )
-requireAll ( __webpack_require__(60) )
-requireAll ( __webpack_require__(66) )
-requireAll ( __webpack_require__(78) )
-
-$(window).on ( "load", function () {
-
-	// Wrapper on all AJAX calls (detect session expiration)
-	var oldAjax = $.ajax
-	$.ajax = function () {
-		var successCallback = arguments [ 0 ].success
-		arguments [ 0 ].success = function ( response, status, xhr ) {
-			if ( ( xhr.getResponseHeader ("content-type") || "" ).indexOf ("html") >= 0 ) {
-				$(".cloudflare-dashboard").addClass ("logged-off")
-				notification.showMessages ({
-					errors: [
-						{
-							code: 42,
-							message: "It appears that you are no longer logged in. Please refresh page and try again."
-						}
-					]
-				})
-			}
-			else {
-				successCallback.apply ( this, arguments )
-			}
-		}
-		oldAjax.apply ( null, arguments )
-	}
-
-	if ( $(`.cloudflare-dashboard .tabs [data-tab='${window.localStorage.getItem ("cloudflare.tab") || "overview"}']`).length > 0 ) {
-		$(`.cloudflare-dashboard .tabs [data-tab='${window.localStorage.getItem ("cloudflare.tab") || "overview"}']`).trigger ("click")
-	}
-	else {
-		$(`.cloudflare-dashboard .tabs [data-tab='overview']`).trigger ("click")
-	}
-
-	$(".proxied").each ( ( index ) => {
-		$(this).data ( "value", /proxied_on/.test ( $(this).attr ("src") ) )
-	})
-
-	const triggerEvent = function () {
-		var section = $(this).closest ("section")
-		var event = {
-			"target": {
-				"tab": $( section ).data ("tab-name"),
-				"section": $( section ).data ("section-name"),
-				"action": $(this).data ("target")
-			},
-			"form": {
-				"endpoint": $(this).closest ("section").data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1" + $(this).data ("target") + "$3" ),
-				"key": $(this).closest ("section").data ("form-key")
-			},
-			"section": section,
-			"trigger": $(this)
-		}
-		event.target.name = event.target.tab + "." + event.target.section + "." + event.target.action
-		event.target.name = "cloudflare." + event.target.name
-		$.event.trigger ( event.target.name, event )
-		// console.log ( "Triggered: " + event.target.name )
-	}
-
-	$(document).on ( "click", ".trigger", triggerEvent )
-	$(document).on ( "change", ".trigger-select", triggerEvent )
-	$(document).on ( "change", ".trigger-radio", triggerEvent )
-	$(document).on ( "keyup", ".trigger-change", triggerEvent )
-
-})
-
-$(document).on ( "click", "[data-tab]", function () {
-	var section = $(this).closest ("section")
-	if ( $(this).hasClass ("active") && !$(section).hasClass ("at_least_one") ) {
-		$(section).find ("[data-tab-content]").removeClass ("active")
-		$(section).find ("[data-tab]").removeClass ("active")
-	}
-	else {
-		$(section).find ("[data-tab-content]").removeClass ("active")
-		$(section).find ("[data-tab]").removeClass ("active")
-		$(this).addClass ("active")
-		$(section).find ("[data-tab-content='" + $(this).data ("tab") + "']").addClass ("active")
-	}
-})
-
-$(document).on ( "change", ".dynamic-trigger", function () {
-	const target = $(this).val ()
-	$(this).parent ().find ("div[data-dynamic-wrapper]").removeClass ("active")
-	$(this).parent ().find ("div[data-dynamic-wrapper='" + target + "']").addClass ("active")
-	$(this).parent ().find ("[data-dynamic-show]").each ( function () {
-		if ( $(this).data ("dynamic-show").includes ( target.toLowerCase () ) ) {
-			$(this).show ()
-		}
-		else {
-			$(this).hide ()
-		}
-	})
-})
-
-$(document).on ( "click", ".dynamic-trigger", function () {
-	const target = $(this).data ("tab")
-	if ( target ) {
-		$(this).parent ().find ("div[data-dynamic-wrapper]").removeClass ("active")
-		$(this).parent ().find ("div[data-dynamic-wrapper='" + target + "']").addClass ("active")
-		$(this).parent ().find ("[data-dynamic-show]").each ( function () {
-			if ( $(this).data ("dynamic-show").includes ( target.toLowerCase () ) ) {
-				$(this).show ()
-			}
-			else {
-				$(this).hide ()
-			}
-		})
-	}
-})
-
-$(document).on ( "click", ".proxied", function () {
-	let source = $(this).attr ("src")
-	if ( /proxied_on/.test ( source ) ) {
-		source = source.replace ( /proxied_on/, "proxied_off" )
-		$(this).data ( "value", false )
-	}
-	else {
-		source = source.replace ( /proxied_off/, "proxied_on" )
-		$(this).data ( "value", true )
-	}
-	$(this).attr ( "src", source )
-	if ( $(this).hasClass ("change") ) $(this).trigger ("change")
-})
-
-$(document).on ( "click", ".cloudflare-dashboard ul.tabs li", function () {
-	let target = $(this).data ("tab")
-	$(".cloudflare-dashboard .content").removeClass ("selected")
-	$(".cloudflare-dashboard .tabs li").removeClass ("selected")
-	$(`.cloudflare-dashboard .content[data-target='${target}']`).addClass ("selected")
-	$(this).addClass ("selected")
-	$(`.initialize.${target}`).addClass ("loading")
-	window.localStorage.setItem ( "cloudflare.tab", target )
-	common.loadSections (`.${target}`)
-})
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./status.js": 12
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 11;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.overview.status.initialize", function ( event, data ) {
-	if ( data.response && data.response.result && data.response.result.paused ) {
-		$(data.section).find (".section_title").text ("Resume")
-		$(data.section).find (".wrapper_left > p").text ("Cloudflare has been temporarily deactivated for your domain. Cloudflare will continue to resolve DNS for your website, but all requests will go directly to your origin which means you will not receive the performance and security benefits. All of your settings have been saved.")
-		$(data.section).find (".trigger").val ("Resume")
-		$(data.section).find (".trigger").data ( "target", "resume" )
-	}
-	else {
-		$(data.section).find (".section_title").text ("Pause Website")
-		$(data.section).find (".wrapper_left > p").text ("Pause will temporarily deactivate Cloudflare for your domain. Cloudflare will continue to resolve DNS for your website, but all requests will go directly to your origin which means you will not receive performance and security benefits. All of your settings will be saved.")
-		$(data.section).find (".trigger").val ("Pause")
-		$(data.section).find (".trigger").data ( "target", "pause" )
-	}
-})
-
-$(document).on ( "cloudflare.overview.status.pause", function ( event, data ) {
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key },
-		success: function ( response, status, xhr ) {
-			// if ( ( xhr.getResponseHeader ("content-type") || "" ).indexOf ("json") < 0 ) {
-			// 	alert ("Please log back in")
-			// }
-			$(data.section).removeClass ("loading")
-			notification.showMessages ( response )
-			if ( response.result && response.result.paused ) {
-				$(data.section).find (".section_title").text ("Resume")
-				$(data.section).find (".wrapper_left > p").text ("Cloudflare has been temporarily deactivated for your domain. Cloudflare will continue to resolve DNS for your website, but all requests will go directly to your origin which means you will not receive the performance and security benefits. All of your settings have been saved.")
-				$(data.section).find (".trigger").val ("Resume")
-				$(data.section).find (".trigger").data ( "target", "resume" )
-			}
-		}
-	})
-})
-
-$(document).on ( "cloudflare.overview.status.resume", function ( event, data ) {
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key },
-		success: function ( response ) {
-			$(data.section).removeClass ("loading")
-			notification.showMessages ( response )
-			if ( response.result && !response.result.paused ) {
-				$(data.section).find (".section_title").text ("Pause Website")
-				$(data.section).find (".wrapper_left > p").text ("Pause will temporarily deactivate Cloudflare for your domain. Cloudflare will continue to resolve DNS for your website, but all requests will go directly to your origin which means you will not receive performance and security benefits. All of your settings will be saved.")
-				$(data.section).find (".trigger").val ("Pause")
-				$(data.section).find (".trigger").data ( "target", "pause" )
-			}
-		}
-	})
-})
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./always_online.js": 14,
-	"./browser_cache_expiration.js": 15,
-	"./caching_level.js": 16,
-	"./development_mode.js": 17,
-	"./enable_query_string_sort.js": 18,
-	"./purge_cache.js": 19
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 13;
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.caching.always_online.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.caching.always_online.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const selectElement = __webpack_require__ (4)
-
-$(document).on ( "cloudflare.caching.browser_cache_expiration.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.caching.browser_cache_expiration.update", selectElement.update )
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (2)
-const common = __webpack_require__ (3)
-
-$(document).on ( "cloudflare.caching.caching_level.initialize", ( event, data ) => {
-	var label = data.response.result.value
-	$(data.section).find ("input[name='value'][value='" + label + "']").prop ( "checked", true )
-})
-
-$(document).on ( "cloudflare.caching.caching_level.update", ( event, data ) => {
-	var newValue = $(data.section).find ("input[name='value']:checked").val ()
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key, "value": newValue },
-		success: ( response ) => {
-			notification.showMessages ( response )
-			common.loadSections (".caching_level")
-		}
-	})
-})
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.caching.development_mode.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.caching.development_mode.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.caching.enable_query_string_sort.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.caching.enable_query_string_sort.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const modal = __webpack_require__ (5)
-const notification = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.caching.purge_cache.individual", ( event, data ) => {
-	let textarea = modal
-		.createTextarea ( "files", "http://example.com/images/example.jpg" )
-		.css ({
-			"width": "calc(100% - 45px)",
-			"margin": "auto 22.5px",
-			"fontSize": "1.2em"
-		})
-	let prompt = new modal.Modal ( 800 )
-	prompt.addTitle ( "Purge Individual Files", "You can purge up to 30 files at a time." )
-	prompt.addElement ( $("<p>")
-		.append ( $("<strong>").text ("Note: ") )
-		.append ("Wildcards are not supported with single file purge at this time. You will need to specify the full path to the file.")
-	)
-	prompt.addElement ( $("<p>").text ("Separate tags(s) with commas, or list one per line") )
-	prompt.addElement ( textarea )
-	prompt.addButton ({ label: "Purge Individual Files", callback: ( components ) => {
-		$(prompt.components.modal).addClass ("loading")
-		$(data.section).addClass ("loading")
-		let files = $(textarea).val ()
-			.split (/\n|,/)
-			.map ( i => i.trim () )
-			.filter ( i => i !== "" )
-		$.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: { "form_key": data.form.key, "files": files },
-			success: ( response ) => {
-				if ( response.success ) {
-					prompt.close ()
-				}
-				else {
-					$(prompt.components.modal).removeClass ("loading")
-				}
-				notification.showMessages ( response )
-				$(data.section).removeClass ("loading")
-			}
-		})
-	}})
-	prompt.show ()
-})
-
-$(document).on ( "cloudflare.caching.purge_cache.everything", ( event, data ) => {
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key },
-		success: ( response ) => {
-			notification.showMessages ( response )
-			$(data.section).removeClass ("loading")
-		}
-	})
-})
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./always_use_https.js": 21,
-	"./authenticated_origin_pulls.js": 22,
-	"./automatic_https_rewrites.js": 23,
-	"./certificate_transparency_monitoring.js": 24,
-	"./disable_universal_ssl.js": 25,
-	"./http_strict_transport_security.js": 26,
-	"./minimum_tls_version.js": 27,
-	"./opportunistic_encryption.js": 28,
-	"./ssl.js": 29,
-	"./ssl_tls_recommender.js": 30,
-	"./tls_13.js": 31
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 20;
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.ssl_tls.always_use_https.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.ssl_tls.always_use_https.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.ssl_tls.authenticated_origin_pulls.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.ssl_tls.authenticated_origin_pulls.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.ssl_tls.automatic_https_rewrites.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.ssl_tls.automatic_https_rewrites.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.ssl_tls.certificate_transparency_monitoring.initialize", switchElement.initializeCustom ( "enabled", true ) )
-$(document).on ( "cloudflare.ssl_tls.certificate_transparency_monitoring.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (2)
-const modal = __webpack_require__ (5)
-const common = __webpack_require__ (3)
-
-$(document).on ( "cloudflare.ssl_tls.disable_universal_ssl.initialize", function ( event, data ) {
-	if ( !data.response.result.enabled ) {
-		$(data.section).find ("[name='button']").val ("Enable Universal SSL")
-		$(data.section).find ("[name='button']").data ( "action", "enable" )
-	}
-	else {
-		$(data.section).find ("[name='button']").val ("Disable Universal SSL")
-		$(data.section).find ("[name='button']").data ( "action", "disable" )
-	}
-})
-
-function triggerChange ( data ) {
-	let value = $(data.trigger).data ("action") == "enable"
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key, "state": value },
-		success: function ( response ) {
-			notification.showMessages ( response )
-			$("section.cloudflare.ssl_tls.ssl").addClass ("loading")
-			common.loadSections (".ssl_tls.disable_universal_ssl")
-		}
-	})
-}
-
-$(document).on ( "cloudflare.ssl_tls.disable_universal_ssl.toggle", function ( event, data ) {
-	if ( $(data.trigger).data ("action") == "disable" ) {
-		let agreement = new modal.Modal ( 800 )
-		agreement.addTitle ("Acknowledgement")
-		agreement.addElement ( $("<p>").text ("By disabling Universal SSL, you understand that the following Cloudflare settings and preferences will result in visitors being unable to visit your domain unless you have uploaded a custom certificate or purchased a dedicated certificate.") )
-		agreement.addElement ( $("<ul>")
-			.append ( $("<li>").text ("HSTS") )
-			.append ( $("<li>").text ("Always Use HTTPS") )
-			.append ( $("<li>").text ("Opportunistic Encryption") )
-			.append ( $("<li>").text ("Any Page Rules redirecting traffic to HTTPS") )
-		)
-		agreement.addElement ( $("<p>").text ("Similarly, any HTTP redirect to HTTPS at the origin while the Cloudflare proxy is enabled will result in users being unable to visit your site without a valid certificate at Cloudflare’s edge.") )
-		agreement.addElement ( $("<p>").text ("If you do not have a valid custom or dedicated certificate at Cloudflare’s edge and are unsure if any of the above Cloudflare settings are enabled, or if any HTTP redirects exist at your origin, we advise leaving Universal SSL enabled for your domain.") )
-		agreement.addButton ({ label: "Cancel", class: "gray", callback: agreement.close })
-		agreement.addButton ({ label: "I Understand", class: "red", callback: ( components ) => {
-			agreement.close ()
-			triggerChange ( data )
-		}})
-		agreement.show ()
-	}
-	else {
-		triggerChange ( data )
-	}
-})
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const common = __webpack_require__ (3)
-const modal = __webpack_require__ (5)
-const notification = __webpack_require__ (2)
-
-function maxAgeLabel ( value ) {
-	if ( value >= 31536000 ) return "12 months"
-	if ( value >= 15552000 ) return "6 months (recommended)"
-	if ( value >= 12960000 ) return "5 months"
-	if ( value >= 10368000 ) return "4 months"
-	if ( value >= 7776000 ) return "3 months"
-	if ( value >= 5184000 ) return "2 months"
-	if ( value >= 2592000 ) return "1 month"
-	return "0 (Disable)"
-}
-
-$(document).on ( "cloudflare.ssl_tls.http_strict_transport_security.initialize", function ( event, data ) {
-	let options = data.response.result.value.strict_transport_security
-	$(data.section).data ( "options", options )
-	if ( options.enabled ) {
-		$(data.section).find ("[name='button']").val ("Change HSTS Settings")
-		$(data.section).find (".option_enabled").show ().find ("span").text ( options.enabled ? "On" : "Off" )
-		$(data.section).find (".option_max_age").show ().find ("span").text ( maxAgeLabel ( options.max_age ) )
-		$(data.section).find (".option_include_sub_domains").show ().find ("span").text ( options.include_subdomains ? "On" : "Off" )
-		$(data.section).find (".option_preload").show ().find ("span").text ( options.preload ? "On" : "Off" )
-		$(data.section).find (".option_no_sniff").show ().find ("span").text ( options.nosniff ? "On" : "Off" )
-	}
-	else {
-		$(data.section).find ("[name='button']").val ("Enable HSTS")
-		$(data.section).find (".option_enabled").hide ()
-		$(data.section).find (".option_max_age").hide ()
-		$(data.section).find (".option_include_sub_domains").hide ()
-		$(data.section).find (".option_preload").hide ()
-		$(data.section).find (".option_no_sniff").hide ()
-	}
-})
-
-function createAcknowledgement ( options, callback ) {
-	let acknowledgement = new modal.Modal ( 600 )
-	acknowledgement.addTitle ("Acknowledgement")
-	acknowledgement.addElement ( $("<p>").append ("HTTP Strict Transport Security (HSTS) can substantially improve the security of your website. However, there are important considerations to keep in mind when enabling HSTS:") )
-	acknowledgement.addElement ( $("<p>").append ( $("<strong>").text ("HTTPS (SSL) must be enabled in order to use HSTS.") ) )
-	acknowledgement.addElement ( $("<ul>")
-		.append ( $("<li>").text ("If you turn on HSTS and do not have HTTPS for your website, browsers will not accept the HSTS setting.") )
-		.append ( $("<li>").text ("If you have HSTS enabled and leave Cloudflare, you need to continue to support HTTPS through a new service provider otherwise your site will become inaccessible to visitors until you support HTTPS again.") )
-		.append ( $("<li>").text ("If you turn off Cloudflare’s HTTPS while HSTS is enabled, and you don’t have a valid SSL certificate on your origin server, your website will become inaccessible to visitors.") )
-	)
-	acknowledgement.addElement ( $("<p>")
-		.append ( $("<strong>").text ("Note") )
-		.append (": Disabling Cloudflare’s HTTP can be done in several ways: Grey clouding a subdomain in your DNS records, “Pausing” the Cloudflare service, or having a misconfigured custom SSL certificate through your Cloudflare dashboard (e.g., invalid SSL certificates, expired certificates, or mismatched host names).")
-	)
-	acknowledgement.addElement ( $("<p>")
-		.append ( $("<strong>").text ("If you need to disable HTTPS on your domain") )
-		.append (", you must first disable HSTS in your Cloudflare dashboard and wait for the max-age to lapse to guarantee that every browser is aware of this change before you can disable HTTPS. The average max-age is six months (you can set the max-age in the next step). ")
-		.append ( $("<strong>").text ("If you remove HTTPS before disabling HSTS your website will become inaccessible to visitors for up to the max-age or until you support HTTPS again.  ") )
-		.append ("Because disabling HTTPS on an HSTS enabled website can have these consequences, we strongly suggest that you have a committed HTTPS service in place before enabling this feature.")
-	)
-	acknowledgement.addElement ( $("<a>").text ("More information").prop ( "target", "_blank" ).prop ( "href", "https://blog.cloudflare.com/enforce-web-policy-with-hypertext-strict-transport-security-hsts/" ) )
-	acknowledgement.addButton ({ label: "Cancel", class: "gray", callback: acknowledgement.close })
-	acknowledgement.addButton ({ label: "I Understand", class: "red", callback: ( components ) => {
-		acknowledgement.close ()
-		createConfigure ( options, callback )
-	}})
-	acknowledgement.show ()
-}
-
-function createConfigure ( options, callback ) {
-	let configure = new modal.Modal ( 600 )
-	let enabled = modal.createSwitch ( "enabled", options.enabled )
-	let maxAge = modal.createSelect ( "max-age", [
-		{ value: "0", label: maxAgeLabel ( 0 ) },
-		{ value: "2592000", label: maxAgeLabel ( 2592000 ) },
-		{ value: "5184000", label: maxAgeLabel ( 5184000 ) },
-		{ value: "7776000", label: maxAgeLabel ( 7776000 ) },
-		{ value: "10368000", label: maxAgeLabel ( 10368000 ) },
-		{ value: "12960000", label: maxAgeLabel ( 12960000 ) },
-		{ value: "15552000", label: maxAgeLabel ( 15552000 ) },
-		{ value: "31536000", label: maxAgeLabel ( 31536000 ) },
-	]).val ( options.max_age )
-	let includeSubDomains = modal.createSwitch ( "include_subdomains", options.include_subdomains )
-	let preload = modal.createSwitch ( "preload", options.preload )
-	let noSniff = modal.createSwitch ( "nosniff", options.nosniff )
-	configure.addTitle ("Configure")
-	configure.addElement ( $(`<p style="font-size: 15.5px;" >`)
-		.append ( $("<strong>").text ("Caution") )
-		.append (": If misconfigured, HTTP Strict Transport Security (HSTS) can make your website inaccessible to users for an extended period of time.")
-	)
-	configure.addElement ( $("<table class='configure' >")
-		.append ( $("<tr>")
-			.append ( $("<td>")
-				.append ( $("<strong>").text ("Enable HSTS (Strict-Transport-Security)") )
-				.append ("Serve HSTS headers with all HTTPS requests")
-			)
-			.append ( $("<td>").append ( enabled ) )
-		)
-		.append ( $("<tr>")
-			.append ( $("<td>")
-				.append ( $("<strong>").text ("Max Age Header (max-age)") )
-				.append ("Specify the duration HSTS headers are cached in browsers")
-			)
-			.append ( $("<td>").append ( maxAge ) )
-		)
-		.append ( $("<tr>")
-			.append ( $("<td>")
-				.append ( $("<strong>").text ("Apply HSTS policy to subdomains (includeSubDomains)") )
-				.append ("Every domain below this will inherit the same HSTS headers")
-				.append ("<b>Caution</b>: If any of your subdomains do not support HTTPS, they will become inaccessible.")
-			)
-			.append ( $("<td>").append ( includeSubDomains ) )
-		)
-		.append ( $("<tr>")
-			.append ( $("<td>")
-				.append ( $("<strong>").text ("Preload") )
-				.append ("Permit browsers to preload HSTS configuration automatically")
-				.append ("<b>Caution</b>: Preload can make a website without HTTPS support completely inaccessible.")
-			)
-			.append ( $("<td>").append ( preload ) )
-		)
-		.append ( $("<tr>")
-			.append ( $("<td>")
-				.append ( $("<strong>").text ("No-Sniff Header") )
-				.append ("Send the “X-Content-Type-Options: nosniff” header to prevent Internet Explorer and Google Chrome from MIME-sniffing away from the declared Content-Type.")
-			)
-			.append ( $("<td>").append ( noSniff ) )
-		)
-	)
-	configure.addButton ({ label: "Previous", class: "gray", callback: () => {
-		configure.close ()
-		createAcknowledgement ( options, callback )
-	}})
-	configure.addButton ({ label: "Cancel", class: "gray", callback: configure.close })
-	configure.addButton ({ label: "Save", callback: ( components ) => {
-		callback ( configure, {
-			enabled: $(enabled).find ("[type='checkbox']:checked").length > 0,
-	        max_age: maxAge.val (),
-	        include_subdomains: $(includeSubDomains).find ("[type='checkbox']:checked").length > 0,
-	        preload: $(preload).find ("[type='checkbox']:checked").length > 0,
-	        nosniff: $(noSniff).find ("[type='checkbox']:checked").length > 0
-		})
-	}})
-	configure.show ()
-}
-
-$(document).on ( "cloudflare.ssl_tls.http_strict_transport_security.update", function ( event, data ) {
-	createAcknowledgement ( $(data.section).data ("options"), ( configure, config ) => {
-		$(data.section).addClass ("loading")
-		$(configure.components.modal).addClass ("loading")
-		$.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: { "form_key": data.form.key, "value": config },
-			success: function ( response ) {
-				notification.showMessages ( response )
-				configure.close ()
-				common.loadSections (".ssl_tls.http_strict_transport_security")
-			}
-		})
-	})
-})
-
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const selectElement = __webpack_require__ (4)
-
-$(document).on ( "cloudflare.ssl_tls.minimum_tls_version.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.ssl_tls.minimum_tls_version.update", selectElement.update )
-
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.ssl_tls.opportunistic_encryption.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.ssl_tls.opportunistic_encryption.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const selectElement = __webpack_require__ (4)
-
-$(document).on ( "cloudflare.ssl_tls.ssl.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.ssl_tls.ssl.update", selectElement.update )
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.ssl_tls.ssl_tls_recommender.initialize", switchElement.initializeCustom ( "enabled", true ) )
-$(document).on ( "cloudflare.ssl_tls.ssl_tls_recommender.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const selectElement = __webpack_require__ (4)
-
-$(document).on ( "cloudflare.ssl_tls.tls_13.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.ssl_tls.tls_13.update", selectElement.update )
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./amp_real_url.js": 33,
-	"./auto_minify.js": 34,
-	"./automatic_platform_optimization.js": 35,
-	"./brotli.js": 36,
-	"./enhanced_http2_prioritization.js": 37,
-	"./image_resizing.js": 38,
-	"./mirage.js": 39,
-	"./mobile_redirect.js": 40,
-	"./polish.js": 41,
-	"./prefetch_urls.js": 42,
-	"./rocket_loader.js": 43,
-	"./tcp_turbo.js": 44
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 32;
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.speed.amp_real_url.initialize", switchElement.initializeCustom ( "enabled", true ) )
-$(document).on ( "cloudflare.speed.amp_real_url.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (2)
-const common = __webpack_require__ (3)
-
-$(document).on ( "cloudflare.speed.auto_minify.initialize", ( event, data ) => {
-	var jsState = data.response.result.value.js === "on"
-	var cssState = data.response.result.value.css === "on"
-	var htmlState = data.response.result.value.html === "on"
-	$(data.section).find ("input[value='javascript']").prop ( "checked", jsState )
-	$(data.section).find ("input[value='css']").prop ( "checked", cssState )
-	$(data.section).find ("input[value='html']").prop ( "checked", htmlState )
-})
-
-$(document).on ( "cloudflare.speed.auto_minify.change", ( event, data ) => {
-	var jsVal = $(data.section).find ("input[value='javascript']").prop ("checked")
-	var cssVal = $(data.section).find ("input[value='css']").prop ("checked")
-	var htmlVal = $(data.section).find ("input[value='html']").prop ("checked")
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key, "js": jsVal, "css": cssVal, "html": htmlVal },
-		success: ( response ) => {
-			notification.showMessages ( response )
-			common.loadSections (".auto_minify")
-		}
-	})
-})
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.speed.automatic_platform_optimization.initialize", switchElement.initializeCustom ( [ "value", "enabled" ], true ) )
-$(document).on ( "cloudflare.speed.automatic_platform_optimization.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.speed.brotli.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.speed.brotli.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.speed.enhanced_http2_prioritization.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.speed.enhanced_http2_prioritization.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.speed.image_resizing.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.speed.image_resizing.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.speed.mirage.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.speed.mirage.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const common = __webpack_require__ (3)
-const notification = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.speed.mobile_redirect.initialize", ( event, data ) => {
-	var domains = data.response.result.domains
-	var setting = data.response.result.value
-	$(data.section).find ("[name='mobile_subdomain']").html ("")
-	for ( let domain of domains ) {
-		$(data.section).find ("[name='mobile_subdomain']").append (
-			$("<option>").prop ( "value", domain.value ).text ( domain.label )
-		)
-	}
-	$(data.section).find ("[name='mobile_subdomain']").val ( setting.mobile_subdomain )
-	$(data.section).find ("[name='strip_uri']").val ( setting.strip_uri + "" )
-	$(data.section).find ("[name='status']").prop ( "checked", setting.status === "on" )
-})
-
-$(document).on ( "cloudflare.speed.mobile_redirect.change", ( event, data ) => {
-	let mobileSubdomain = $(data.section).find ("[name='mobile_subdomain']").val ()
-	let stripUri = $(data.section).find ("[name='strip_uri']").val ()
-	let status = $(data.section).find ("[name='status']").prop ("checked")
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: {
-			"form_key": data.form.key,
-			"mobile_subdomain": mobileSubdomain,
-			"status": status ? "on" : "off",
-			"strip_uri": stripUri
-		},
-		success: ( response ) => {
-			notification.showMessages (  response )
-			common.loadSections (".mobile_redirect")
-		}
-	})
-})
-
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const common = __webpack_require__ (3)
-const notification = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.speed.polish.initialize", ( event, data ) => {
-	var value = data.response.state.result.value
-	var webp = data.response.webp.result.value == "on"
-	$(data.section).find ("[name='value']").val ( value )
-	$(data.section).find ("[name='webp']").prop ( "checked", webp )
-	if ( !data.response.state.result.editable ) {
-		var button = "<a href='https://www.cloudflare.com/plans/' target='_blank' ><input type='button' value='Upgrade to Pro' /></a>"
-		$(data.section).find (".wrapper_right > div").eq ( 0 ).html ( button )
-	}
-})
-
-$(document).on ( "cloudflare.speed.polish.change", ( event, data ) => {
-	let value = $(data.section).find ("[name='value']").val ()
-	let webp = $(data.section).find ("[name='webp']").prop ("checked")
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key, "value": value, "webp": webp },
-		success: ( response ) => {
-			notification.showMessages (  response )
-			common.loadSections (".polish")
-		}
-	})
-})
-
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.speed.prefetch_urls.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.speed.prefetch_urls.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.speed.rocket_loader.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.speed.rocket_loader.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-
-$(document).on ( "cloudflare.speed.tcp_turbo.initialize", ( event, data ) => {
-	const plan = data.response.result
-	$(data.section).find (".value").text ( plan === "free" ? "Disabled" : "Enabled" )
-})
-
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./cloudflare_nameservers.js": 46,
-	"./cname_flattening.js": 47,
-	"./dns_records.js": 48
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 45;
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const notification = __webpack_require__ (2)
-
-$(document).on ( "cloudflare.dns.cloudflare_nameservers.initialize", function ( event, data ) {
-	$(data.section).find ("table tr:not(:first)").remove ()
-	data.response.result.map ( entry => {
-		var row = $("<tr>")
-		$( row ).append ( $("<td>")
-			.attr ( "class", "type_cfns" )
-			.text ( "NS" )
-		)
-		$( row ).append ( $("<td>").text ( entry ) )
-		$(data.section).find ("table").append ( row )
-	})
-})
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const selectElement = __webpack_require__ (4)
-
-$(document).on ( "cloudflare.dns.cname_flattening.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.dns.cname_flattening.update", selectElement.update )
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const common = __webpack_require__ (3)
-const notification = __webpack_require__ (2)
-const modal = __webpack_require__ (5)
-const global = __webpack_require__ (7)
-
-function createTtlSelect ( selected = "1" ) {
-	let select = modal.createSelect ( "ttl_value", [
-		{ label: secondsToAppropriate ( 1 ), value: 1 },
-		{ label: secondsToAppropriate ( 120 ), value: 120 },
-		{ label: secondsToAppropriate ( 300 ), value: 300 },
-		{ label: secondsToAppropriate ( 600 ), value: 600 },
-		{ label: secondsToAppropriate ( 900 ), value: 900 },
-		{ label: secondsToAppropriate ( 1800 ), value: 1800 },
-		{ label: secondsToAppropriate ( 3600 ), value: 3600 },
-		{ label: secondsToAppropriate ( 7200 ), value: 7200 },
-		{ label: secondsToAppropriate ( 18000 ), value: 18000 },
-		{ label: secondsToAppropriate ( 43200 ), value: 43200 },
-		{ label: secondsToAppropriate ( 86400 ), value: 86400 }
-	])
-	return select.val ( selected )
-}
-
-function secondsToAppropriate ( seconds ) {
-	if ( seconds == 1 ) return "Automatic"
-	if ( seconds < 60 ) return seconds + " seconds"
-	if ( seconds == 60 ) return "1 minute"
-	if ( seconds < 3600 ) return seconds / 60 + " minutes"
-	if ( seconds == 3600 ) return "1 hour"
-	if ( seconds < 216000 ) return seconds / 3600 + " hours"
-	if ( seconds = 216000 ) return "1 day"
-	return seconds / 216000 + " days"
-}
-
-function filterResults ( term, results ) {
-	let searchTerm = ( term + "" ).toLowerCase ().trim ()
-	return !results ? [] : results.filter ( entry => {
-		return ( entry.name + "" ).toLowerCase ().indexOf ( searchTerm ) > -1 ||
-			   ( entry.content + "" ).toLowerCase ().indexOf ( searchTerm ) > -1
-	})
-}
-
-function sortResults ( section, results ) {
-	let pivot = $(section).find (".sort-asc, .sort-desc")
-	if ( pivot.length > 0 ) {
-		let access = ( obj, path ) => {
-			return path.reduce ( ( o, i ) => o [ i ], obj )
-		}
-		let attribute = $(pivot).data ("sort").split (".")
-		let isAsc = $(pivot).hasClass ("sort-asc") === true
-		results = results.sort ( ( a, b ) => {
-			let aValue = ( access ( a, attribute ) + "").toLowerCase ()
-			let bValue = ( access ( b, attribute ) + "").toLowerCase ()
-			if ( isAsc ) {
-				if ( aValue < bValue ) return -1
-				if ( aValue > bValue ) return 1
-				return 0
-			}
-			else {
-				if ( aValue > bValue ) return -1
-				if ( aValue < bValue ) return 1
-				return 0
-			}
-		})
-	}
-	return results
-}
-
-function populateResult ( section ) {
-	let results = $(section).data ("result")
-	results = filterResults ( $(section).find (".search").val (), results )
-	results = sortResults ( section, results )
-	let table = $(section).find ("table > tbody")
-	$(table).children ().remove ()
-	$(section).data ( "item-count", results.length )
-	let itemCount = $(section).data ("item-count")
-	let page = $(section).data ("page")
-	let pageSize = $(section).data ("page-size")
-	let pageCount = Math.ceil ( itemCount / pageSize )
-	let from = pageSize * ( page - 1 ) + 1
-	if ( itemCount == 0 ) from = 0
-	let to = Math.min ( pageSize * page, itemCount )
-	$(section).find (".pagination_container .pages").html ("")
-	$(section).find (".pagination_container .showing").html (`${from} - ${to} of ${itemCount} records`)
-	let pages = $(section).find (".pagination_container .pages")
-	let createPage = ( number ) => {
-		return $(`<span class="page" >`)
-			.addClass ( number == page ? "" : "trigger" )
-			.addClass ( number == page ? "current" : "" )
-			.data ( "target", "page" )
-			.data ( "page", number )
-			.text ( number )
-	}
-	if ( pageCount > 7 ) {
-		$(pages).append ( createPage ( 1 ) )
-		if ( pageCount > 7 && page > 4 ) {
-			$(pages).append ( $(`<span>`).text ("...") )
-		}
-		let start = Math.max ( 2, page - 3 )
-		let end = Math.min ( pageCount - 1, page + 3 )
-		if ( page - 4 < 0 ) end += Math.abs ( page - 4 )
-		if ( page + 3 > pageCount ) start -= page + 3 - pageCount
-		if ( pageCount <= 7 && page < 4 ) end -= 1
-		if ( pageCount <= 7 && page > 4 ) start += 1
-		for ( let i = start; i <= end; i++ ) {
-			$(pages).append ( createPage ( i ) )
-		}
-		if ( pageCount > 7 && page < pageCount - 3 ) {
-			$(pages).append ( $(`<span>`).text ("...") )
-		}
-		$(pages).append ( createPage ( pageCount ) )
-	}
-	else {
-		for ( let i = 1; i <= pageCount; i++ ) {
-			$(pages).append ( createPage ( i ) )
-		}
-	}
-	if ( page == 1 ) {
-		$(section).find (".previous").addClass ("disabled")
-	}
-	else {
-		$(section).find (".previous").removeClass ("disabled")
-	}
-	if ( page == pageCount ) {
-		$(section).find (".next").addClass ("disabled")
-	}
-	else {
-		$(section).find (".next").removeClass ("disabled")
-	}
-	const imageBase = global.getSkinBaseUrl ()
-	for ( let i = 0; i < results.length; i++ ) {
-		if ( i >= ( page - 1 ) * pageSize && i < page * pageSize ) {
-			let entry = results [ i ]
-			let formattedName = [ "CAA", "SRV" ].indexOf ( entry.type ) > -1 ? entry.name : entry.name.replace ( /\.[^.]+\.[^.]+$/, "" )
-			var formattedContent = entry.content
-			if ( entry.type == "SRV" ) {
-				formattedName = formattedName.replace ( /\.$/, "" ) + "."
-				formattedContent = `SRV ${entry.data.priority} ${entry.data.weight} ${entry.data.port} ${entry.data.target}.`
-			}
-			else if ( entry.type == "LOC" ) {
-				formattedContent = "IN LOC " + entry.content.replace ( /(\d\.[0-9]*[1-9])0*|(\d)\.0+/g, "$1$2" )
-			}
-			var row = $("<tr>")
-			$(row).data ( "entry", entry )
-			$( row ).append ( $("<td>")
-				.attr ( "class", "type type_" + entry.type.toLowerCase () )
-				.text ( entry.type )
-			)
-			$( row ).append ( $("<td>")
-				.attr ( "class", "name" )
-				.html ( $("<div class='editable' contenteditable='true' >")
-					.text ( formattedName )
-					.attr ( "name", "content" )
-					.addClass ( "show-form-" + entry.type.toLowerCase () + "-name" )
-					.data ( "old", formattedName )
-					.val ( formattedName )
-				)
-			)
-			$( row ).append ( $("<td>")
-				.attr ( "class", "value" )
-				.html ( $("<div class='editable' contenteditable='true' >")
-					.text ( formattedContent )
-					.addClass ( "type_" + entry.type.toLowerCase () )
-					.attr ( "name", "content" )
-					.addClass ( "show-form-" + entry.type.toLowerCase () )
-					.data ( "old", formattedContent )
-					.val ( formattedContent )
-				)
-				.append ( entry.type == "MX" ? `<div class="priority" >${entry.priority}</div>` : "" )
-			)
-			$( row ).append ( $("<td>")
-				.attr ( "class", "ttl" )
-				.text ( secondsToAppropriate ( entry.ttl ) )
-				.data ( "ttl", entry.ttl )
-			)
-			$( row ).append ( $("<td>")
-				.attr ( "class", "status" )
-				.html ( entry.proxiable ? entry.proxied ? "<img class='proxied change' src='" + imageBase + "/images/proxied_on.svg' />" : "<img class='proxied change' src='" + imageBase + "/images/proxied_off.svg' />" : "" )
-			)
-			$( row ).append ( $("<td>").attr ( "class", "delete" )
-				.html ( $("<div class='trigger delete_entry cloudflare-font' >")
-					.data ( "target", "delete" )
-					.data ( "id", entry.id )
-					.data ( "type", entry.type )
-					.data ( "name", entry.name )
-					.html ("&#xF01A;")
-				)
-			)
-			row.appendTo ( table )
-		}
-	}
-	if ( results.length == 0 ) {
-		$(table).append ( $("<tr>").append ( $("<td colspan='6' >").text ("No DNS records found.") ) )
-	}
-}
-
-$(document).on ( "cloudflare.dns.dns_records.initialize", function ( event, data ) {
-	$(data.section).data ( "result", data.response.result )
-	populateResult ( data.section )
-})
-
-$(document).on ( "cloudflare.dns.dns_records.delete", function ( event, data ) {
-	var id = $(data.trigger).data ("id")
-	var type = $(data.trigger).data ("type").toUpperCase ()
-	var name = $(data.trigger).data ("name")
-	var confirm = new modal.Modal ()
-	confirm.addTitle ("Confirm")
-	confirm.addElement ( $("<p>").text (`Are you sure you want to delete the ${type} Record?`) )
-	confirm.addElement ( $("<li>").append ( $("<strong>").text ( name ) ) )
-	confirm.addButton ({ label: "OK", callback: ( components ) => {
-		confirm.close ()
-		$(data.section).addClass ("loading")
-		$.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: { "form_key": data.form.key, "id": id },
-			success: function ( response ) {
-				notification.showMessages ( response )
-				common.loadSections (".dns_records")
-			}
-		})
-	}})
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.show ()
-})
-
-$(document).on ( "cloudflare.dns.dns_records.create", function ( event, data ) {
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: {
-			"form_key": data.form.key,
-			"type": $(data.section).find ("select.type").val (),
-			"name": $(data.section).find ("div.active > input[name='name']").val (),
-			"content": $(data.section).find ("div.active > input[name='content']").val (),
-			"ttl": $(data.section).find ("select.ttl").val (),
-			"proxied": $(data.section).find (".proxied.add").data ("value"),
-			"priority": $(data.section).find (".priority.add").val ()
-		},
-		success: function ( response ) {
-			$(data.section).removeClass ("loading")
-			notification.showMessages ( response )
-			if ( response.success ) {
-				$(data.section).find ("[name='name'],[name='content']").val ("")
-				$(data.section).addClass ("loading")
-				common.loadSections (".dns.dns_records")
-			}
-		}
-	})
-})
-
-$(document).on ( "cloudflare.dns.dns_records.search", function ( event, data ) {
-	$(data.section).data ( "page", 1 )
-	populateResult ( data.section )
-})
-
-$(document).on ( "focus", ".show-form-mx", function () {
-	var confirm = new modal.Modal ()
-	let oldPriority = parseInt ( $(document).find (".priority.add").val () ) || 1
-	let oldValue = $(this).val ()
-	if ( $(this).hasClass ("editable") ) {
-		oldPriority = $(this).parent ().find (".priority").text ()
-	}
-	confirm.addTitle ( "Add Record: MX content", $(this).val () )
-	confirm.addRow ( "Server", $("<input type='text' placeholder='Mail server' name='server' >").val ( oldValue ) )
-	confirm.addRow ( "Priority", $("<input type='text' placeholder='1' name='priority' >").val ( oldPriority ) )
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	var that = this
-	confirm.addButton ({ label: "Save", callback: ( components ) => {
-		var priority = $( components.container ).find ("input[name='priority']").val ()
-		let newValue = $( components.container ).find ("input[name='server']").val ()
-		if ( priority.trim () === "" ) priority = "1"
-		$(document).find (".priority.add").val ( priority )
-		$(that).data ( "priority", parseInt ( priority ) )
-		$(that).parent ().find (".priority").text ( parseInt ( priority ) )
-		$(that).val ( newValue ).text ( newValue )
-		if ( $(this).hasClass ("editable") && ( oldPriority != parseInt ( priority ) ) || newValue != oldValue ) {
-			let tempVal = $(that).val () + " "
-			$(that).val ( tempVal ).text ( tempVal ).trigger ("change")
-		}
-		confirm.close ()
-	}})
-	confirm.show ()
-})
-
-$(document).on ( "focus", ".show-form-loc", function () {
-	var that = this
-	var confirm = new modal.Modal ()
-	var latitude = modal.createRows (
-		modal.createRow ( "degrees", modal.createInput ( "text", "lat-degrees", "", "0" ) ),
-		modal.createRow ( "minutes", modal.createInput ( "text", "lat-minutes", "", "0" ) ),
-		modal.createRow ( "seconds", modal.createInput ( "text", "lat-seconds", "", "0" ) ),
-		modal.createRow ( "direction", modal.createSelect ( "lat-direction", [
-			{ "value": "N", "label": "North", "selected": true },
-			{ "value": "S", "label": "South" }
-		]))
-	)
-	var longitude = modal.createRows (
-		modal.createRow ( "degrees", modal.createInput ( "text", "lon-degrees", "", "0" ) ),
-		modal.createRow ( "minutes", modal.createInput ( "text", "lon-minutes", "", "0" ) ),
-		modal.createRow ( "seconds", modal.createInput ( "text", "lon-seconds", "", "0" ) ),
-		modal.createRow ( "direction", modal.createSelect ( "lon-direction", [
-			{ "value": "W", "label": "West", "selected": true },
-			{ "value": "E", "label": "East" }
-		]))
-	)
-	var percision = modal.createRows (
-		modal.createRow ( "horizontal precision", modal.createInput ( "text", "pre-horizontal", false, "0" ) ),
-		modal.createRow ( "vertical precision", modal.createInput ( "text", "pre-vertical", false, "0" ) )
-	)
-	var altitude = modal.createInput ( "text", "altitude", false, "0" )
-	var size = modal.createInput ( "text", "size", false, "0" )
-	var matches = $(this).val ().match (/^IN LOC ([^ ]+) ([^ ]+) ([^ ]+) ([NS]) ([^ ]+) ([^ ]+) ([^ ]+) ([WE]) ([^ ]+)m ([^ ]+)m ([^ ]+)m ([^ ]+)m$/)
-	if ( matches ) {
-		$(latitude).find ("[name='lat-degrees']").val ( matches [ 1 ] )
-		$(latitude).find ("[name='lat-minutes']").val ( matches [ 2 ] )
-		$(latitude).find ("[name='lat-seconds']").val ( matches [ 3 ] )
-		$(latitude).find ("[name='lat-direction']").val ( matches [ 4 ] )
-		$(longitude).find ("[name='lon-degrees']").val ( matches [ 5 ] )
-		$(longitude).find ("[name='lon-minutes']").val ( matches [ 6 ] )
-		$(longitude).find ("[name='lon-seconds']").val ( matches [ 7 ] )
-		$(longitude).find ("[name='lon-direction']").val ( matches [ 8 ] )
-		$(altitude).val ( matches [ 9 ] )
-		$(size).val ( matches [ 10 ] )
-		$(percision).find ("[name='pre-horizontal']").val ( matches [ 11 ] )
-		$(percision).find ("[name='pre-vertical']").val ( matches [ 12 ] )
-	}
-	confirm.addTitle ( "Add Record: LOC content", $(this).val () )
-	confirm.addRow ( "Latitude", latitude, true )
-	confirm.addRow ( "Longitude", longitude, true )
-	confirm.addRow ( "Altitude (in meters)", altitude, true )
-	confirm.addRow ( "Size (in meters)", size, true )
-	confirm.addRow ( "Percision (in meters)", percision, true )
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.addButton ({ label: "Save", callback: ( components ) => {
-		var latDegrees = $( components.container ).find ("[name='lat-degrees']").val ().trim ()
-		var latMinutes = $( components.container ).find ("[name='lat-minutes']").val ().trim ()
-		var latSeconds = $( components.container ).find ("[name='lat-seconds']").val ().trim ()
-		var latDirection = $( components.container ).find ("[name='lat-direction']").val ()
-		var lonDegrees = $( components.container ).find ("[name='lon-degrees']").val ().trim ()
-		var lonMinutes = $( components.container ).find ("[name='lon-minutes']").val ().trim ()
-		var lonSeconds = $( components.container ).find ("[name='lon-seconds']").val ().trim ()
-		var lonDirection = $( components.container ).find ("[name='lon-direction']").val ()
-		var altitude = $( components.container ).find ("[name='altitude']").val ().trim ()
-		var size = $( components.container ).find ("[name='size']").val ().trim ()
-		var preHorizontal = $( components.container ).find ("[name='pre-horizontal']").val ().trim ()
-		var preVertical = $( components.container ).find ("[name='pre-vertical']").val ().trim ()
-		let newValue = `IN LOC ${latDegrees} ${latMinutes} ${latSeconds} ${latDirection} ${lonDegrees} ${lonMinutes} ${lonSeconds} ${lonDirection} ${altitude}m ${size}m ${preHorizontal}m ${preVertical}m`
-			.replace ( /(\d\.[0-9]*[1-9])0*|(\d)\.0+/g, "$1$2" )
-		$(that).val ( newValue ).text ( newValue ).trigger ("change")
-		confirm.close ()
-	}})
-	confirm.show ()
-})
-
-$(document).on ( "focus", ".show-form-srv-name", function () {
-	var that = this
-	var confirm = new modal.Modal ()
-	var service = modal.createInput ( "text", "service", "_sip" )
-	var protocol = $("<select name='protocol' ><option value='_udp' >UDP</option><option value='_tcp' >TCP</option><option value='_tls' selected >TLS</option><select/>")
-	var name = modal.createInput ( "text", "name", global.getDomainName (), global.getDomainName () )
-	let oldValue = `${service.val ()}.${protocol.val ()}.${name.val ()}.`
-	if ( $(that).hasClass ("editable") ) {
-		oldValue = $(that).text ()
-	}
-	var matches = $(this).val ().match (/^([^.]+)\.([^.]+)\.(.+)\.$/)
-	if ( matches ) {
-		$(service).val ( matches [ 1 ] )
-		$(protocol).val ( matches [ 2 ] )
-		$(name).val ( matches [ 3 ] )
-	}
-	confirm.addTitle ( "Add Record: SRV name", $(this).val () )
-	confirm.addRow ( "Service name", service )
-	confirm.addRow ( "Protocol", protocol )
-	confirm.addRow ( "Name", name )
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.addButton ({ label: "Save", callback: ( components ) => {
-		var service = $( components.container ).find ("input[name='service']").val ().trim () || "_sip"
-		var protocol = $( components.container ).find ("select[name='protocol']").val ().trim ()
-		var name = $( components.container ).find ("input[name='name']").val ().trim () || global.getDomainName ()
-		let newValue = `${service}.${protocol}.${name}.`
-		$(that).val ( newValue ).text ( newValue )
-		if ( $(that).hasClass ("editable") && oldValue != newValue ) {
-			$(that).trigger ("change")
-		}
-		confirm.close ()
-	}})
-	confirm.show ()
-})
-
-$(document).on ( "focus", ".show-form-srv", function () {
-	var that = this
-	var confirm = new modal.Modal ()
-	var priority = modal.createInput ( "text", "priority", "1", "1" )
-	var weight = modal.createInput ( "text", "weight", "10", "1" )
-	var port = modal.createInput ( "text", "port", "8444", "1" )
-	var target = modal.createInput ( "text", "target", "example.com", global.getDomainName () )
-	var matches = $(this).val ().match (/^SRV ([^ ]+) ([^ ]+) ([^ ]+) (.+)\.$/)
-	if ( matches ) {
-		$(priority).val ( matches [ 1 ] )
-		$(weight).val ( matches [ 2 ] )
-		$(port).val ( matches [ 3 ] )
-		$(target).val ( matches [ 4 ] )
-	}
-	let oldValue = $(that).val ()
-	if ( $(that).hasClass ("editable") ) {
-		oldValue = $(that).text ()
-	}
-	confirm.addTitle ( "Add Record: SRV content", $(this).val () )
-	confirm.addRow ( "Priority", priority )
-	confirm.addRow ( "Weight", weight )
-	confirm.addRow ( "Port", port )
-	confirm.addRow ( "Target", target )
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.addButton ({ label: "Save", callback: ( components ) => {
-		var priority = $( components.container ).find ("input[name='priority']").val ().trim () || "1"
-		var weight = $( components.container ).find ("input[name='weight']").val ().trim () || "1"
-		var port = $( components.container ).find ("input[name='port']").val ().trim () || "1"
-		var target = $( components.container ).find ("input[name='target']").val ().trim () || global.getDomainName ()
-		let newValue = `SRV ${priority} ${weight} ${port} ${target}.`
-		$(that).val ( newValue ).text ( newValue )
-		if ( $(that).hasClass ("editable") && oldValue != newValue ) {
-			$(that).trigger ("change")
-		}
-		else {
-			$(document).find (".priority.add").val ( priority )
-		}
-		confirm.close ()
-	}})
-	confirm.show ()
-})
-
-$(document).on ( "focus", ".show-form-spf", function () {
-	var that = this
-	var confirm = new modal.Modal ()
-	var policy = modal.createTextarea ( "policy", "Policy parameters", $(this).val () )
-	confirm.addTitle ( "Add Record: SPF content", $(this).val () )
-	confirm.addRow ( "Content", policy, true )
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.addButton ({ label: "Save", callback: ( components ) => {
-		var policy = $( components.container ).find ("[name='policy']").val ()
-		$(that).val ( policy ).text ( policy ).trigger ("change")
-		confirm.close ()
-	}})
-	confirm.show ()
-})
-
-$(document).on ( "focus", ".show-form-txt", function () {
-	var that = this
-	var confirm = new modal.Modal ()
-	var text = modal.createTextarea ( "text", "Text", $(this).val () )
-	confirm.addTitle ( "Add Record: TXT content", $(this).val () )
-	confirm.addRow ( "Content", text, true )
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.addButton ({ label: "Save", callback: ( components ) => {
-		var text = $( components.container ).find ("[name='text']").val ()
-		$(that).val ( text ).text ( text ).trigger ("change")
-		confirm.close ()
-	}})
-	confirm.show ()
-})
-
-$(document).on ( "focus", ".show-form-caa", function () {
-	var that = this
-	var confirm = new modal.Modal ( true )
-	var tag = modal.createSelect ( "tag", [
-		{ label: "Only allow specific hostnames", value: "issue", selected: true },
-		{ label: "Only allow wildcards", value: "issuewild" },
-		{ label: "Send violation reports to URL (http:, https:, or mailto:)", value: "iodef" }
-	])
-	var value = modal.createInput ( "text", "value", "Certificate authority (CA) domain name" )
-	let oldValue = $(that).hasClass (".editable") ? $(this).text () : $(this).val ()
-	var matches = oldValue.match (/0 ((?:issue|issuewild|iodef)) \"(.+)\"/)
-	if ( matches ) {
-		$(tag).val ( matches [ 1 ] )
-		$(value).val ( matches [ 2 ] )
-	}
-	confirm.addTitle ( "Add Record: CAA content", $(this).val () )
-	confirm.addRow ( "Tag", tag )
-	confirm.addRow ( "Value", value )
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.addButton ({ label: "Save", callback: ( components ) => {
-		var tag = $( components.container ).find ("[name='tag']").val ().trim ()
-		var value = $( components.container ).find ("[name='value']").val ().trim ()
-		let newValue = `0 ${tag} "${value}"`
-		$(that).val ( newValue ).text ( newValue ).trigger ("change")
-		confirm.close ()
-	}})
-	confirm.show ()
-})
-
-$(document).on ( "cloudflare.dns.dns_records.page", function ( event, data ) {
-	$(data.section).data ( "page", $(data.trigger).data ("page") )
-	populateResult ( data.section )
-})
-
-$(document).on ( "cloudflare.dns.dns_records.next_page", function ( event, data ) {
-	if ( $(data.section).data ("page") + 1 <= Math.ceil ( $(data.section).data ("item-count") / $(data.section).data ("page-size") ) ) {
-		$(data.section).data ( "page", $(data.section).data ("page") + 1 )
-		populateResult ( data.section )
-	}
-})
-
-$(document).on ( "cloudflare.dns.dns_records.previous_page", function ( event, data ) {
-	if ( $(data.section).data ("page") - 1 > 0 ) {
-		$(data.section).data ( "page", $(data.section).data ("page") - 1 )
-		populateResult ( data.section )
-	}
-})
-
-$(document).on ( "cloudflare.dns.dns_records.sort", function ( event, data ) {
-	$(data.section).data ( "page", 1 )
-	$(data.section).data ( "sort", $(data.trigger).data ("sort") )
-	if ( $(data.trigger).hasClass ("sort-asc") ) {
-		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
-		$(data.trigger).removeClass ("sort-asc").addClass ("sort-desc")
-		$(data.section).data ( "direction", "desc" )
-	}
-	else if ( $(data.trigger).hasClass ("sort-desc") ) {
-		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
-		$(data.trigger).removeClass ("sort-asc").removeClass ("sort-desc")
-		$(data.section).data ( "direction", "" )
-	}
-	else {
-		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
-		$(data.trigger).addClass ("sort-asc")
-		$(data.section).data ( "direction", "asc" )
-	}
-	populateResult ( data.section )
-})
-
-$(document).on ( "cloudflare.dns.dns_records.export", function ( event, data ) {
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key },
-		success: function ( response ) {
-			notification.showMessages ( response )
-			let blob = new Blob ( [ response ], { type: "octet/stream" } )
-			let url = window.URL.createObjectURL ( blob )
-			let a = document.createElement ("a")
-			document.body.appendChild ( a )
-			a.style = "display: none"
-			a.href = url
-			a.download = global.getDomainName () + ".txt"
-			a.click ()
-			window.URL.revokeObjectURL ( url )
-			$(data.section).removeClass ("loading")
-		}
-	})
-})
-
-$(document).on ( "cloudflare.dns.dns_records.upload", function ( event, data ) {
-	let prompt = new modal.Modal ()
-	let form = $(`<form method="POST" enctype="multipart/form-data" >`)
-		.css ( "display", "none" )
-	let fileInput = $("<input id='file_select' >")
-		.prop ( "type", "file" )
-		.prop ( "name", "file" )
-	let submitInput = $("<input>")
-		.prop ( "type", "submit" )
-		.prop ( "name", "submit" )
-		.css ({ "display": "none" })
-	let fileButton = modal.createInput ( "button", "select", "", "Select a file" )
-		.on ( "click", () => $(fileInput).trigger ("click") )
-	let fileName = modal.createInput ( "text", "filename", "", "" )
-		.prop ( "disabled", true )
-		.css ( "margin-left", "10px" )
-		.on ( "click", () => $(fileInput).trigger ("click") )
-	$(fileInput).on ( "change", () => {
-		let newVal = $(fileInput).val ().split ("\\").pop ()
-		$(fileName).val ( newVal == null ? "" : newVal )
-	})
-	let messagesContainer = $("<div>").addClass ("message_container")
-	$(form).append ( fileInput ).append ( submitInput )
-		.on ( "submit", ( event ) => {
-			event.preventDefault ()
-			$(prompt.components.modal).addClass ("loading")
-			let formData = new FormData ( form [ 0 ] )
-			formData.set ( "form_key", data.form.key )
-			formData.set ( "file", ($(fileInput)) [ 0 ].files [ 0 ] )
-			$.ajax ({
-				url: data.form.endpoint,
-				type: "POST",
-				data: formData,
-				cache: false,
-				contentType: false,
-				processData: false,
-				success: ( response ) => {
-					notification.showMessages ( response )
-					if ( response.success && response.result.recs_added == response.result.total_records_parsed ) {
-						prompt.close ()
-						$(data.section).addClass ("loading")
-						common.loadSections (".dns.dns_records")
-					}
-					else if ( response.success ) {
-						$(prompt.components.modal).removeClass ("loading")
-						$(messagesContainer).html ( $("<div>")
-							.text (`${response.result.recs_added} record(s) added`)
-							.addClass ("status")
-						)
-						response.messages.map ( message => {
-							$(messagesContainer).append ( $("<div>").text ( message.message ) )
-						})
-						if ( response.result.recs_added > 0 ) {
-							common.loadSections (".dns.dns_records")
-						}
-					}
-					else {
-						$(prompt.components.modal).removeClass ("loading")
-						prompt.close ()
-					}
-				}
-			})
-		})
-	prompt.addTitle ("Upload DNS File")
-	prompt.addElement ( $("<p>").text ("If you have a DNS file that is in the BIND format, you can upload it here and we will do our best to parse it so you don't have to retype it.") )
-	prompt.addElement ( form )
-	prompt.addElement ( $("<div>")
-		.append ( fileButton )
-		.append ( fileName )
-		.css ({
-			display: "flex",
-			padding: "22.5px",
-			background: "#F5F5F5",
-			border: "solid 1px #DEDEDE"
-		})
-	)
-	prompt.addElement ( messagesContainer )
-	prompt.addButton ({ label: "Cancel", class: "gray", callback: prompt.close })
-	prompt.addButton ({ label: "Upload", callback: () => $(form).trigger ("submit") })
-	prompt.show ()
-})
-
-$(document).on ( "blur", ".editable", ( event ) => {
-	let target = event.target
-	let oldValue = $(target).data ("old")
-	let newValue = $(target).text ()
-	if ( oldValue !== newValue ) {
-		$(target).trigger ( "change", { target } )
-	}
-})
-
-$(document).on ( "change", ".editable, .proxied, td.ttl", ( event ) => {
-	let target = event.target
-	let oldValue = $(target).data ("old")
-	let newValue = $(target).text ()
-	if ( oldValue !== newValue || $(target).hasClass ("proxied") ) {
-		$(target).data ( "old", newValue )
-		let entry = $(event.target).closest ("tr")
-		let id = $(entry).data ("entry").id
-		let type = $(entry).data ("entry").type
-		let name = $(entry).find ("td.name").text ()
-		let content = $(entry).find ("td.value > .editable").text ()
-		let ttl = $(entry).find (".ttl").data ("ttl")
-		let proxied = $(entry).find (".proxied").length > 0 &&
-					  $(entry).find (".proxied").prop ("src").indexOf ("proxied_on") >= 0
-		let priority = $(entry).find (".value .priority").text () || 0
-		let section = $(entry).closest ("section")
-		let endpoint = $(section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1edit$3" )
-		let formKey = $(section).data ("form-key")
-		$(section).addClass ("loading")
-		$(section).find ("[contenteditable]").prop ( "contenteditable", false )
-		$.ajax ({
-			url: endpoint,
-			type: "POST",
-			data: {
-				"form_key": formKey,
-				"id": id,
-				"type": type,
-				"name": name,
-				"content": content,
-				"ttl": ttl,
-				"proxied": proxied,
-				"priority": priority == "" ? 0 : priority
-			},
-			success: ( response ) => {
-				notification.showMessages ( response )
-				$(section).find ("[contenteditable]").prop ( "contenteditable", true )
-				common.loadSections (".dns.dns_records")
-			}
-		})
-	}
-})
-
-$(document).on ( "click", ".cloudflare td.ttl", ( event ) => {
-	if ( $(event.target).hasClass ("ttl") ) {
-		let target = $(event.target)
-		let entry = $(target).closest ("tr")
-		let proxied = $(entry).find (".proxied")
-		if ( proxied.length == 0 || $(proxied).eq ( 0 ).prop ("src").indexOf ("proxied_off") > -1 ) {
-			let select = createTtlSelect ( $(target).data ("ttl") )
-			$(select).on ( "change", () => {
-				let value = $(select).val ()
-				$(select).trigger ("blur")
-				$(target).data ( "ttl", value )
-				$(target).html ( secondsToAppropriate ( value ) )
-				$(target).trigger ("change")
-			})
-			$(target).html ( select.focus () )
-		}
-	}
-})
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./access_rules.js": 50,
-	"./bot_fight_mode.js": 51,
-	"./bot_management.js": 52,
-	"./browser_integrity_check.js": 53,
-	"./challenge_passage.js": 54,
-	"./javascript_detections.js": 55,
-	"./privacy_pass_support.js": 56,
-	"./security_level.js": 57,
-	"./user_agent_blocking.js": 58,
-	"./web_application_firewall.js": 59
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 49;
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const common = __webpack_require__ (3)
-const notification = __webpack_require__ (2)
-const modal = __webpack_require__ (5)
-
-function filterResults ( term, results ) {
-	let searchTerm = ( term + "" ).toLowerCase ().trim ()
-	return results.filter ( entry => {
-		return ( entry.notes + "" ).toLowerCase ().indexOf ( searchTerm ) > -1
-			|| ( entry.configuration.value + "" ).toLowerCase ().indexOf ( searchTerm ) > -1
-	})
-}
-
-function sortResults ( section, results ) {
-	let pivot = $(section).find (".sort-asc, .sort-desc")
-	if ( pivot.length > 0 ) {
-		let access = ( obj, path ) => {
-			return path.reduce ( ( o, i ) => o [ i ], obj )
-		}
-		let attribute = $(pivot).data ("sort").split (".")
-		let isAsc = $(pivot).hasClass ("sort-asc") === true
-		results = results.sort ( ( a, b ) => {
-			let aValue = (access ( a, attribute ) + "").toLowerCase ()
-			let bValue = (access ( b, attribute ) + "").toLowerCase ()
-			if ( isAsc ) {
-				if ( aValue < bValue ) return -1
-				if ( aValue > bValue ) return 1
-				return 0
-			}
-			else {
-				if ( aValue > bValue ) return -1
-				if ( aValue < bValue ) return 1
-				return 0
-			}
-		})
-	}
-	return results
-}
-
-function sortResults ( section, results ) {
-	let pivot = $(section).find (".sort-asc, sort-desc")
-	if ( pivot.length > 0 ) {
-		let access = ( obj, path ) => {
-			return path.reduce ( ( o, i ) => o [ i ], obj )
-		}
-		let attribute = $(pivot).data ("sort").split (".")
-		results = results.sort ( ( a, b ) => {
-			let aValue = (access ( a, attribute ) + "").toLowerCase ()
-			let bValue = (access ( b, attribute ) + "").toLowerCase ()
-			if ( $(pivot).hasClass ("sort-desc") ) {
-				if ( aValue > bValue ) return -1
-				if ( aValue < bValue ) return 1
-				return 0
-			}
-			else {
-				if ( aValue < bValue ) return -1
-				if ( aValue > bValue ) return 1
-				return 0
-			}
-		})
-	}
-	return results
-}
-
-function populateResult ( section ) {
-	let results = $(section).data ("result") || []
-	results = filterResults ( $(section).find (".search").val (), results )
-	results = sortResults ( section, results )
-	let table = $(section).find ("table > tbody")
-	$(section).data ( "item-count", results.length )
-	let itemCount = $(section).data ("item-count")
-	let page = $(section).data ("page")
-	let pageSize = $(section).data ("page-size")
-	let pageCount = Math.ceil ( itemCount / pageSize )
-	let from = pageSize * ( page - 1 ) + 1
-	if ( itemCount == 0 ) from = 0
-	let to = Math.min ( pageSize * page, itemCount )
-	$(section).find (".pagination_container .pages").html ("")
-	$(section).find (".pagination_container .showing").html (`${from} - ${to} of ${itemCount} rules`)
-	let pages = $(section).find (".pagination_container .pages")
-	let createPage = ( number ) => {
-		return $(`<span class="page" >`)
-			.addClass ( number == page ? "" : "trigger" )
-			.addClass ( number == page ? "current" : "" )
-			.data ( "target", "page" )
-			.data ( "page", number )
-			.text ( number )
-	}
-	if ( pageCount > 7 ) {
-		$(pages).append ( createPage ( 1 ) )
-		if ( pageCount > 7 && page > 4 ) {
-			$(pages).append ( $(`<span>`).text ("...") )
-		}
-		let start = Math.max ( 2, page - 3 )
-		let end = Math.min ( pageCount - 1, page + 3 )
-		if ( page - 4 < 0 ) end += Math.abs ( page - 4 )
-		if ( page + 3 > pageCount ) start -= page + 3 - pageCount
-		if ( pageCount <= 7 && page < 4 ) end -= 1
-		if ( pageCount <= 7 && page > 4 ) start += 1
-		for ( let i = start; i <= end; i++ ) {
-			$(pages).append ( createPage ( i ) )
-		}
-		if ( pageCount > 7 && page < pageCount - 3 ) {
-			$(pages).append ( $(`<span>`).text ("...") )
-		}
-		$(pages).append ( createPage ( pageCount ) )
-	}
-	else {
-		for ( let i = 1; i <= pageCount; i++ ) {
-			$(pages).append ( createPage ( i ) )
-		}
-	}
-	if ( page == 1 ) {
-		$(section).find (".previous").addClass ("disabled")
-	}
-	else {
-		$(section).find (".previous").removeClass ("disabled")
-	}
-	if ( page == pageCount ) {
-		$(section).find (".next").addClass ("disabled")
-	}
-	else {
-		$(section).find (".next").removeClass ("disabled")
-	}
-	$(table).html ("")
-	let appended = 0
-	for ( let i = 0; i < results.length; i++ ) {
-		if ( i >= ( page - 1 ) * pageSize && i < page * pageSize ) {
-			let entry = results [ i ]
-			$(table).append ( $(`<tr>`)
-				.append ( $(`<td>`)
-					.text ( entry.configuration.value )
-					.append ( $(`<span>`).text ( entry.notes ) )
-					.css ({ width: "100%" })
-				)
-				.append ( $(`<td>`).text ("This website") )
-				.append ( $(`<td>`).css ( "display", "flex" )
-					.html ( modal.createSelect ( "mode", [
-							{ "label": "Block", "value": "block", selected: entry.mode == "block" },
-							{ "label": "Challenge", "value": "challenge", selected: entry.mode == "challenge" },
-							{ "label": "Whitelist", "value": "whitelist", selected: entry.mode == "whitelist" },
-							{ "label": "JavaScript Challenge", "value": "js_challenge", selected: entry.mode == "js_challenge" }
-						])
-						.css ({ minWidth: "200px" })
-						.addClass ("trigger-select")
-						.data ( "target", "mode" )
-						.data ( "id", entry.id )
-					)
-					.append ( modal.createIconButton ( "trigger edit", "&#xF013;" )
-						.data ( "id", entry.id )
-						.data ( "note", entry.notes )
-						.data ( "target", "edit" )
-					)
-					.append ( modal.createIconButton ( "trigger delete", "&#xF01A;" )
-						.data ( "id", entry.id )
-						.data ( "target", "delete" )
-					)
-				)
-			)
-		}
-	}
-	if ( results.length == 0 ) {
-		$(table).append ( $("<tr>").append ( $("<td colspan='6' >").text ("No access rules found.") ) )
-	}
-}
-
-$(document).on ( "cloudflare.firewall.access_rules.initialize", function ( event, data ) {
-	$(data.section).data ( "result", data.response.result )
-	populateResult ( data.section )
-	$(data.section).removeClass ("loading")
-})
-
-$(document).on ( "cloudflare.firewall.access_rules.sort", function ( event, data ) {
-	$(data.section).data ( "page", 1 )
-	$(data.section).data ( "sort", $(data.trigger).data ("sort") )
-	if ( $(data.trigger).hasClass ("sort-asc") ) {
-		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
-		$(data.trigger).removeClass ("sort-asc").addClass ("sort-desc")
-		$(data.section).data ( "direction", "desc" )
-	}
-	else if ( $(data.trigger).hasClass ("sort-desc") ) {
-		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
-		$(data.trigger).removeClass ("sort-asc").removeClass ("sort-desc")
-		$(data.section).data ( "direction", "" )
-	}
-	else {
-		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
-		$(data.trigger).addClass ("sort-asc")
-		$(data.section).data ( "direction", "asc" )
-	}
-	populateResult ( data.section )
-})
-
-$(document).on ( "cloudflare.firewall.access_rules.search", function ( event, data ) {
-	$(data.section).data ( "page", 1 )
-	let table = $(data.section).find ("table > tbody")
-	$(table).children ().remove ()
-	populateResult ( data.section )
-})
-
-$(document).on ( "cloudflare.firewall.access_rules.add", function ( event, data ) {
-	$(data.section).addClass ("loading")
-	var value = $(data.section).find ("[name='value']").val ()
-	var mode = $(data.section).find ("[name='mode']").val ()
-	var note = $(data.section).find ("[name='note']").val ()
-	var target = ""
-	switch ( true ) {
-		case /[0-9]+(?:\.[0-9]+){3}\/[0-9]+/.test ( value ):
-			target = "ip_range"
-			break
-		case /[0-9]+(?:\.[0-9]+){3}/.test ( value ):
-			target = "ip"
-			break
-		case /AS[0-9]+/.test ( value ):
-			target = "asn"
-			break
-		default:
-			target = "country"
-	}
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: {
-			"form_key": data.form.key,
-			"target": target,
-			"value": value,
-			"mode": mode,
-			"note": note
-		},
-		success: function ( response ) {
-			notification.showMessages ( response )
-			$(data.section).addClass ("loading")
-			$(data.section).find ("[name='value']").val ("")
-			$(data.section).find ("[name='mode']").val ("block")
-			$(data.section).find ("[name='note']").val ("")
-			common.loadSections (".access_rules")
-		}
-	})
-	common.loadSections (".access_rules")
-})
-
-$(document).on ( "cloudflare.firewall.access_rules.delete", function ( event, data ) {
-	var confirm = new modal.Modal ()
-	confirm.addTitle ("Confirm")
-	confirm.addElement ( $("<p>").text (`Are you sure you want to delete this rule?`) )
-	confirm.addButton ({ label: "OK", callback: ( components ) => {
-		confirm.close ()
-		$(data.section).addClass ("loading")
-		var id = $(data.trigger).data ("id")
-		$.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: { "form_key": data.form.key, "id": id },
-			success: function ( response ) {
-				notification.showMessages ( response )
-				common.loadSections (".access_rules")
-			}
-		})
-	}})
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.show ()
-})
-
-$(document).on ( "cloudflare.firewall.access_rules.mode", function ( event, data ) {
-	$(data.section).addClass ("loading")
-	var id = $(data.trigger).data ("id")
-	var mode = $(data.trigger).val ()
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key, "id": id, "mode": mode },
-		success: function ( response ) {
-			notification.showMessages ( response )
-			common.loadSections (".access_rules")
-		}
-	})
-})
-
-$(document).on ( "cloudflare.firewall.access_rules.edit", function ( event, data ) {
-	let notes = modal.createTextarea ( "notes", "", $(data.trigger).data ("note") ).css ({
-		margin: "22.5px 22.5px 0 22.5px",
-		width: "calc(100% - 45px)",
-		fontSize: "1.1em"
-	})
-	let edit = new modal.Modal ( 800 )
-	edit.addTitle ("Edit notes")
-	edit.addElement ( notes )
-	edit.addButton ({ label: "Close", class: "gray", callback: edit.close })
-	edit.addButton ({ label: "Save", callback: ( components ) => {
-		edit.close ()
-		$(data.section).addClass ("loading")
-		$.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: { "form_key": data.form.key, "id": $(data.trigger).data ("id"), "note": notes.val () },
-			success: function ( response ) {
-				notification.showMessages ( response )
-				common.loadSections (".access_rules")
-			}
-		})
-	}})
-	edit.show ()
-})
-
-$(document).on ( "cloudflare.firewall.access_rules.page", function ( event, data ) {
-	$(data.section).data ( "page", $(data.trigger).data ("page") )
-	populateResult ( data.section )
-})
-
-$(document).on ( "cloudflare.firewall.access_rules.next_page", function ( event, data ) {
-	if ( $(data.section).data ("page") + 1 <= Math.ceil ( $(data.section).data ("item-count") / $(data.section).data ("page-size") ) ) {
-		$(data.section).data ( "page", $(data.section).data ("page") + 1 )
-		populateResult ( data.section )
-	}
-})
-
-$(document).on ( "cloudflare.firewall.access_rules.previous_page", function ( event, data ) {
-	if ( $(data.section).data ("page") - 1 > 0 ) {
-		$(data.section).data ( "page", $(data.section).data ("page") - 1 )
-		populateResult ( data.section )
-	}
-})
-
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.firewall.bot_fight_mode.initialize", switchElement.initializeCustom ( "fight_mode", true ) )
-$(document).on ( "cloudflare.firewall.bot_fight_mode.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.firewall.bot_management.initialize", switchElement.initializeCustom ( "enabled", true ) )
-$(document).on ( "cloudflare.firewall.bot_management.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.firewall.browser_integrity_check.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.firewall.browser_integrity_check.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const selectElement = __webpack_require__ (4)
-
-$(document).on ( "cloudflare.firewall.challenge_passage.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.firewall.challenge_passage.update", selectElement.update )
-
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.firewall.javascript_detections.initialize", switchElement.initializeCustom ( "enable_js", true ) )
-$(document).on ( "cloudflare.firewall.javascript_detections.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.firewall.privacy_pass_support.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.firewall.privacy_pass_support.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const selectElement = __webpack_require__ (4)
-
-$(document).on ( "cloudflare.firewall.security_level.initialize", selectElement.initialize )
-$(document).on ( "cloudflare.firewall.security_level.update", selectElement.update )
-
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const common = __webpack_require__ (3)
-const notification = __webpack_require__ (2)
-const modal = __webpack_require__ (5)
-
-function populateResult ( section ) {
-	let results = $(section).data ("result") || []
-	let table = $(section).find ("table > tbody")
-	$(section).data ( "item-count", results.length )
-	let itemCount = $(section).data ("item-count")
-	let page = $(section).data ("page")
-	let pageSize = $(section).data ("page-size")
-	let pageCount = Math.ceil ( itemCount / pageSize )
-	let from = pageSize * ( page - 1 ) + 1
-	if ( itemCount == 0 ) from = 0
-	let to = Math.min ( pageSize * page, itemCount )
-	$(section).find (".pagination_container .pages").html ("")
-	$(section).find (".pagination_container .showing").html (`${from} - ${to} of ${itemCount} rules`)
-	let pages = $(section).find (".pagination_container .pages")
-	let createPage = ( number ) => {
-		return $(`<span class="page" >`)
-			.addClass ( number == page ? "" : "trigger" )
-			.addClass ( number == page ? "current" : "" )
-			.data ( "target", "page" )
-			.data ( "page", number )
-			.text ( number )
-	}
-	if ( pageCount > 7 ) {
-		$(pages).append ( createPage ( 1 ) )
-		if ( pageCount > 7 && page > 4 ) {
-			$(pages).append ( $(`<span>`).text ("...") )
-		}
-		let start = Math.max ( 2, page - 3 )
-		let end = Math.min ( pageCount - 1, page + 3 )
-		if ( page - 4 < 0 ) end += Math.abs ( page - 4 )
-		if ( page + 3 > pageCount ) start -= page + 3 - pageCount
-		if ( pageCount <= 7 && page < 4 ) end -= 1
-		if ( pageCount <= 7 && page > 4 ) start += 1
-		for ( let i = start; i <= end; i++ ) {
-			$(pages).append ( createPage ( i ) )
-		}
-		if ( pageCount > 7 && page < pageCount - 3 ) {
-			$(pages).append ( $(`<span>`).text ("...") )
-		}
-		$(pages).append ( createPage ( pageCount ) )
-	}
-	else {
-		for ( let i = 1; i <= pageCount; i++ ) {
-			$(pages).append ( createPage ( i ) )
-		}
-	}
-	if ( page == 1 ) {
-		$(section).find (".previous").addClass ("disabled")
-	}
-	else {
-		$(section).find (".previous").removeClass ("disabled")
-	}
-	if ( page == pageCount ) {
-		$(section).find (".next").addClass ("disabled")
-	}
-	else {
-		$(section).find (".next").removeClass ("disabled")
-	}
-	$(table).html ("")
-	let appended = 0
-	for ( let i = 0; i < results.length; i++ ) {
-		if ( i >= ( page - 1 ) * pageSize && i < page * pageSize ) {
-			let entry = results [ i ]
-			$(table).append ( createRow ( entry ) )
-		}
-	}
-	if ( results.length == 0 ) {
-		$(table).append ( $("<tr>").append ( $("<td colspan='2' >").text ("You currently have no User Agent Blocking rules. Please click on 'Create Blocking Rule' to get started.") ) )
-	}
-}
-
-function createRow ( entry ) {
-	let switchElement = modal.createSwitch ( "state", !entry.paused )
-		.css ( "margin", "auto 15px auto 22px" )
-	$(switchElement).find ("input")
-		.addClass ("trigger")
-		.data ( "target", "toggle" )
-		.data ( "entry", entry )
-	return $("<tr>")
-		.append ( $("<td>")
-			.append ( $("<b>").text ( entry.description ).css ({ "text-overflow": "ellipsis", "overflow": "hidden" }) )
-			.append ( $("<span>").text ( entry.configuration.value ).css ({ "text-overflow": "ellipsis", "overflow": "hidden" }) )
-			.css ({ "width": "100%", "max-width": "100px" })
-		)
-		.append ( $("<td>")
-			.append ( modal.createSelect ( "mode", [
-				{ "label": "Block", "value": "block" },
-				{ "label": "Challenge", "value": "challenge" },
-				{ "label": "JavaScript Challenge", "value": "js_challenge" }
-				]).val ( entry.mode )
-				.css ( "width", "auto" )
-				.addClass ( "trigger-select" )
-				.data ( "target", "mode" )
-				.data ( "entry", entry )
-			)
-			.append ( switchElement )
-			.append ( modal.createIconButton ( "trigger edit", "&#xF019;" )
-				.css ( "display", "inline-block" )
-				.addClass ("trigger")
-				.data ( "target", "edit" )
-				.data ( "entry", entry )
-			)
-			.append ( modal.createIconButton ( "trigger delete", "&#xF01A;" )
-				.css ( "display", "inline-block" )
-				.addClass ("trigger")
-				.data ( "target", "delete" )
-				.data ( "entry", entry )
-			)
-		)
-}
-
-function createModal ( name = false, action = false, agent = false ) {
-	let prompt = new modal.Modal ( 600 )
-	let nameElem = modal.createInput ( "text", "name", "Example: Block Internet Explorer 6 browsers", name ? name : "" )
-	let agentElem = modal.createTextarea ( "agent", "Example: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)", agent ? agent : "" )
-		.css ({ width: "100%", margin: 0 })
-	let actionElem = modal.createSelect ( "mode", [
-		{ "label": "Block", "value": "block", "selected": action === false || action == "block" },
-		{ "label": "Challenge", "value": "challenge", "selected": action == "challenge" },
-		{ "label": "JavaScript Challenge", "value": "js_challenge", "selected": action == "js_challenge" }
-	])
-	prompt.addTitle ( ( name === false ? "Create" : "Edit" ) + " a User Agent Blocking Rule" )
-	prompt.addElement ( $("<p>").text ("Provide a description, an action, and a specific User Agent which you wish to configure.") )
-	prompt.addRow ( "Name Description", nameElem, true )
-	prompt.addRow ( "Action", actionElem, true )
-	prompt.addRow ( "User Agent", agentElem, true )
-	prompt.addButton ({ label: "Cancel", class: "gray", callback: prompt.close })
-	prompt.show ()
-	return prompt
-}
-
-$(document).on ( "cloudflare.firewall.user_agent_blocking.initialize", function ( event, data ) {
-	let used = data.response.usage.used
-	let available = data.response.usage.max
-	let message = `You have ${used} of ${available} User Agent Blocking rules active`
-	$(data.section).find (".usage").text ( message )
-	$(data.section).data ( "result", data.response.result )
-	$(data.section).data ( "used", used )
-	$(data.section).data ( "available", available )
-	populateResult ( data.section )
-	$(data.section).removeClass ("loading")
-})
-
-$(document).on ( "cloudflare.firewall.user_agent_blocking.create", function ( event, data ) {
-	let used = (data.section).data ("used")
-	let available = (data.section).data ("available")
-	let prompt = createModal ()
-	let create = ( paused ) => {
-		let description = $(prompt.components.container).find ("[name='name']").val ()
-		let mode = $(prompt.components.container).find ("[name='mode']").val ()
-		let agent = $(prompt.components.container).find ("[name='agent']").val ()
-		$(data.section).addClass ("loading")
-		$(prompt.components.modal).addClass ("loading")
-		$.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: {
-				"form_key": data.form.key,
-				"mode": mode,
-				"paused": paused,
-				"description": description,
-				"value": agent
-			},
-			success: function ( response ) {
-				$(prompt.components.modal).removeClass ("loading")
-				if ( response.success ) {
-					prompt.close ()
-				}
-				notification.showMessages ( response )
-				common.loadSections (".firewall.user_agent_blocking")
-			}
-		})
-	}
-	prompt.addButton ({ label: "Save as Draft", class: "gray", callback: () => create ( true ) })
-	if ( used < available ) {
-		prompt.addButton ({ label: "Save and Deploy", callback: () => create ( false ) })
-	}
-})
-
-$(document).on ( "cloudflare.firewall.user_agent_blocking.edit", function ( event, data ) {
-	let entry = $(data.trigger).data ("entry")
-	let prompt = createModal ( entry.description, entry.mode, entry.configuration.value )
-	prompt.addButton ({ label: "Save", callback: () => {
-		$(data.section).addClass ("loading")
-		$(prompt.components.modal).addClass ("loading")
-		let modal = $(prompt.components.modal)
-		$.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: {
-				"form_key": data.form.key,
-				"id": entry.id,
-				"mode": $(modal).find ("[name='mode']").val (),
-				"paused": entry.paused,
-				"description": $(modal).find ("[name='name']").val (),
-				"value": $(modal).find ("[name='agent']").val ()
-			},
-			success: ( response ) => {
-				$(modal).removeClass ("loading")
-				if ( response.success ) {
-					prompt.close ()
-				}
-				notification.showMessages ( response )
-				common.loadSections (".firewall.user_agent_blocking")
-			}
-		})
-	}})
-})
-
-$(document).on ( "cloudflare.firewall.user_agent_blocking.delete", function ( event, data ) {
-	let prompt = new modal.Modal ( 600 )
-	let entry = $(data.trigger).data ("entry")
-	prompt.addTitle ( "Please confirm that you would like to delete the following rule: <b>" + entry.description + "</b>" )
-	prompt.addButton ({ label: "Cancel", class: "gray", callback: prompt.close })
-	prompt.addButton ({ label: "Delete User Agent Rule", class: "red", callback: () => {
-		$(data.section).addClass ("loading")
-		prompt.close ()
-		$.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: { "form_key": data.form.key, "id": entry.id },
-			success: function ( response ) {
-				notification.showMessages ( response )
-				common.loadSections (".firewall.user_agent_blocking")
-			}
-		})
-	}})
-	prompt.show ()
-})
-
-$(document).on ( "cloudflare.firewall.user_agent_blocking.mode", function ( event, data ) {
-	let target = $(data.trigger)
-	let entry = $(target).data ("entry")
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: {
-			"form_key": data.form.key,
-			"id": entry.id,
-			"mode": target.val (),
-			"paused": entry.paused,
-			"value": entry.configuration.value,
-			"description": entry.description
-		},
-		success: function ( response ) {
-			notification.showMessages ( response )
-			common.loadSections (".firewall.user_agent_blocking")
-		}
-	})
-})
-
-$(document).on ( "cloudflare.firewall.user_agent_blocking.toggle", function ( event, data ) {
-	let target = $(data.trigger)
-	let entry = $(target).data ("entry")
-	$(data.section).addClass ("loading")
-	$.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: {
-			"form_key": data.form.key,
-			"id": entry.id,
-			"mode": entry.mode,
-			"paused": !$(target).prop ("checked"),
-			"value": entry.configuration.value,
-			"description": entry.description
-		},
-		success: function ( response ) {
-			notification.showMessages ( response )
-			common.loadSections (".firewall.user_agent_blocking")
-		}
-	})
-})
-
-$(document).on ( "cloudflare.firewall.user_agent_blocking.page", function ( event, data ) {
-	$(data.section).data ( "page", $(data.trigger).data ("page") )
-	populateResult ( data.section )
-})
-
-$(document).on ( "cloudflare.firewall.user_agent_blocking.next_page", function ( event, data ) {
-	if ( $(data.section).data ("page") + 1 <= Math.ceil ( $(data.section).data ("item-count") / $(data.section).data ("page-size") ) ) {
-		$(data.section).data ( "page", $(data.section).data ("page") + 1 )
-		populateResult ( data.section )
-	}
-})
-
-$(document).on ( "cloudflare.firewall.user_agent_blocking.previous_page", function ( event, data ) {
-	if ( $(data.section).data ("page") - 1 > 0 ) {
-		$(data.section).data ( "page", $(data.section).data ("page") - 1 )
-		populateResult ( data.section )
-	}
-})
-
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const $ = __webpack_require__ (0)
-const switchElement = __webpack_require__ (1)
-
-$(document).on ( "cloudflare.firewall.web_application_firewall.initialize", switchElement.initialize )
-$(document).on ( "cloudflare.firewall.web_application_firewall.toggle", switchElement.toggle )
-
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var map = {
-	"./page_rules.js": 61
-};
-function webpackContext(req) {
-	return __webpack_require__(webpackContextResolve(req));
-};
-function webpackContextResolve(req) {
-	var id = map[req];
-	if(!(id + 1)) // check for number or string
-		throw new Error("Cannot find module '" + req + "'.");
-	return id;
-};
-webpackContext.keys = function webpackContextKeys() {
-	return Object.keys(map);
-};
-webpackContext.resolve = webpackContextResolve;
-module.exports = webpackContext;
-webpackContext.id = 60;
-
-/***/ }),
-/* 61 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__);
-
-
-
-const notification = __webpack_require__ (2)
-const modal = __webpack_require__ (5)
-const common = __webpack_require__ (3)
-const global = __webpack_require__ (7)
-
-function upperCaseFirst ( target ) {
-	target = target + ""
-	return target.charAt ( 0 ).toUpperCase () + target.slice ( 1 )
-}
-
-function valueToLabel ( value ) {
-	let lookup = {
-		"pick_a_setting": "Pick a Setting",
-		"always_online": "Always Online",
-		"minify": "Auto Minify",
-		"browser_cache_ttl": "Browser Cache TTL",
-		"browser_check": "Browser Integrity Check",
-		"bypass_cache_on_cookie": "Bypass Cache on Cookie",
-		"cache_by_device_type": "Cache By Device Type",
-		"cache_deception_armor": "Cache Deception Armor",
-		"cache_level": "Cache Level",
-		"cache_on_cookie": "Cache on Cookie",
-		"disable_apps": "Disable Apps",
-		"disable_performance": "Disable Performance",
-		"disable_security": "Disable Security",
-		"edge_cache_ttl": "Edge Cache TTL",
-		"email_obfuscation": "Email Obfuscation",
-		"forwarding_url": "Forwarding URL",
-		"host_header_override": "Host Header Override",
-		"ip_geolocation": "IP Geolocation Header",
-		"mirage": "Mirage",
-		"explicit_cache_control": "Origin Cache Control",
-		"origin_error_page_pass_thru": "Origin Error Page Pass-thru",
-		"polish": "Polish",
-		"sort_query_string_for_cache": "Query String Sort",
-		"resolve_override": "Resolve Override",
-		"respect_strong_etag": "Respect Strong ETags",
-		"response_buffering": "Response Buffering",
-		"rocket_loader": "Rocket Loader",
-		"security_level": "Security Level",
-		"server_side_exclude": "Server Side Excludes",
-		"ssl": "SSL",
-		"true_client_ip_header": "True Client IP Header",
-		"waf": "Web Application Firewall",
-		"status_code": "Status Code",
-		"url": "Url",
-		"html": "HTML",
-		"js": "JS",
-		"css": "CSS"
-	}
-	if ( value in lookup ) {
-		return lookup [ value ]
-	}
-	return "Undefined"
-}
-
-function createRow ( previousExists = false, values = [] ) {
-	var close = __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<div class='cloudflare-font delete' >").html ("&#xF01A;")
-	var row = __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<div class='dynamic_wrapper collection' >")
-		.append ( modal.createSelect ( "setting", [
-			{ label: "Pick a Setting", value: "pick_a_setting", disabled: true, selected: true },
-			{ label: valueToLabel ("always_online"), value: "always_online" },
-			{ label: valueToLabel ("minify"), value: "minify" },
-			{ label: valueToLabel ("browser_cache_ttl"), value: "browser_cache_ttl" },
-			{ label: valueToLabel ("browser_check"), value: "browser_check" },
-			{ label: valueToLabel ("bypass_cache_on_cookie"), value: "bypass_cache_on_cookie" },
-			{ label: valueToLabel ("cache_by_device_type"), value: "cache_by_device_type" },
-			{ label: valueToLabel ("cache_deception_armor"), value: "cache_deception_armor" },
-			{ label: valueToLabel ("cache_level"), value: "cache_level" },
-			{ label: valueToLabel ("cache_on_cookie"), value: "cache_on_cookie" },
-			{ label: valueToLabel ("disable_apps"), value: "disable_apps" },
-			{ label: valueToLabel ("disable_performance"), value: "disable_performance" },
-			{ label: valueToLabel ("disable_security"), value: "disable_security" },
-			{ label: valueToLabel ("edge_cache_ttl"), value: "edge_cache_ttl" },
-			{ label: valueToLabel ("email_obfuscation"), value: "email_obfuscation" },
-			{ label: valueToLabel ("forwarding_url"), value: "forwarding_url", disabled: previousExists },
-			{ label: valueToLabel ("host_header_override"), value: "host_header_override" },
-			{ label: valueToLabel ("ip_geolocation"), value: "ip_geolocation" },
-			{ label: valueToLabel ("mirage"), value: "mirage" },
-			{ label: valueToLabel ("explicit_cache_control"), value: "explicit_cache_control" },
-			{ label: valueToLabel ("origin_error_page_pass_thru"), value: "origin_error_page_pass_thru" },
-			{ label: valueToLabel ("polish"), value: "polish" },
-			{ label: valueToLabel ("sort_query_string_for_cache"), value: "sort_query_string_for_cache" },
-			{ label: valueToLabel ("resolve_override"), value: "resolve_override" },
-			{ label: valueToLabel ("respect_strong_etag"), value: "respect_strong_etag" },
-			{ label: valueToLabel ("response_buffering"), value: "response_buffering" },
-			{ label: valueToLabel ("rocket_loader"), value: "rocket_loader" },
-			{ label: valueToLabel ("security_level"), value: "security_level" },
-			{ label: valueToLabel ("server_side_exclude"), value: "server_side_exclude" },
-			{ label: valueToLabel ("ssl"), value: "ssl" },
-			{ label: valueToLabel ("true_client_ip_header"), value: "true_client_ip_header" },
-			{ label: valueToLabel ("waf"), value: "waf" },
-		]).addClass ("dynamic-trigger").val ( values.length > 0 ? values [ 0 ] : "pick_a_setting" ) )
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="always_online" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="minify" >`)
-				.append (`<label class="text" >HTML</label>`)
-				.append ( modal.createSwitch ("html") )
-				.append (`<label class="text" >CSS</label>`)
-				.append ( modal.createSwitch ("css") )
-				.append (`<label class="text" >JS</label>`)
-				.append ( modal.createSwitch ("js") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="browser_cache_ttl" >`).html ( modal.createSelect ( "value", [
-				{ label: "Enable Browser Cache TTL", value: "", selected: true, disabled: true },
-				{ label: "30 minutes", value: 1800 },
-				{ label: "an hour", value: 3600 },
-				{ label: "2 hours", value: 7200 },
-				{ label: "3 hours", value: 10800 },
-				{ label: "4 hours", value: 14400 },
-				{ label: "5 hours", value: 18000 },
-				{ label: "8 hours", value: 28800 },
-				{ label: "12 hours", value: 43200 },
-				{ label: "16 hours", value: 57600 },
-				{ label: "20 hours", value: 72000 },
-				{ label: "a day", value: 86400 },
-				{ label: "2 days", value: 172800 },
-				{ label: "3 days", value: 259200 },
-				{ label: "4 days", value: 345600 },
-				{ label: "5 days", value: 432000 },
-				{ label: "8 days", value: 691200 },
-				{ label: "16 days", value: 1382400 },
-				{ label: "24 days", value: 2073600 },
-				{ label: "a month", value: 2678400 },
-				{ label: "2 months", value: 5356800 },
-				{ label: "6 months", value: 16070400 },
-				{ label: "a year", value: 31536000 }
-			]))
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="browser_check" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="bypass_cache_on_cookie" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_by_device_type" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_deception_armor" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_level" >`).append ( modal.createSelect ( "value", [
-				{ label: "Select Cache Level", value: "", disabled: true, selected: true },
-				{ label: "Bypass", value: "bypass" },
-				{ label: "No Query String", value: "basic" },
-				{ label: "Ignore Query String", value: "simplified" },
-				{ label: "Standard", value: "aggressive" },
-				{ label: "Cache Everything", value: "cache_everything" }
-			]))
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_on_cookie" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="disable_apps" >`).html ("<p>Apps are disabled</p>")
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="disable_performance" >`).html ("<p>Performance is disabled</p>")
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="disable_security" >`).html ("<p>Security is disabled</p>")
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="edge_cache_ttl" >`).html ( modal.createSelect ( "value", [
-				{ label: "Enter Edge Cache TTL", value: "", selected: true, disabled: true },
-				{ label: "2 hours", value: 7200 },
-				{ label: "3 hours", value: 10800 },
-				{ label: "4 hours", value: 14400 },
-				{ label: "5 hours", value: 18000 },
-				{ label: "8 hours", value: 28800 },
-				{ label: "12 hours", value: 43200 },
-				{ label: "16 hours", value: 57600 },
-				{ label: "20 hours", value: 72000 },
-				{ label: "a day", value: 86400 },
-				{ label: "2 days", value: 172800 },
-				{ label: "3 days", value: 259200 },
-				{ label: "4 days", value: 345600 },
-				{ label: "5 days", value: 432000 },
-				{ label: "6 days", value: 518400 },
-				{ label: "7 days", value: 604800 },
-				{ label: "14 days", value: 1209600 },
-				{ label: "a month", value: 2419200 }
-			]))
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="email_obfuscation" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="forwarding_url" >`)
-				.html ( modal.createSelect ( "status_code", [
-					{ label: "Select Status Code", value: "", disabled: true, selected: true },
-					{ label: "301 - Permanent Redirect", value: 301 },
-					{ label: "302 - Temporary Redirect", value: 302 }
-				]))
-				.append ( modal.createInput ( "text", "url", "Enter destination URL" ) )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="host_header_override" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="ip_geolocation" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="mirage" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="explicit_cache_control" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="origin_error_page_pass_thru" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="polish" >`).append (
-				modal.createSelect ( "value", [
-					{ label: "Select Value", value: "", disabled: true, selected: true },
-					{ label: "Off", value: "off" },
-					{ label: "Lossless", value: "lossless" },
-					{ label: "Lossy", value: "lossy" }
-				])
-			)
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="sort_query_string_for_cache" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="resolve_override" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="respect_strong_etag" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="response_buffering" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="rocket_loader" >`).append (
-				modal.createSwitch ("value")
-			)
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="security_level" >`).html ( modal.createSelect ( "value", [
-				{ label: "Select Security Level", value: "", disabled: true, selected: true },
-				{ label: "Essentially Off", value: "essentially_off" },
-				{ label: "Low", value: "low" },
-				{ label: "Medium", value: "medium" },
-				{ label: "High", value: "high" },
-				{ label: "I'm Under Attack", value: "under_attack" }
-			]))
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="server_side_exclude" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="ssl" >`).html ( modal.createSelect ( "value", [
-				{ label: "Select SSL Setting", value: "", disabled: true, selected: true },
-				{ label: "Off", value: "off" },
-				{ label: "Flexible", value: "flexible" },
-				{ label: "Full", value: "full" },
-				{ label: "Strict", value: "strict" }
-			]))
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="true_client_ip_header" >`).append ( modal.createSwitch ("value") )
-		)
-		.append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="waf" >`).append ( modal.createSwitch ("value") )
-		)
-		.append ( close.click ( () => { __WEBPACK_IMPORTED_MODULE_0_jquery___default()(close).parent ().remove () } ) )
-	if ( values.length > 0 ) {
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).addClass ("active")
-		if ( values.length > 1 ) {
-			let target = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("input,[name='value']")
-			let value = values [1]
-			if ( values [0] == "forwarding_url" ) {
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='status_code']").val ( values [ 1 ] )
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='url']").val ( values [ 2 ] )
-			}
-			else if ( values [0] == "minify" ) {
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='html']")
-					.prop ( "checked", values [ 1 ].html == "on" )
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='css']")
-					.prop ( "checked", values [ 1 ].css == "on" )
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='js']")
-					.prop ( "checked", values [ 1 ].js == "on" )
-			}
-			else if ( ( value == "on" || value == "off" ) && values[0] != "ssl" && values[0] != "rocket_loader" ) {
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(target).prop ( "checked", value == "on" )
-			}
-			else {
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(target).val ( value )
-			}
-		}
-	}
-	return row
-}
-
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.initialize", function ( event, data ) {
-	let rulesUsed = data.response.result.length
-	let rulesAllowed = data.response.entitlements.allocation.value
-	if ( rulesUsed < rulesAllowed ) {
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#rules_left").text ( rulesAllowed - rulesUsed )
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#action")
-			.addClass ("trigger")
-			.val ("Create Page Rule")
-			.off ( "click" )
-	}
-	else {
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#rules_left").text ("0")
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#action")
-			.removeClass ("trigger")
-			.val ("Buy More Page Rules")
-			.on ( "click", () => {
-				window.open ( "https://support.cloudflare.com/hc/en-us/articles/225894428-How-To-Buy-Additional-Page-Rules", "_blank" )
-			})
-	}
-	var table = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("table.rules")
-	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody > tr").remove ()
-	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ( "rules", data.response.result )
-	if ( data.response.result.length > 0 ) {
-		data.response.result
-		.sort ( ( a, b ) => {
-			return b.priority - a.priority
-		})
-		.map ( ( rule, index ) => {
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody").append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<tr>")
-				.data ( "rule", rule )
-				.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td class='handle' >").html ("&#xF000; &#xF001;") )
-				.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td>").text ( index + 1 ).css ( "min-width", "initial" ) )
-				.append (
-					__WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td class='no_white_space' >")
-						.text ( rule.targets [ 0 ].constraint.value )
-						.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<span>").text (
-							rule.actions.map ( i => {
-								let id = valueToLabel ( i.id )
-								let value = ""
-								if ( i.value && i.value instanceof Object ) {
-									value = ": ("
-									let delim = ""
-									for ( let key in i.value ) {
-										value += delim + valueToLabel ( key ) + ": " + i.value [ key ]
-										delim = ", "
-									}
-									value += ")"
-								}
-								else if ( i.value ) {
-									value = ": " + upperCaseFirst ( i.value )
-								}
-								let string = id + value
-								return string
-							}).join (", ")
-						))
-				)
-				.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td>")
-					.append (( () => {
-						var element = modal.createSwitch ( "status", rule.status == "active" )
-						__WEBPACK_IMPORTED_MODULE_0_jquery___default()(element).find ("input")
-							.addClass ("trigger")
-							.data ( "target", "toggle" )
-							.data ( "id", rule.id )
-						return element
-					}) () )
-					.append (
-						modal.createIconButton ( "edit", "&#xF019;" )
-							.addClass ("trigger")
-							.data ( "target", "edit" )
-							.data ( "data", rule )
-							.css ( "display", "inline-block" )
-					)
-					.append (
-						modal.createIconButton ( "delete", "&#xF01A;" )
-							.addClass ("trigger")
-							.data ( "target", "delete" )
-							.data ( "id", rule.id )
-							.css ( "display", "inline-block" )
-					)
-				)
-			)
-		})
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody").sortable ({
-			handle: ".handle",
-			helper: ( e, ui ) => {
-				ui.children ().each ( () => {
-					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).width ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).width () )
-				})
-				return ui
-			},
-			stop: ( e, ui ) => {
-				ui.item.parent ().find ("tr").each ( ( i, e ) => {
-					__WEBPACK_IMPORTED_MODULE_0_jquery___default()( e ).find ("td").eq ( 1 ).text ( i + 1 )
-				})
-				var priorities = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(table)
-					.find ("tbody > tr")
-					.toArray ()
-					.map ( ( rule, index ) => {
-						let data = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(rule).data ("rule")
-						return {
-							id: data.id,
-							priority: index + 1
-						}
-					})
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
-					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1priority$3" ),
-					type: "POST",
-					data: {
-						"form_key": __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ("form-key"),
-						"priorities": priorities
-					},
-					success: function ( response ) {
-						notification.showMessages ( response )
-					}
-				})
-			}
-		})
-	}
-	else {
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody").append (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()("<tr>").append (
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td colspan='6' >").text ("You do not have any Page Rules yet. Click 'Create Page Rule' above to get started.")
-			)
-		)
-	}
-})
-
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.toggle", function ( event, data ) {
-	var id = data.trigger.data ("id")
-	var state = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.trigger).is (":checked")
-	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
-	__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
-		url: data.form.endpoint,
-		type: "POST",
-		data: { "form_key": data.form.key, "state": state, "id": id },
-		success: function ( response ) {
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).removeClass ("loading")
-			notification.showMessages ( response )
-		}
-	})
-})
-
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.delete", function ( event, data ) {
-	var confirm = new modal.Modal ()
-	confirm.addTitle ("Confirm")
-	confirm.addElement ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<p>").text ("Are you sure you want to delete this page rule?") )
-	confirm.addButton ({ label: "OK", callback: ( components ) => {
-		confirm.close ()
-		var id = data.trigger.data ("id")
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: { "form_key": data.form.key, "id": id },
-			success: function ( response ) {
-				notification.showMessages ( response )
-				common.loadSections (".page_rules")
-			}
-		})
-	}})
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.show ()
-})
-
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.edit", function ( event, data ) {
-	var response = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.trigger).data ("data")
-	var that = this
-	var confirm = new modal.Modal ( 800 )
-	var collections = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div class="collections" >`)
-	confirm.addTitle ( "Edit Page Rule for " + global.getDomainName (), __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).val () )
-	confirm.addRow (
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`)
-			.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("If the URL matches: ") )
-			.append ( "By using the asterisk (*) character, you can create dynamic patterns that can match many URLs, rather than just one. " )
-			.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a href="https://support.cloudflare.com/hc/en-us/articles/218411427" target="_blank" >`).text ("Learn more here") ),
-		modal.createInput ( "text", "target", "Example: www.example.com/*" ).val ( response.targets [0].constraint.value ),
-		true
-	)
-	response.actions.map ( action => {
-		var values = [ action.value ]
-		if ( action.id == "forwarding_url" ) {
-			values = [ action.value.status_code, action.value.url ]
-		}
-		collections.append ( createRow ( false, [ action.id ].concat ( values ) ) )
-	})
-	confirm.addRow (
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Then the settings are:") ),
-		[
-			collections,
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a class="dashed" >`).text ("+ Add a Setting").click ( () => {
-				var previousExists = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(collections).find (".collection").length > 0
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(collections).append ( createRow ( previousExists ) )
-			})
-		],
-		true
-	)
-	var saveCallback = ( components, status ) => {
-		var target = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='target']").val ()
-		var actions = __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.makeArray ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()( components.container )
-			.find (".collections > .collection")
-			.map ( ( i, e ) => {
-				var id = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[name='setting']").val ()
-				var value = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='value']").eq ( 0 )
-				value = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).is (":checkbox") ? ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).is (":checked") ? "on" : "off" ) : __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).val ()
-				if ( id == "forwarding_url" ) value = {
-					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='url']").eq ( 0 ).val (),
-					status_code: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='status_code']").eq ( 0 ).val ()
-				}
-				if ( id == "minify" ) value = {
-					html: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='html']").eq ( 0 ).is (":checked") ? "on" : "off",
-					css: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='css']").eq ( 0 ).is (":checked") ? "on" : "off",
-					js: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='js']").eq ( 0 ).is (":checked") ? "on" : "off"
-				}
-				return { id, value }
-			}))
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).addClass ("loading")
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: {
-				"form_key": data.form.key,
-				"target": target,
-				"actions": actions,
-				"status": status,
-				"id": response.id
-			},
-			success: function ( response ) {
-				if ( response.success ) {
-					confirm.close ()
-					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
-					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
-					common.loadSections (".page_rules")
-				}
-				else {
-					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
-					notification.showMessages ( response )
-				}
-			}
-		})
-	}
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.addButton ({ label: "Save as Draft", class: "gray", callback: ( components ) => { saveCallback ( components, false ) } })
-	confirm.addButton ({ label: "Save and Deploy", callback: ( components ) => { saveCallback ( components, true ) } })
-	confirm.show ()
-})
-
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.create", function ( event, data ) {
-	var section = data.section
-	var that = this
-	var confirm = new modal.Modal ( 800 )
-	var collections = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div class="collections" >`)
-	confirm.addTitle ( "Create a Page Rule for " + global.getDomainName (), __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).val () )
-	confirm.addRow (
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`)
-			.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("If the URL matches: ") )
-			.append ( "By using the asterisk (*) character, you can create dynamic patterns that can match many URLs, rather than just one. " )
-			.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a href="https://support.cloudflare.com/hc/en-us/articles/218411427" target="_blank" >`).text ("Learn more here") ),
-		modal.createInput ( "text", "target", "Example: www.example.com/*" ),
-		true
-	)
-	confirm.addRow (
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Then the settings are:") ),
-		[
-			collections.append ( createRow () ),
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a class="dashed" >`).text ("+ Add a Setting").click ( () => {
-				var previousExists = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(collections).find (".collection").length > 0
-				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(collections).append ( createRow ( previousExists ) )
-			})
-		],
-		true
-	)
-	if ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(section).data ("rules").length > 0 ) {
-		var customOptions = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(section).data ("rules")
-			.sort ( ( a, b ) => { return b.priority - a.priority } )
-			.map ( rule => {
-				return {
-					label: rule.targets [ 0 ].constraint.value,
-					value: rule.priority
-				}
-			})
-		customOptions = [{ label: "Select which Page Rule this will fire after", value: 1, selected: true, disabled: true }].concat ( customOptions )
-		confirm.addRow (
-			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`)
-				.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Order: ") )
-				.append ("This is the order in which your Page Rules will be triggered. Only one Page Rule will trigger per URL, so put your most specific Page Rules at the top."),
-			[
-				modal.createSelect ( "order", [
-					{ label: "First", value: "first", selected: true },
-					{ label: "Last", value: "last" },
-					{ label: "Custom", value: "custom" }
-				]).on ( "change", ( event ) => {
-					if ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(event.target).val () === "custom" ) {
-						__WEBPACK_IMPORTED_MODULE_0_jquery___default()(event.target).next ().show ()
-					}
-					else {
-						__WEBPACK_IMPORTED_MODULE_0_jquery___default()(event.target).next ().hide ()
-					}
-				}),
-				modal.createSelect ( "custom", customOptions ).hide ()
-			],
-			true
-		)
-	}
-	var saveCallback = ( components, status ) => {
-		var target = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='target']").val ()
-		var actions = __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.makeArray ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()( components.container )
-			.find (".collections > .collection")
-			.map ( ( i, e ) => {
-				var id = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[name='setting']").val ()
-				var value = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='value']").eq ( 0 )
-				value = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).is (":checkbox") ? ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).is (":checked") ? "on" : "off" ) : __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).val ()
-				if ( id == "forwarding_url" ) value = {
-					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='url']").eq ( 0 ).val (),
-					status_code: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='status_code']").eq ( 0 ).val ()
-				}
-				if ( id == "minify" ) value = {
-					html: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='html']").eq ( 0 ).val (),
-					css: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='css']").eq ( 0 ).val (),
-					js: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='js']").eq ( 0 ).val ()
-				}
-				return { id, value }
-			}))
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).addClass ("loading")
-		let getPriority = () => {
-			var priority = 1
-			if ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(section).data ("rules").length > 0 ) {
-				let order = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='order']").val ()
-				if ( order === "custom" ) {
-					priority = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='custom']").val ()
-				}
-				else if ( order == "last" ) {
-					priority = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(section).data ("rules").length + 1
-				}
-			}
-			return priority
-		}
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
-			url: data.form.endpoint,
-			type: "POST",
-			data: {
-				"form_key": data.form.key,
-				"target": target,
-				"actions": actions,
-				"status": status,
-				"priority": getPriority ()
-			},
-			success: function ( response ) {
-				if ( response.success ) {
-					confirm.close ()
-					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
-					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
-					common.loadSections (".page_rules")
-				}
-				else {
-					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
-					notification.showMessages ( response )
-				}
-			}
-		})
-	}
-	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
-	confirm.addButton ({ label: "Save as Draft", class: "gray", callback: ( components ) => { saveCallback ( components, false ) } })
-	confirm.addButton ({ label: "Save and Deploy", callback: ( components ) => { saveCallback ( components, true ) } })
-	confirm.show ()
-})
-
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "change", ".cloudflare_modal .collection [name='setting']", function () {
-	if ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).val () == "forwarding_url" ) {
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(".cloudflare_modal a.dashed").hide ()
-	}
-	else {
-		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(".cloudflare_modal a.dashed").show ()
-	}
-})
-
-
-/***/ }),
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * jQuery UI Sortable 1.12.1
  * http://jqueryui.com
@@ -15420,12 +11414,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 		// AMD. Register as an anonymous module.
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 			__webpack_require__(0),
+			__webpack_require__(62),
 			__webpack_require__(63),
+			__webpack_require__(9),
 			__webpack_require__(64),
-			__webpack_require__(8),
-			__webpack_require__(65),
 			__webpack_require__(6),
-			__webpack_require__(9)
+			__webpack_require__(10)
 		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
@@ -16958,7 +12952,3596 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 
 /***/ }),
-/* 63 */
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(6) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+} ( function( $ ) {
+
+// This file is deprecated
+return $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
+} ) );
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery UI Widget 1.12.1
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+
+//>>label: Widget
+//>>group: Core
+//>>description: Provides a factory for creating stateful widgets with a common API.
+//>>docs: http://api.jqueryui.com/jQuery.widget/
+//>>demos: http://jqueryui.com/widget/
+
+( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0), __webpack_require__(6) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}( function( $ ) {
+
+var widgetUuid = 0;
+var widgetSlice = Array.prototype.slice;
+
+$.cleanData = ( function( orig ) {
+	return function( elems ) {
+		var events, elem, i;
+		for ( i = 0; ( elem = elems[ i ] ) != null; i++ ) {
+			try {
+
+				// Only trigger remove when necessary to save time
+				events = $._data( elem, "events" );
+				if ( events && events.remove ) {
+					$( elem ).triggerHandler( "remove" );
+				}
+
+			// Http://bugs.jquery.com/ticket/8235
+			} catch ( e ) {}
+		}
+		orig( elems );
+	};
+} )( $.cleanData );
+
+$.widget = function( name, base, prototype ) {
+	var existingConstructor, constructor, basePrototype;
+
+	// ProxiedPrototype allows the provided prototype to remain unmodified
+	// so that it can be used as a mixin for multiple widgets (#8876)
+	var proxiedPrototype = {};
+
+	var namespace = name.split( "." )[ 0 ];
+	name = name.split( "." )[ 1 ];
+	var fullName = namespace + "-" + name;
+
+	if ( !prototype ) {
+		prototype = base;
+		base = $.Widget;
+	}
+
+	if ( $.isArray( prototype ) ) {
+		prototype = $.extend.apply( null, [ {} ].concat( prototype ) );
+	}
+
+	// Create selector for plugin
+	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
+		return !!$.data( elem, fullName );
+	};
+
+	$[ namespace ] = $[ namespace ] || {};
+	existingConstructor = $[ namespace ][ name ];
+	constructor = $[ namespace ][ name ] = function( options, element ) {
+
+		// Allow instantiation without "new" keyword
+		if ( !this._createWidget ) {
+			return new constructor( options, element );
+		}
+
+		// Allow instantiation without initializing for simple inheritance
+		// must use "new" keyword (the code above always passes args)
+		if ( arguments.length ) {
+			this._createWidget( options, element );
+		}
+	};
+
+	// Extend with the existing constructor to carry over any static properties
+	$.extend( constructor, existingConstructor, {
+		version: prototype.version,
+
+		// Copy the object used to create the prototype in case we need to
+		// redefine the widget later
+		_proto: $.extend( {}, prototype ),
+
+		// Track widgets that inherit from this widget in case this widget is
+		// redefined after a widget inherits from it
+		_childConstructors: []
+	} );
+
+	basePrototype = new base();
+
+	// We need to make the options hash a property directly on the new instance
+	// otherwise we'll modify the options hash on the prototype that we're
+	// inheriting from
+	basePrototype.options = $.widget.extend( {}, basePrototype.options );
+	$.each( prototype, function( prop, value ) {
+		if ( !$.isFunction( value ) ) {
+			proxiedPrototype[ prop ] = value;
+			return;
+		}
+		proxiedPrototype[ prop ] = ( function() {
+			function _super() {
+				return base.prototype[ prop ].apply( this, arguments );
+			}
+
+			function _superApply( args ) {
+				return base.prototype[ prop ].apply( this, args );
+			}
+
+			return function() {
+				var __super = this._super;
+				var __superApply = this._superApply;
+				var returnValue;
+
+				this._super = _super;
+				this._superApply = _superApply;
+
+				returnValue = value.apply( this, arguments );
+
+				this._super = __super;
+				this._superApply = __superApply;
+
+				return returnValue;
+			};
+		} )();
+	} );
+	constructor.prototype = $.widget.extend( basePrototype, {
+
+		// TODO: remove support for widgetEventPrefix
+		// always use the name + a colon as the prefix, e.g., draggable:start
+		// don't prefix for widgets that aren't DOM-based
+		widgetEventPrefix: existingConstructor ? ( basePrototype.widgetEventPrefix || name ) : name
+	}, proxiedPrototype, {
+		constructor: constructor,
+		namespace: namespace,
+		widgetName: name,
+		widgetFullName: fullName
+	} );
+
+	// If this widget is being redefined then we need to find all widgets that
+	// are inheriting from it and redefine all of them so that they inherit from
+	// the new version of this widget. We're essentially trying to replace one
+	// level in the prototype chain.
+	if ( existingConstructor ) {
+		$.each( existingConstructor._childConstructors, function( i, child ) {
+			var childPrototype = child.prototype;
+
+			// Redefine the child widget using the same prototype that was
+			// originally used, but inherit from the new version of the base
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
+				child._proto );
+		} );
+
+		// Remove the list of existing child constructors from the old constructor
+		// so the old child constructors can be garbage collected
+		delete existingConstructor._childConstructors;
+	} else {
+		base._childConstructors.push( constructor );
+	}
+
+	$.widget.bridge( name, constructor );
+
+	return constructor;
+};
+
+$.widget.extend = function( target ) {
+	var input = widgetSlice.call( arguments, 1 );
+	var inputIndex = 0;
+	var inputLength = input.length;
+	var key;
+	var value;
+
+	for ( ; inputIndex < inputLength; inputIndex++ ) {
+		for ( key in input[ inputIndex ] ) {
+			value = input[ inputIndex ][ key ];
+			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
+
+				// Clone objects
+				if ( $.isPlainObject( value ) ) {
+					target[ key ] = $.isPlainObject( target[ key ] ) ?
+						$.widget.extend( {}, target[ key ], value ) :
+
+						// Don't extend strings, arrays, etc. with objects
+						$.widget.extend( {}, value );
+
+				// Copy everything else by reference
+				} else {
+					target[ key ] = value;
+				}
+			}
+		}
+	}
+	return target;
+};
+
+$.widget.bridge = function( name, object ) {
+	var fullName = object.prototype.widgetFullName || name;
+	$.fn[ name ] = function( options ) {
+		var isMethodCall = typeof options === "string";
+		var args = widgetSlice.call( arguments, 1 );
+		var returnValue = this;
+
+		if ( isMethodCall ) {
+
+			// If this is an empty collection, we need to have the instance method
+			// return undefined instead of the jQuery instance
+			if ( !this.length && options === "instance" ) {
+				returnValue = undefined;
+			} else {
+				this.each( function() {
+					var methodValue;
+					var instance = $.data( this, fullName );
+
+					if ( options === "instance" ) {
+						returnValue = instance;
+						return false;
+					}
+
+					if ( !instance ) {
+						return $.error( "cannot call methods on " + name +
+							" prior to initialization; " +
+							"attempted to call method '" + options + "'" );
+					}
+
+					if ( !$.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
+						return $.error( "no such method '" + options + "' for " + name +
+							" widget instance" );
+					}
+
+					methodValue = instance[ options ].apply( instance, args );
+
+					if ( methodValue !== instance && methodValue !== undefined ) {
+						returnValue = methodValue && methodValue.jquery ?
+							returnValue.pushStack( methodValue.get() ) :
+							methodValue;
+						return false;
+					}
+				} );
+			}
+		} else {
+
+			// Allow multiple hashes to be passed on init
+			if ( args.length ) {
+				options = $.widget.extend.apply( null, [ options ].concat( args ) );
+			}
+
+			this.each( function() {
+				var instance = $.data( this, fullName );
+				if ( instance ) {
+					instance.option( options || {} );
+					if ( instance._init ) {
+						instance._init();
+					}
+				} else {
+					$.data( this, fullName, new object( options, this ) );
+				}
+			} );
+		}
+
+		return returnValue;
+	};
+};
+
+$.Widget = function( /* options, element */ ) {};
+$.Widget._childConstructors = [];
+
+$.Widget.prototype = {
+	widgetName: "widget",
+	widgetEventPrefix: "",
+	defaultElement: "<div>",
+
+	options: {
+		classes: {},
+		disabled: false,
+
+		// Callbacks
+		create: null
+	},
+
+	_createWidget: function( options, element ) {
+		element = $( element || this.defaultElement || this )[ 0 ];
+		this.element = $( element );
+		this.uuid = widgetUuid++;
+		this.eventNamespace = "." + this.widgetName + this.uuid;
+
+		this.bindings = $();
+		this.hoverable = $();
+		this.focusable = $();
+		this.classesElementLookup = {};
+
+		if ( element !== this ) {
+			$.data( element, this.widgetFullName, this );
+			this._on( true, this.element, {
+				remove: function( event ) {
+					if ( event.target === element ) {
+						this.destroy();
+					}
+				}
+			} );
+			this.document = $( element.style ?
+
+				// Element within the document
+				element.ownerDocument :
+
+				// Element is window or document
+				element.document || element );
+			this.window = $( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
+		}
+
+		this.options = $.widget.extend( {},
+			this.options,
+			this._getCreateOptions(),
+			options );
+
+		this._create();
+
+		if ( this.options.disabled ) {
+			this._setOptionDisabled( this.options.disabled );
+		}
+
+		this._trigger( "create", null, this._getCreateEventData() );
+		this._init();
+	},
+
+	_getCreateOptions: function() {
+		return {};
+	},
+
+	_getCreateEventData: $.noop,
+
+	_create: $.noop,
+
+	_init: $.noop,
+
+	destroy: function() {
+		var that = this;
+
+		this._destroy();
+		$.each( this.classesElementLookup, function( key, value ) {
+			that._removeClass( value, key );
+		} );
+
+		// We can probably remove the unbind calls in 2.0
+		// all event bindings should go through this._on()
+		this.element
+			.off( this.eventNamespace )
+			.removeData( this.widgetFullName );
+		this.widget()
+			.off( this.eventNamespace )
+			.removeAttr( "aria-disabled" );
+
+		// Clean up events and states
+		this.bindings.off( this.eventNamespace );
+	},
+
+	_destroy: $.noop,
+
+	widget: function() {
+		return this.element;
+	},
+
+	option: function( key, value ) {
+		var options = key;
+		var parts;
+		var curOption;
+		var i;
+
+		if ( arguments.length === 0 ) {
+
+			// Don't return a reference to the internal hash
+			return $.widget.extend( {}, this.options );
+		}
+
+		if ( typeof key === "string" ) {
+
+			// Handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
+			options = {};
+			parts = key.split( "." );
+			key = parts.shift();
+			if ( parts.length ) {
+				curOption = options[ key ] = $.widget.extend( {}, this.options[ key ] );
+				for ( i = 0; i < parts.length - 1; i++ ) {
+					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
+					curOption = curOption[ parts[ i ] ];
+				}
+				key = parts.pop();
+				if ( arguments.length === 1 ) {
+					return curOption[ key ] === undefined ? null : curOption[ key ];
+				}
+				curOption[ key ] = value;
+			} else {
+				if ( arguments.length === 1 ) {
+					return this.options[ key ] === undefined ? null : this.options[ key ];
+				}
+				options[ key ] = value;
+			}
+		}
+
+		this._setOptions( options );
+
+		return this;
+	},
+
+	_setOptions: function( options ) {
+		var key;
+
+		for ( key in options ) {
+			this._setOption( key, options[ key ] );
+		}
+
+		return this;
+	},
+
+	_setOption: function( key, value ) {
+		if ( key === "classes" ) {
+			this._setOptionClasses( value );
+		}
+
+		this.options[ key ] = value;
+
+		if ( key === "disabled" ) {
+			this._setOptionDisabled( value );
+		}
+
+		return this;
+	},
+
+	_setOptionClasses: function( value ) {
+		var classKey, elements, currentElements;
+
+		for ( classKey in value ) {
+			currentElements = this.classesElementLookup[ classKey ];
+			if ( value[ classKey ] === this.options.classes[ classKey ] ||
+					!currentElements ||
+					!currentElements.length ) {
+				continue;
+			}
+
+			// We are doing this to create a new jQuery object because the _removeClass() call
+			// on the next line is going to destroy the reference to the current elements being
+			// tracked. We need to save a copy of this collection so that we can add the new classes
+			// below.
+			elements = $( currentElements.get() );
+			this._removeClass( currentElements, classKey );
+
+			// We don't use _addClass() here, because that uses this.options.classes
+			// for generating the string of classes. We want to use the value passed in from
+			// _setOption(), this is the new value of the classes option which was passed to
+			// _setOption(). We pass this value directly to _classes().
+			elements.addClass( this._classes( {
+				element: elements,
+				keys: classKey,
+				classes: value,
+				add: true
+			} ) );
+		}
+	},
+
+	_setOptionDisabled: function( value ) {
+		this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
+
+		// If the widget is becoming disabled, then nothing is interactive
+		if ( value ) {
+			this._removeClass( this.hoverable, null, "ui-state-hover" );
+			this._removeClass( this.focusable, null, "ui-state-focus" );
+		}
+	},
+
+	enable: function() {
+		return this._setOptions( { disabled: false } );
+	},
+
+	disable: function() {
+		return this._setOptions( { disabled: true } );
+	},
+
+	_classes: function( options ) {
+		var full = [];
+		var that = this;
+
+		options = $.extend( {
+			element: this.element,
+			classes: this.options.classes || {}
+		}, options );
+
+		function processClassString( classes, checkOption ) {
+			var current, i;
+			for ( i = 0; i < classes.length; i++ ) {
+				current = that.classesElementLookup[ classes[ i ] ] || $();
+				if ( options.add ) {
+					current = $( $.unique( current.get().concat( options.element.get() ) ) );
+				} else {
+					current = $( current.not( options.element ).get() );
+				}
+				that.classesElementLookup[ classes[ i ] ] = current;
+				full.push( classes[ i ] );
+				if ( checkOption && options.classes[ classes[ i ] ] ) {
+					full.push( options.classes[ classes[ i ] ] );
+				}
+			}
+		}
+
+		this._on( options.element, {
+			"remove": "_untrackClassesElement"
+		} );
+
+		if ( options.keys ) {
+			processClassString( options.keys.match( /\S+/g ) || [], true );
+		}
+		if ( options.extra ) {
+			processClassString( options.extra.match( /\S+/g ) || [] );
+		}
+
+		return full.join( " " );
+	},
+
+	_untrackClassesElement: function( event ) {
+		var that = this;
+		$.each( that.classesElementLookup, function( key, value ) {
+			if ( $.inArray( event.target, value ) !== -1 ) {
+				that.classesElementLookup[ key ] = $( value.not( event.target ).get() );
+			}
+		} );
+	},
+
+	_removeClass: function( element, keys, extra ) {
+		return this._toggleClass( element, keys, extra, false );
+	},
+
+	_addClass: function( element, keys, extra ) {
+		return this._toggleClass( element, keys, extra, true );
+	},
+
+	_toggleClass: function( element, keys, extra, add ) {
+		add = ( typeof add === "boolean" ) ? add : extra;
+		var shift = ( typeof element === "string" || element === null ),
+			options = {
+				extra: shift ? keys : extra,
+				keys: shift ? element : keys,
+				element: shift ? this.element : element,
+				add: add
+			};
+		options.element.toggleClass( this._classes( options ), add );
+		return this;
+	},
+
+	_on: function( suppressDisabledCheck, element, handlers ) {
+		var delegateElement;
+		var instance = this;
+
+		// No suppressDisabledCheck flag, shuffle arguments
+		if ( typeof suppressDisabledCheck !== "boolean" ) {
+			handlers = element;
+			element = suppressDisabledCheck;
+			suppressDisabledCheck = false;
+		}
+
+		// No element argument, shuffle and use this.element
+		if ( !handlers ) {
+			handlers = element;
+			element = this.element;
+			delegateElement = this.widget();
+		} else {
+			element = delegateElement = $( element );
+			this.bindings = this.bindings.add( element );
+		}
+
+		$.each( handlers, function( event, handler ) {
+			function handlerProxy() {
+
+				// Allow widgets to customize the disabled handling
+				// - disabled as an array instead of boolean
+				// - disabled class as method for disabling individual parts
+				if ( !suppressDisabledCheck &&
+						( instance.options.disabled === true ||
+						$( this ).hasClass( "ui-state-disabled" ) ) ) {
+					return;
+				}
+				return ( typeof handler === "string" ? instance[ handler ] : handler )
+					.apply( instance, arguments );
+			}
+
+			// Copy the guid so direct unbinding works
+			if ( typeof handler !== "string" ) {
+				handlerProxy.guid = handler.guid =
+					handler.guid || handlerProxy.guid || $.guid++;
+			}
+
+			var match = event.match( /^([\w:-]*)\s*(.*)$/ );
+			var eventName = match[ 1 ] + instance.eventNamespace;
+			var selector = match[ 2 ];
+
+			if ( selector ) {
+				delegateElement.on( eventName, selector, handlerProxy );
+			} else {
+				element.on( eventName, handlerProxy );
+			}
+		} );
+	},
+
+	_off: function( element, eventName ) {
+		eventName = ( eventName || "" ).split( " " ).join( this.eventNamespace + " " ) +
+			this.eventNamespace;
+		element.off( eventName ).off( eventName );
+
+		// Clear the stack to avoid memory leaks (#10056)
+		this.bindings = $( this.bindings.not( element ).get() );
+		this.focusable = $( this.focusable.not( element ).get() );
+		this.hoverable = $( this.hoverable.not( element ).get() );
+	},
+
+	_delay: function( handler, delay ) {
+		function handlerProxy() {
+			return ( typeof handler === "string" ? instance[ handler ] : handler )
+				.apply( instance, arguments );
+		}
+		var instance = this;
+		return setTimeout( handlerProxy, delay || 0 );
+	},
+
+	_hoverable: function( element ) {
+		this.hoverable = this.hoverable.add( element );
+		this._on( element, {
+			mouseenter: function( event ) {
+				this._addClass( $( event.currentTarget ), null, "ui-state-hover" );
+			},
+			mouseleave: function( event ) {
+				this._removeClass( $( event.currentTarget ), null, "ui-state-hover" );
+			}
+		} );
+	},
+
+	_focusable: function( element ) {
+		this.focusable = this.focusable.add( element );
+		this._on( element, {
+			focusin: function( event ) {
+				this._addClass( $( event.currentTarget ), null, "ui-state-focus" );
+			},
+			focusout: function( event ) {
+				this._removeClass( $( event.currentTarget ), null, "ui-state-focus" );
+			}
+		} );
+	},
+
+	_trigger: function( type, event, data ) {
+		var prop, orig;
+		var callback = this.options[ type ];
+
+		data = data || {};
+		event = $.Event( event );
+		event.type = ( type === this.widgetEventPrefix ?
+			type :
+			this.widgetEventPrefix + type ).toLowerCase();
+
+		// The original event may come from any element
+		// so we need to reset the target on the new event
+		event.target = this.element[ 0 ];
+
+		// Copy original event properties over to the new event
+		orig = event.originalEvent;
+		if ( orig ) {
+			for ( prop in orig ) {
+				if ( !( prop in event ) ) {
+					event[ prop ] = orig[ prop ];
+				}
+			}
+		}
+
+		this.element.trigger( event, data );
+		return !( $.isFunction( callback ) &&
+			callback.apply( this.element[ 0 ], [ event ].concat( data ) ) === false ||
+			event.isDefaultPrevented() );
+	}
+};
+
+$.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
+	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
+		if ( typeof options === "string" ) {
+			options = { effect: options };
+		}
+
+		var hasOptions;
+		var effectName = !options ?
+			method :
+			options === true || typeof options === "number" ?
+				defaultEffect :
+				options.effect || defaultEffect;
+
+		options = options || {};
+		if ( typeof options === "number" ) {
+			options = { duration: options };
+		}
+
+		hasOptions = !$.isEmptyObject( options );
+		options.complete = callback;
+
+		if ( options.delay ) {
+			element.delay( options.delay );
+		}
+
+		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
+			element[ method ]( options );
+		} else if ( effectName !== method && element[ effectName ] ) {
+			element[ effectName ]( options.duration, options.easing, callback );
+		} else {
+			element.queue( function( next ) {
+				$( this )[ method ]();
+				if ( callback ) {
+					callback.call( element[ 0 ] );
+				}
+				next();
+			} );
+		}
+	};
+} );
+
+return $.widget;
+
+} ) );
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const notification = __webpack_require__ (2)
+const common = __webpack_require__ (3)
+const global = __webpack_require__ (7)
+const requireAll = ( r ) => { r.keys ().forEach ( r ) }
+
+requireAll ( __webpack_require__(12) )
+requireAll ( __webpack_require__(14) )
+requireAll ( __webpack_require__(21) )
+requireAll ( __webpack_require__(33) )
+requireAll ( __webpack_require__(46) )
+requireAll ( __webpack_require__(50) )
+requireAll ( __webpack_require__(65) )
+requireAll ( __webpack_require__(67) )
+requireAll ( __webpack_require__(79) )
+
+$(window).on ( "load", function () {
+
+	// Wrapper on all AJAX calls (detect session expiration)
+	var oldAjax = $.ajax
+	$.ajax = function () {
+		var successCallback = arguments [ 0 ].success
+		arguments [ 0 ].success = function ( response, status, xhr ) {
+			if ( ( xhr.getResponseHeader ("content-type") || "" ).indexOf ("html") >= 0 ) {
+				$(".cloudflare-dashboard").addClass ("logged-off")
+				notification.showMessages ({
+					errors: [
+						{
+							code: 42,
+							message: "It appears that you are no longer logged in. Please refresh page and try again."
+						}
+					]
+				})
+			}
+			else {
+				successCallback.apply ( this, arguments )
+			}
+		}
+		oldAjax.apply ( null, arguments )
+	}
+
+	if ( $(`.cloudflare-dashboard .tabs [data-tab='${window.localStorage.getItem ("cloudflare.tab") || "overview"}']`).length > 0 ) {
+		$(`.cloudflare-dashboard .tabs [data-tab='${window.localStorage.getItem ("cloudflare.tab") || "overview"}']`).trigger ("click")
+	}
+	else {
+		$(`.cloudflare-dashboard .tabs [data-tab='overview']`).trigger ("click")
+	}
+
+	$(".proxied").each ( ( index ) => {
+		$(this).data ( "value", /proxied_on/.test ( $(this).attr ("src") ) )
+	})
+
+	const triggerEvent = function () {
+		var section = $(this).closest ("section")
+		var event = {
+			"target": {
+				"tab": $( section ).data ("tab-name"),
+				"section": $( section ).data ("section-name"),
+				"action": $(this).data ("target")
+			},
+			"form": {
+				"endpoint": $(this).closest ("section").data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1" + $(this).data ("target") + "$3" ),
+				"key": $(this).closest ("section").data ("form-key")
+			},
+			"section": section,
+			"trigger": $(this)
+		}
+		event.target.name = event.target.tab + "." + event.target.section + "." + event.target.action
+		event.target.name = "cloudflare." + event.target.name
+		$.event.trigger ( event.target.name, event )
+		// console.log ( "Triggered: " + event.target.name )
+	}
+
+	$(document).on ( "click", ".trigger", triggerEvent )
+	$(document).on ( "change", ".trigger-select", triggerEvent )
+	$(document).on ( "change", ".trigger-radio", triggerEvent )
+	$(document).on ( "keyup", ".trigger-change", triggerEvent )
+
+})
+
+$(document).on ( "click", "[data-tab]", function () {
+	var section = $(this).closest ("section")
+	if ( $(this).hasClass ("active") && !$(section).hasClass ("at_least_one") ) {
+		$(section).find ("[data-tab-content]").removeClass ("active")
+		$(section).find ("[data-tab]").removeClass ("active")
+	}
+	else {
+		$(section).find ("[data-tab-content]").removeClass ("active")
+		$(section).find ("[data-tab]").removeClass ("active")
+		$(this).addClass ("active")
+		$(section).find ("[data-tab-content='" + $(this).data ("tab") + "']").addClass ("active")
+	}
+})
+
+$(document).on ( "change", ".dynamic-trigger", function () {
+	const target = $(this).val ()
+	$(this).parent ().find ("div[data-dynamic-wrapper]").removeClass ("active")
+	$(this).parent ().find ("div[data-dynamic-wrapper='" + target + "']").addClass ("active")
+	$(this).parent ().find ("[data-dynamic-show]").each ( function () {
+		if ( $(this).data ("dynamic-show").includes ( target.toLowerCase () ) ) {
+			$(this).show ()
+		}
+		else {
+			$(this).hide ()
+		}
+	})
+})
+
+$(document).on ( "click", ".dynamic-trigger", function () {
+	const target = $(this).data ("tab")
+	if ( target ) {
+		$(this).parent ().find ("div[data-dynamic-wrapper]").removeClass ("active")
+		$(this).parent ().find ("div[data-dynamic-wrapper='" + target + "']").addClass ("active")
+		$(this).parent ().find ("[data-dynamic-show]").each ( function () {
+			if ( $(this).data ("dynamic-show").includes ( target.toLowerCase () ) ) {
+				$(this).show ()
+			}
+			else {
+				$(this).hide ()
+			}
+		})
+	}
+})
+
+$(document).on ( "click", ".proxied", function () {
+	let source = $(this).attr ("src")
+	if ( /proxied_on/.test ( source ) ) {
+		source = source.replace ( /proxied_on/, "proxied_off" )
+		$(this).data ( "value", false )
+	}
+	else {
+		source = source.replace ( /proxied_off/, "proxied_on" )
+		$(this).data ( "value", true )
+	}
+	$(this).attr ( "src", source )
+	if ( $(this).hasClass ("change") ) $(this).trigger ("change")
+})
+
+$(document).on ( "click", ".cloudflare-dashboard ul.tabs li", function () {
+	let target = $(this).data ("tab")
+	$(".cloudflare-dashboard .content").removeClass ("selected")
+	$(".cloudflare-dashboard .tabs li").removeClass ("selected")
+	$(`.cloudflare-dashboard .content[data-target='${target}']`).addClass ("selected")
+	$(this).addClass ("selected")
+	$(`.initialize.${target}`).addClass ("loading")
+	window.localStorage.setItem ( "cloudflare.tab", target )
+	common.loadSections (`.${target}`)
+})
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./status.js": 13
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 12;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const notification = __webpack_require__ (2)
+
+$(document).on ( "cloudflare.overview.status.initialize", function ( event, data ) {
+	if ( data.response && data.response.result && data.response.result.paused ) {
+		$(data.section).find (".section_title").text ("Resume")
+		$(data.section).find (".wrapper_left > p").text ("Cloudflare has been temporarily deactivated for your domain. Cloudflare will continue to resolve DNS for your website, but all requests will go directly to your origin which means you will not receive the performance and security benefits. All of your settings have been saved.")
+		$(data.section).find (".trigger").val ("Resume")
+		$(data.section).find (".trigger").data ( "target", "resume" )
+	}
+	else {
+		$(data.section).find (".section_title").text ("Pause Website")
+		$(data.section).find (".wrapper_left > p").text ("Pause will temporarily deactivate Cloudflare for your domain. Cloudflare will continue to resolve DNS for your website, but all requests will go directly to your origin which means you will not receive performance and security benefits. All of your settings will be saved.")
+		$(data.section).find (".trigger").val ("Pause")
+		$(data.section).find (".trigger").data ( "target", "pause" )
+	}
+})
+
+$(document).on ( "cloudflare.overview.status.pause", function ( event, data ) {
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key },
+		success: function ( response, status, xhr ) {
+			// if ( ( xhr.getResponseHeader ("content-type") || "" ).indexOf ("json") < 0 ) {
+			// 	alert ("Please log back in")
+			// }
+			$(data.section).removeClass ("loading")
+			notification.showMessages ( response )
+			if ( response.result && response.result.paused ) {
+				$(data.section).find (".section_title").text ("Resume")
+				$(data.section).find (".wrapper_left > p").text ("Cloudflare has been temporarily deactivated for your domain. Cloudflare will continue to resolve DNS for your website, but all requests will go directly to your origin which means you will not receive the performance and security benefits. All of your settings have been saved.")
+				$(data.section).find (".trigger").val ("Resume")
+				$(data.section).find (".trigger").data ( "target", "resume" )
+			}
+		}
+	})
+})
+
+$(document).on ( "cloudflare.overview.status.resume", function ( event, data ) {
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key },
+		success: function ( response ) {
+			$(data.section).removeClass ("loading")
+			notification.showMessages ( response )
+			if ( response.result && !response.result.paused ) {
+				$(data.section).find (".section_title").text ("Pause Website")
+				$(data.section).find (".wrapper_left > p").text ("Pause will temporarily deactivate Cloudflare for your domain. Cloudflare will continue to resolve DNS for your website, but all requests will go directly to your origin which means you will not receive performance and security benefits. All of your settings will be saved.")
+				$(data.section).find (".trigger").val ("Pause")
+				$(data.section).find (".trigger").data ( "target", "pause" )
+			}
+		}
+	})
+})
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./always_online.js": 15,
+	"./browser_cache_expiration.js": 16,
+	"./caching_level.js": 17,
+	"./development_mode.js": 18,
+	"./enable_query_string_sort.js": 19,
+	"./purge_cache.js": 20
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 14;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.caching.always_online.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.caching.always_online.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const selectElement = __webpack_require__ (4)
+
+$(document).on ( "cloudflare.caching.browser_cache_expiration.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.caching.browser_cache_expiration.update", selectElement.update )
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const notification = __webpack_require__ (2)
+const common = __webpack_require__ (3)
+
+$(document).on ( "cloudflare.caching.caching_level.initialize", ( event, data ) => {
+	var label = data.response.result.value
+	$(data.section).find ("input[name='value'][value='" + label + "']").prop ( "checked", true )
+})
+
+$(document).on ( "cloudflare.caching.caching_level.update", ( event, data ) => {
+	var newValue = $(data.section).find ("input[name='value']:checked").val ()
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key, "value": newValue },
+		success: ( response ) => {
+			notification.showMessages ( response )
+			common.loadSections (".caching_level")
+		}
+	})
+})
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.caching.development_mode.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.caching.development_mode.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.caching.enable_query_string_sort.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.caching.enable_query_string_sort.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const modal = __webpack_require__ (5)
+const notification = __webpack_require__ (2)
+
+$(document).on ( "cloudflare.caching.purge_cache.individual", ( event, data ) => {
+	let textarea = modal
+		.createTextarea ( "files", "http://example.com/images/example.jpg" )
+		.css ({
+			"width": "calc(100% - 45px)",
+			"margin": "auto 22.5px",
+			"fontSize": "1.2em"
+		})
+	let prompt = new modal.Modal ( 800 )
+	prompt.addTitle ( "Purge Individual Files", "You can purge up to 30 files at a time." )
+	prompt.addElement ( $("<p>")
+		.append ( $("<strong>").text ("Note: ") )
+		.append ("Wildcards are not supported with single file purge at this time. You will need to specify the full path to the file.")
+	)
+	prompt.addElement ( $("<p>").text ("Separate tags(s) with commas, or list one per line") )
+	prompt.addElement ( textarea )
+	prompt.addButton ({ label: "Purge Individual Files", callback: ( components ) => {
+		$(prompt.components.modal).addClass ("loading")
+		$(data.section).addClass ("loading")
+		let files = $(textarea).val ()
+			.split (/\n|,/)
+			.map ( i => i.trim () )
+			.filter ( i => i !== "" )
+		$.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: { "form_key": data.form.key, "files": files },
+			success: ( response ) => {
+				if ( response.success ) {
+					prompt.close ()
+				}
+				else {
+					$(prompt.components.modal).removeClass ("loading")
+				}
+				notification.showMessages ( response )
+				$(data.section).removeClass ("loading")
+			}
+		})
+	}})
+	prompt.show ()
+})
+
+$(document).on ( "cloudflare.caching.purge_cache.everything", ( event, data ) => {
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key },
+		success: ( response ) => {
+			notification.showMessages ( response )
+			$(data.section).removeClass ("loading")
+		}
+	})
+})
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./always_use_https.js": 22,
+	"./authenticated_origin_pulls.js": 23,
+	"./automatic_https_rewrites.js": 24,
+	"./certificate_transparency_monitoring.js": 25,
+	"./disable_universal_ssl.js": 26,
+	"./http_strict_transport_security.js": 27,
+	"./minimum_tls_version.js": 28,
+	"./opportunistic_encryption.js": 29,
+	"./ssl.js": 30,
+	"./ssl_tls_recommender.js": 31,
+	"./tls_13.js": 32
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 21;
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.ssl_tls.always_use_https.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.always_use_https.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.ssl_tls.authenticated_origin_pulls.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.authenticated_origin_pulls.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.ssl_tls.automatic_https_rewrites.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.automatic_https_rewrites.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.ssl_tls.certificate_transparency_monitoring.initialize", switchElement.initializeCustom ( "enabled", true ) )
+$(document).on ( "cloudflare.ssl_tls.certificate_transparency_monitoring.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const notification = __webpack_require__ (2)
+const modal = __webpack_require__ (5)
+const common = __webpack_require__ (3)
+
+$(document).on ( "cloudflare.ssl_tls.disable_universal_ssl.initialize", function ( event, data ) {
+	if ( !data.response.result.enabled ) {
+		$(data.section).find ("[name='button']").val ("Enable Universal SSL")
+		$(data.section).find ("[name='button']").data ( "action", "enable" )
+	}
+	else {
+		$(data.section).find ("[name='button']").val ("Disable Universal SSL")
+		$(data.section).find ("[name='button']").data ( "action", "disable" )
+	}
+})
+
+function triggerChange ( data ) {
+	let value = $(data.trigger).data ("action") == "enable"
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key, "state": value },
+		success: function ( response ) {
+			notification.showMessages ( response )
+			$("section.cloudflare.ssl_tls.ssl").addClass ("loading")
+			common.loadSections (".ssl_tls.disable_universal_ssl")
+		}
+	})
+}
+
+$(document).on ( "cloudflare.ssl_tls.disable_universal_ssl.toggle", function ( event, data ) {
+	if ( $(data.trigger).data ("action") == "disable" ) {
+		let agreement = new modal.Modal ( 800 )
+		agreement.addTitle ("Acknowledgement")
+		agreement.addElement ( $("<p>").text ("By disabling Universal SSL, you understand that the following Cloudflare settings and preferences will result in visitors being unable to visit your domain unless you have uploaded a custom certificate or purchased a dedicated certificate.") )
+		agreement.addElement ( $("<ul>")
+			.append ( $("<li>").text ("HSTS") )
+			.append ( $("<li>").text ("Always Use HTTPS") )
+			.append ( $("<li>").text ("Opportunistic Encryption") )
+			.append ( $("<li>").text ("Any Page Rules redirecting traffic to HTTPS") )
+		)
+		agreement.addElement ( $("<p>").text ("Similarly, any HTTP redirect to HTTPS at the origin while the Cloudflare proxy is enabled will result in users being unable to visit your site without a valid certificate at Cloudflare’s edge.") )
+		agreement.addElement ( $("<p>").text ("If you do not have a valid custom or dedicated certificate at Cloudflare’s edge and are unsure if any of the above Cloudflare settings are enabled, or if any HTTP redirects exist at your origin, we advise leaving Universal SSL enabled for your domain.") )
+		agreement.addButton ({ label: "Cancel", class: "gray", callback: agreement.close })
+		agreement.addButton ({ label: "I Understand", class: "red", callback: ( components ) => {
+			agreement.close ()
+			triggerChange ( data )
+		}})
+		agreement.show ()
+	}
+	else {
+		triggerChange ( data )
+	}
+})
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const common = __webpack_require__ (3)
+const modal = __webpack_require__ (5)
+const notification = __webpack_require__ (2)
+
+function maxAgeLabel ( value ) {
+	if ( value >= 31536000 ) return "12 months"
+	if ( value >= 15552000 ) return "6 months (recommended)"
+	if ( value >= 12960000 ) return "5 months"
+	if ( value >= 10368000 ) return "4 months"
+	if ( value >= 7776000 ) return "3 months"
+	if ( value >= 5184000 ) return "2 months"
+	if ( value >= 2592000 ) return "1 month"
+	return "0 (Disable)"
+}
+
+$(document).on ( "cloudflare.ssl_tls.http_strict_transport_security.initialize", function ( event, data ) {
+	let options = data.response.result.value.strict_transport_security
+	$(data.section).data ( "options", options )
+	if ( options.enabled ) {
+		$(data.section).find ("[name='button']").val ("Change HSTS Settings")
+		$(data.section).find (".option_enabled").show ().find ("span").text ( options.enabled ? "On" : "Off" )
+		$(data.section).find (".option_max_age").show ().find ("span").text ( maxAgeLabel ( options.max_age ) )
+		$(data.section).find (".option_include_sub_domains").show ().find ("span").text ( options.include_subdomains ? "On" : "Off" )
+		$(data.section).find (".option_preload").show ().find ("span").text ( options.preload ? "On" : "Off" )
+		$(data.section).find (".option_no_sniff").show ().find ("span").text ( options.nosniff ? "On" : "Off" )
+	}
+	else {
+		$(data.section).find ("[name='button']").val ("Enable HSTS")
+		$(data.section).find (".option_enabled").hide ()
+		$(data.section).find (".option_max_age").hide ()
+		$(data.section).find (".option_include_sub_domains").hide ()
+		$(data.section).find (".option_preload").hide ()
+		$(data.section).find (".option_no_sniff").hide ()
+	}
+})
+
+function createAcknowledgement ( options, callback ) {
+	let acknowledgement = new modal.Modal ( 600 )
+	acknowledgement.addTitle ("Acknowledgement")
+	acknowledgement.addElement ( $("<p>").append ("HTTP Strict Transport Security (HSTS) can substantially improve the security of your website. However, there are important considerations to keep in mind when enabling HSTS:") )
+	acknowledgement.addElement ( $("<p>").append ( $("<strong>").text ("HTTPS (SSL) must be enabled in order to use HSTS.") ) )
+	acknowledgement.addElement ( $("<ul>")
+		.append ( $("<li>").text ("If you turn on HSTS and do not have HTTPS for your website, browsers will not accept the HSTS setting.") )
+		.append ( $("<li>").text ("If you have HSTS enabled and leave Cloudflare, you need to continue to support HTTPS through a new service provider otherwise your site will become inaccessible to visitors until you support HTTPS again.") )
+		.append ( $("<li>").text ("If you turn off Cloudflare’s HTTPS while HSTS is enabled, and you don’t have a valid SSL certificate on your origin server, your website will become inaccessible to visitors.") )
+	)
+	acknowledgement.addElement ( $("<p>")
+		.append ( $("<strong>").text ("Note") )
+		.append (": Disabling Cloudflare’s HTTP can be done in several ways: Grey clouding a subdomain in your DNS records, “Pausing” the Cloudflare service, or having a misconfigured custom SSL certificate through your Cloudflare dashboard (e.g., invalid SSL certificates, expired certificates, or mismatched host names).")
+	)
+	acknowledgement.addElement ( $("<p>")
+		.append ( $("<strong>").text ("If you need to disable HTTPS on your domain") )
+		.append (", you must first disable HSTS in your Cloudflare dashboard and wait for the max-age to lapse to guarantee that every browser is aware of this change before you can disable HTTPS. The average max-age is six months (you can set the max-age in the next step). ")
+		.append ( $("<strong>").text ("If you remove HTTPS before disabling HSTS your website will become inaccessible to visitors for up to the max-age or until you support HTTPS again.  ") )
+		.append ("Because disabling HTTPS on an HSTS enabled website can have these consequences, we strongly suggest that you have a committed HTTPS service in place before enabling this feature.")
+	)
+	acknowledgement.addElement ( $("<a>").text ("More information").prop ( "target", "_blank" ).prop ( "href", "https://blog.cloudflare.com/enforce-web-policy-with-hypertext-strict-transport-security-hsts/" ) )
+	acknowledgement.addButton ({ label: "Cancel", class: "gray", callback: acknowledgement.close })
+	acknowledgement.addButton ({ label: "I Understand", class: "red", callback: ( components ) => {
+		acknowledgement.close ()
+		createConfigure ( options, callback )
+	}})
+	acknowledgement.show ()
+}
+
+function createConfigure ( options, callback ) {
+	let configure = new modal.Modal ( 600 )
+	let enabled = modal.createSwitch ( "enabled", options.enabled )
+	let maxAge = modal.createSelect ( "max-age", [
+		{ value: "0", label: maxAgeLabel ( 0 ) },
+		{ value: "2592000", label: maxAgeLabel ( 2592000 ) },
+		{ value: "5184000", label: maxAgeLabel ( 5184000 ) },
+		{ value: "7776000", label: maxAgeLabel ( 7776000 ) },
+		{ value: "10368000", label: maxAgeLabel ( 10368000 ) },
+		{ value: "12960000", label: maxAgeLabel ( 12960000 ) },
+		{ value: "15552000", label: maxAgeLabel ( 15552000 ) },
+		{ value: "31536000", label: maxAgeLabel ( 31536000 ) },
+	]).val ( options.max_age )
+	let includeSubDomains = modal.createSwitch ( "include_subdomains", options.include_subdomains )
+	let preload = modal.createSwitch ( "preload", options.preload )
+	let noSniff = modal.createSwitch ( "nosniff", options.nosniff )
+	configure.addTitle ("Configure")
+	configure.addElement ( $(`<p style="font-size: 15.5px;" >`)
+		.append ( $("<strong>").text ("Caution") )
+		.append (": If misconfigured, HTTP Strict Transport Security (HSTS) can make your website inaccessible to users for an extended period of time.")
+	)
+	configure.addElement ( $("<table class='configure' >")
+		.append ( $("<tr>")
+			.append ( $("<td>")
+				.append ( $("<strong>").text ("Enable HSTS (Strict-Transport-Security)") )
+				.append ("Serve HSTS headers with all HTTPS requests")
+			)
+			.append ( $("<td>").append ( enabled ) )
+		)
+		.append ( $("<tr>")
+			.append ( $("<td>")
+				.append ( $("<strong>").text ("Max Age Header (max-age)") )
+				.append ("Specify the duration HSTS headers are cached in browsers")
+			)
+			.append ( $("<td>").append ( maxAge ) )
+		)
+		.append ( $("<tr>")
+			.append ( $("<td>")
+				.append ( $("<strong>").text ("Apply HSTS policy to subdomains (includeSubDomains)") )
+				.append ("Every domain below this will inherit the same HSTS headers")
+				.append ("<b>Caution</b>: If any of your subdomains do not support HTTPS, they will become inaccessible.")
+			)
+			.append ( $("<td>").append ( includeSubDomains ) )
+		)
+		.append ( $("<tr>")
+			.append ( $("<td>")
+				.append ( $("<strong>").text ("Preload") )
+				.append ("Permit browsers to preload HSTS configuration automatically")
+				.append ("<b>Caution</b>: Preload can make a website without HTTPS support completely inaccessible.")
+			)
+			.append ( $("<td>").append ( preload ) )
+		)
+		.append ( $("<tr>")
+			.append ( $("<td>")
+				.append ( $("<strong>").text ("No-Sniff Header") )
+				.append ("Send the “X-Content-Type-Options: nosniff” header to prevent Internet Explorer and Google Chrome from MIME-sniffing away from the declared Content-Type.")
+			)
+			.append ( $("<td>").append ( noSniff ) )
+		)
+	)
+	configure.addButton ({ label: "Previous", class: "gray", callback: () => {
+		configure.close ()
+		createAcknowledgement ( options, callback )
+	}})
+	configure.addButton ({ label: "Cancel", class: "gray", callback: configure.close })
+	configure.addButton ({ label: "Save", callback: ( components ) => {
+		callback ( configure, {
+			enabled: $(enabled).find ("[type='checkbox']:checked").length > 0,
+	        max_age: maxAge.val (),
+	        include_subdomains: $(includeSubDomains).find ("[type='checkbox']:checked").length > 0,
+	        preload: $(preload).find ("[type='checkbox']:checked").length > 0,
+	        nosniff: $(noSniff).find ("[type='checkbox']:checked").length > 0
+		})
+	}})
+	configure.show ()
+}
+
+$(document).on ( "cloudflare.ssl_tls.http_strict_transport_security.update", function ( event, data ) {
+	createAcknowledgement ( $(data.section).data ("options"), ( configure, config ) => {
+		$(data.section).addClass ("loading")
+		$(configure.components.modal).addClass ("loading")
+		$.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: { "form_key": data.form.key, "value": config },
+			success: function ( response ) {
+				notification.showMessages ( response )
+				configure.close ()
+				common.loadSections (".ssl_tls.http_strict_transport_security")
+			}
+		})
+	})
+})
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const selectElement = __webpack_require__ (4)
+
+$(document).on ( "cloudflare.ssl_tls.minimum_tls_version.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.minimum_tls_version.update", selectElement.update )
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.ssl_tls.opportunistic_encryption.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.opportunistic_encryption.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const selectElement = __webpack_require__ (4)
+
+$(document).on ( "cloudflare.ssl_tls.ssl.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.ssl.update", selectElement.update )
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.ssl_tls.ssl_tls_recommender.initialize", switchElement.initializeCustom ( "enabled", true ) )
+$(document).on ( "cloudflare.ssl_tls.ssl_tls_recommender.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const selectElement = __webpack_require__ (4)
+
+$(document).on ( "cloudflare.ssl_tls.tls_13.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.ssl_tls.tls_13.update", selectElement.update )
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./amp_real_url.js": 34,
+	"./auto_minify.js": 35,
+	"./automatic_platform_optimization.js": 36,
+	"./brotli.js": 37,
+	"./enhanced_http2_prioritization.js": 38,
+	"./image_resizing.js": 39,
+	"./mirage.js": 40,
+	"./mobile_redirect.js": 41,
+	"./polish.js": 42,
+	"./prefetch_urls.js": 43,
+	"./rocket_loader.js": 44,
+	"./tcp_turbo.js": 45
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 33;
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.amp_real_url.initialize", switchElement.initializeCustom ( "enabled", true ) )
+$(document).on ( "cloudflare.speed.amp_real_url.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const notification = __webpack_require__ (2)
+const common = __webpack_require__ (3)
+
+$(document).on ( "cloudflare.speed.auto_minify.initialize", ( event, data ) => {
+	var jsState = data.response.result.value.js === "on"
+	var cssState = data.response.result.value.css === "on"
+	var htmlState = data.response.result.value.html === "on"
+	$(data.section).find ("input[value='javascript']").prop ( "checked", jsState )
+	$(data.section).find ("input[value='css']").prop ( "checked", cssState )
+	$(data.section).find ("input[value='html']").prop ( "checked", htmlState )
+})
+
+$(document).on ( "cloudflare.speed.auto_minify.change", ( event, data ) => {
+	var jsVal = $(data.section).find ("input[value='javascript']").prop ("checked")
+	var cssVal = $(data.section).find ("input[value='css']").prop ("checked")
+	var htmlVal = $(data.section).find ("input[value='html']").prop ("checked")
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key, "js": jsVal, "css": cssVal, "html": htmlVal },
+		success: ( response ) => {
+			notification.showMessages ( response )
+			common.loadSections (".auto_minify")
+		}
+	})
+})
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.automatic_platform_optimization.initialize", switchElement.initializeCustom ( [ "value", "enabled" ], true ) )
+$(document).on ( "cloudflare.speed.automatic_platform_optimization.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.brotli.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.speed.brotli.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.enhanced_http2_prioritization.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.speed.enhanced_http2_prioritization.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.image_resizing.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.speed.image_resizing.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.mirage.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.speed.mirage.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const common = __webpack_require__ (3)
+const notification = __webpack_require__ (2)
+
+$(document).on ( "cloudflare.speed.mobile_redirect.initialize", ( event, data ) => {
+	var domains = data.response.result.domains
+	var setting = data.response.result.value
+	$(data.section).find ("[name='mobile_subdomain']").html ("")
+	for ( let domain of domains ) {
+		$(data.section).find ("[name='mobile_subdomain']").append (
+			$("<option>").prop ( "value", domain.value ).text ( domain.label )
+		)
+	}
+	$(data.section).find ("[name='mobile_subdomain']").val ( setting.mobile_subdomain )
+	$(data.section).find ("[name='strip_uri']").val ( setting.strip_uri + "" )
+	$(data.section).find ("[name='status']").prop ( "checked", setting.status === "on" )
+})
+
+$(document).on ( "cloudflare.speed.mobile_redirect.change", ( event, data ) => {
+	let mobileSubdomain = $(data.section).find ("[name='mobile_subdomain']").val ()
+	let stripUri = $(data.section).find ("[name='strip_uri']").val ()
+	let status = $(data.section).find ("[name='status']").prop ("checked")
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: {
+			"form_key": data.form.key,
+			"mobile_subdomain": mobileSubdomain,
+			"status": status ? "on" : "off",
+			"strip_uri": stripUri
+		},
+		success: ( response ) => {
+			notification.showMessages (  response )
+			common.loadSections (".mobile_redirect")
+		}
+	})
+})
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const common = __webpack_require__ (3)
+const notification = __webpack_require__ (2)
+
+$(document).on ( "cloudflare.speed.polish.initialize", ( event, data ) => {
+	var value = data.response.state.result.value
+	var webp = data.response.webp.result.value == "on"
+	$(data.section).find ("[name='value']").val ( value )
+	$(data.section).find ("[name='webp']").prop ( "checked", webp )
+	if ( !data.response.state.result.editable ) {
+		var button = "<a href='https://www.cloudflare.com/plans/' target='_blank' ><input type='button' value='Upgrade to Pro' /></a>"
+		$(data.section).find (".wrapper_right > div").eq ( 0 ).html ( button )
+	}
+})
+
+$(document).on ( "cloudflare.speed.polish.change", ( event, data ) => {
+	let value = $(data.section).find ("[name='value']").val ()
+	let webp = $(data.section).find ("[name='webp']").prop ("checked")
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key, "value": value, "webp": webp },
+		success: ( response ) => {
+			notification.showMessages (  response )
+			common.loadSections (".polish")
+		}
+	})
+})
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.prefetch_urls.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.speed.prefetch_urls.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.speed.rocket_loader.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.speed.rocket_loader.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+
+$(document).on ( "cloudflare.speed.tcp_turbo.initialize", ( event, data ) => {
+	const plan = data.response.result
+	$(data.section).find (".value").text ( plan === "free" ? "Disabled" : "Enabled" )
+})
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./cloudflare_nameservers.js": 47,
+	"./cname_flattening.js": 48,
+	"./dns_records.js": 49
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 46;
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const notification = __webpack_require__ (2)
+
+$(document).on ( "cloudflare.dns.cloudflare_nameservers.initialize", function ( event, data ) {
+	$(data.section).find ("table tr:not(:first)").remove ()
+	data.response.result.map ( entry => {
+		var row = $("<tr>")
+		$( row ).append ( $("<td>")
+			.attr ( "class", "type_cfns" )
+			.text ( "NS" )
+		)
+		$( row ).append ( $("<td>").text ( entry ) )
+		$(data.section).find ("table").append ( row )
+	})
+})
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const selectElement = __webpack_require__ (4)
+
+$(document).on ( "cloudflare.dns.cname_flattening.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.dns.cname_flattening.update", selectElement.update )
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const common = __webpack_require__ (3)
+const notification = __webpack_require__ (2)
+const modal = __webpack_require__ (5)
+const global = __webpack_require__ (7)
+
+function createTtlSelect ( selected = "1" ) {
+	let select = modal.createSelect ( "ttl_value", [
+		{ label: secondsToAppropriate ( 1 ), value: 1 },
+		{ label: secondsToAppropriate ( 120 ), value: 120 },
+		{ label: secondsToAppropriate ( 300 ), value: 300 },
+		{ label: secondsToAppropriate ( 600 ), value: 600 },
+		{ label: secondsToAppropriate ( 900 ), value: 900 },
+		{ label: secondsToAppropriate ( 1800 ), value: 1800 },
+		{ label: secondsToAppropriate ( 3600 ), value: 3600 },
+		{ label: secondsToAppropriate ( 7200 ), value: 7200 },
+		{ label: secondsToAppropriate ( 18000 ), value: 18000 },
+		{ label: secondsToAppropriate ( 43200 ), value: 43200 },
+		{ label: secondsToAppropriate ( 86400 ), value: 86400 }
+	])
+	return select.val ( selected )
+}
+
+function secondsToAppropriate ( seconds ) {
+	if ( seconds == 1 ) return "Automatic"
+	if ( seconds < 60 ) return seconds + " seconds"
+	if ( seconds == 60 ) return "1 minute"
+	if ( seconds < 3600 ) return seconds / 60 + " minutes"
+	if ( seconds == 3600 ) return "1 hour"
+	if ( seconds < 216000 ) return seconds / 3600 + " hours"
+	if ( seconds = 216000 ) return "1 day"
+	return seconds / 216000 + " days"
+}
+
+function filterResults ( term, results ) {
+	let searchTerm = ( term + "" ).toLowerCase ().trim ()
+	return !results ? [] : results.filter ( entry => {
+		return ( entry.name + "" ).toLowerCase ().indexOf ( searchTerm ) > -1 ||
+			   ( entry.content + "" ).toLowerCase ().indexOf ( searchTerm ) > -1
+	})
+}
+
+function sortResults ( section, results ) {
+	let pivot = $(section).find (".sort-asc, .sort-desc")
+	if ( pivot.length > 0 ) {
+		let access = ( obj, path ) => {
+			return path.reduce ( ( o, i ) => o [ i ], obj )
+		}
+		let attribute = $(pivot).data ("sort").split (".")
+		let isAsc = $(pivot).hasClass ("sort-asc") === true
+		results = results.sort ( ( a, b ) => {
+			let aValue = ( access ( a, attribute ) + "").toLowerCase ()
+			let bValue = ( access ( b, attribute ) + "").toLowerCase ()
+			if ( isAsc ) {
+				if ( aValue < bValue ) return -1
+				if ( aValue > bValue ) return 1
+				return 0
+			}
+			else {
+				if ( aValue > bValue ) return -1
+				if ( aValue < bValue ) return 1
+				return 0
+			}
+		})
+	}
+	return results
+}
+
+function populateResult ( section ) {
+	let results = $(section).data ("result")
+	results = filterResults ( $(section).find (".search").val (), results )
+	results = sortResults ( section, results )
+	let table = $(section).find ("table > tbody")
+	$(table).children ().remove ()
+	$(section).data ( "item-count", results.length )
+	let itemCount = $(section).data ("item-count")
+	let page = $(section).data ("page")
+	let pageSize = $(section).data ("page-size")
+	let pageCount = Math.ceil ( itemCount / pageSize )
+	let from = pageSize * ( page - 1 ) + 1
+	if ( itemCount == 0 ) from = 0
+	let to = Math.min ( pageSize * page, itemCount )
+	$(section).find (".pagination_container .pages").html ("")
+	$(section).find (".pagination_container .showing").html (`${from} - ${to} of ${itemCount} records`)
+	let pages = $(section).find (".pagination_container .pages")
+	let createPage = ( number ) => {
+		return $(`<span class="page" >`)
+			.addClass ( number == page ? "" : "trigger" )
+			.addClass ( number == page ? "current" : "" )
+			.data ( "target", "page" )
+			.data ( "page", number )
+			.text ( number )
+	}
+	if ( pageCount > 7 ) {
+		$(pages).append ( createPage ( 1 ) )
+		if ( pageCount > 7 && page > 4 ) {
+			$(pages).append ( $(`<span>`).text ("...") )
+		}
+		let start = Math.max ( 2, page - 3 )
+		let end = Math.min ( pageCount - 1, page + 3 )
+		if ( page - 4 < 0 ) end += Math.abs ( page - 4 )
+		if ( page + 3 > pageCount ) start -= page + 3 - pageCount
+		if ( pageCount <= 7 && page < 4 ) end -= 1
+		if ( pageCount <= 7 && page > 4 ) start += 1
+		for ( let i = start; i <= end; i++ ) {
+			$(pages).append ( createPage ( i ) )
+		}
+		if ( pageCount > 7 && page < pageCount - 3 ) {
+			$(pages).append ( $(`<span>`).text ("...") )
+		}
+		$(pages).append ( createPage ( pageCount ) )
+	}
+	else {
+		for ( let i = 1; i <= pageCount; i++ ) {
+			$(pages).append ( createPage ( i ) )
+		}
+	}
+	if ( page == 1 ) {
+		$(section).find (".previous").addClass ("disabled")
+	}
+	else {
+		$(section).find (".previous").removeClass ("disabled")
+	}
+	if ( page == pageCount ) {
+		$(section).find (".next").addClass ("disabled")
+	}
+	else {
+		$(section).find (".next").removeClass ("disabled")
+	}
+	const imageBase = global.getSkinBaseUrl ()
+	for ( let i = 0; i < results.length; i++ ) {
+		if ( i >= ( page - 1 ) * pageSize && i < page * pageSize ) {
+			let entry = results [ i ]
+			let formattedName = [ "CAA", "SRV" ].indexOf ( entry.type ) > -1 ? entry.name : entry.name.replace ( /\.[^.]+\.[^.]+$/, "" )
+			var formattedContent = entry.content
+			if ( entry.type == "SRV" ) {
+				formattedName = formattedName.replace ( /\.$/, "" ) + "."
+				formattedContent = `SRV ${entry.data.priority} ${entry.data.weight} ${entry.data.port} ${entry.data.target}.`
+			}
+			else if ( entry.type == "LOC" ) {
+				formattedContent = "IN LOC " + entry.content.replace ( /(\d\.[0-9]*[1-9])0*|(\d)\.0+/g, "$1$2" )
+			}
+			var row = $("<tr>")
+			$(row).data ( "entry", entry )
+			$( row ).append ( $("<td>")
+				.attr ( "class", "type type_" + entry.type.toLowerCase () )
+				.text ( entry.type )
+			)
+			$( row ).append ( $("<td>")
+				.attr ( "class", "name" )
+				.html ( $("<div class='editable' contenteditable='true' >")
+					.text ( formattedName )
+					.attr ( "name", "content" )
+					.addClass ( "show-form-" + entry.type.toLowerCase () + "-name" )
+					.data ( "old", formattedName )
+					.val ( formattedName )
+				)
+			)
+			$( row ).append ( $("<td>")
+				.attr ( "class", "value" )
+				.html ( $("<div class='editable' contenteditable='true' >")
+					.text ( formattedContent )
+					.addClass ( "type_" + entry.type.toLowerCase () )
+					.attr ( "name", "content" )
+					.addClass ( "show-form-" + entry.type.toLowerCase () )
+					.data ( "old", formattedContent )
+					.val ( formattedContent )
+				)
+				.append ( entry.type == "MX" ? `<div class="priority" >${entry.priority}</div>` : "" )
+			)
+			$( row ).append ( $("<td>")
+				.attr ( "class", "ttl" )
+				.text ( secondsToAppropriate ( entry.ttl ) )
+				.data ( "ttl", entry.ttl )
+			)
+			$( row ).append ( $("<td>")
+				.attr ( "class", "status" )
+				.html ( entry.proxiable ? entry.proxied ? "<img class='proxied change' src='" + imageBase + "/images/proxied_on.svg' />" : "<img class='proxied change' src='" + imageBase + "/images/proxied_off.svg' />" : "" )
+			)
+			$( row ).append ( $("<td>").attr ( "class", "delete" )
+				.html ( $("<div class='trigger delete_entry cloudflare-font' >")
+					.data ( "target", "delete" )
+					.data ( "id", entry.id )
+					.data ( "type", entry.type )
+					.data ( "name", entry.name )
+					.html ("&#xF01A;")
+				)
+			)
+			row.appendTo ( table )
+		}
+	}
+	if ( results.length == 0 ) {
+		$(table).append ( $("<tr>").append ( $("<td colspan='6' >").text ("No DNS records found.") ) )
+	}
+}
+
+$(document).on ( "cloudflare.dns.dns_records.initialize", function ( event, data ) {
+	$(data.section).data ( "result", data.response.result )
+	populateResult ( data.section )
+})
+
+$(document).on ( "cloudflare.dns.dns_records.delete", function ( event, data ) {
+	var id = $(data.trigger).data ("id")
+	var type = $(data.trigger).data ("type").toUpperCase ()
+	var name = $(data.trigger).data ("name")
+	var confirm = new modal.Modal ()
+	confirm.addTitle ("Confirm")
+	confirm.addElement ( $("<p>").text (`Are you sure you want to delete the ${type} Record?`) )
+	confirm.addElement ( $("<li>").append ( $("<strong>").text ( name ) ) )
+	confirm.addButton ({ label: "OK", callback: ( components ) => {
+		confirm.close ()
+		$(data.section).addClass ("loading")
+		$.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: { "form_key": data.form.key, "id": id },
+			success: function ( response ) {
+				notification.showMessages ( response )
+				common.loadSections (".dns_records")
+			}
+		})
+	}})
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.show ()
+})
+
+$(document).on ( "cloudflare.dns.dns_records.create", function ( event, data ) {
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: {
+			"form_key": data.form.key,
+			"type": $(data.section).find ("select.type").val (),
+			"name": $(data.section).find ("div.active > input[name='name']").val (),
+			"content": $(data.section).find ("div.active > input[name='content']").val (),
+			"ttl": $(data.section).find ("select.ttl").val (),
+			"proxied": $(data.section).find (".proxied.add").data ("value"),
+			"priority": $(data.section).find (".priority.add").val ()
+		},
+		success: function ( response ) {
+			$(data.section).removeClass ("loading")
+			notification.showMessages ( response )
+			if ( response.success ) {
+				$(data.section).find ("[name='name'],[name='content']").val ("")
+				$(data.section).addClass ("loading")
+				common.loadSections (".dns.dns_records")
+			}
+		}
+	})
+})
+
+$(document).on ( "cloudflare.dns.dns_records.search", function ( event, data ) {
+	$(data.section).data ( "page", 1 )
+	populateResult ( data.section )
+})
+
+$(document).on ( "focus", ".show-form-mx", function () {
+	var confirm = new modal.Modal ()
+	let oldPriority = parseInt ( $(document).find (".priority.add").val () ) || 1
+	let oldValue = $(this).val ()
+	if ( $(this).hasClass ("editable") ) {
+		oldPriority = $(this).parent ().find (".priority").text ()
+	}
+	confirm.addTitle ( "Add Record: MX content", $(this).val () )
+	confirm.addRow ( "Server", $("<input type='text' placeholder='Mail server' name='server' >").val ( oldValue ) )
+	confirm.addRow ( "Priority", $("<input type='text' placeholder='1' name='priority' >").val ( oldPriority ) )
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	var that = this
+	confirm.addButton ({ label: "Save", callback: ( components ) => {
+		var priority = $( components.container ).find ("input[name='priority']").val ()
+		let newValue = $( components.container ).find ("input[name='server']").val ()
+		if ( priority.trim () === "" ) priority = "1"
+		$(document).find (".priority.add").val ( priority )
+		$(that).data ( "priority", parseInt ( priority ) )
+		$(that).parent ().find (".priority").text ( parseInt ( priority ) )
+		$(that).val ( newValue ).text ( newValue )
+		if ( $(this).hasClass ("editable") && ( oldPriority != parseInt ( priority ) ) || newValue != oldValue ) {
+			let tempVal = $(that).val () + " "
+			$(that).val ( tempVal ).text ( tempVal ).trigger ("change")
+		}
+		confirm.close ()
+	}})
+	confirm.show ()
+})
+
+$(document).on ( "focus", ".show-form-loc", function () {
+	var that = this
+	var confirm = new modal.Modal ()
+	var latitude = modal.createRows (
+		modal.createRow ( "degrees", modal.createInput ( "text", "lat-degrees", "", "0" ) ),
+		modal.createRow ( "minutes", modal.createInput ( "text", "lat-minutes", "", "0" ) ),
+		modal.createRow ( "seconds", modal.createInput ( "text", "lat-seconds", "", "0" ) ),
+		modal.createRow ( "direction", modal.createSelect ( "lat-direction", [
+			{ "value": "N", "label": "North", "selected": true },
+			{ "value": "S", "label": "South" }
+		]))
+	)
+	var longitude = modal.createRows (
+		modal.createRow ( "degrees", modal.createInput ( "text", "lon-degrees", "", "0" ) ),
+		modal.createRow ( "minutes", modal.createInput ( "text", "lon-minutes", "", "0" ) ),
+		modal.createRow ( "seconds", modal.createInput ( "text", "lon-seconds", "", "0" ) ),
+		modal.createRow ( "direction", modal.createSelect ( "lon-direction", [
+			{ "value": "W", "label": "West", "selected": true },
+			{ "value": "E", "label": "East" }
+		]))
+	)
+	var percision = modal.createRows (
+		modal.createRow ( "horizontal precision", modal.createInput ( "text", "pre-horizontal", false, "0" ) ),
+		modal.createRow ( "vertical precision", modal.createInput ( "text", "pre-vertical", false, "0" ) )
+	)
+	var altitude = modal.createInput ( "text", "altitude", false, "0" )
+	var size = modal.createInput ( "text", "size", false, "0" )
+	var matches = $(this).val ().match (/^IN LOC ([^ ]+) ([^ ]+) ([^ ]+) ([NS]) ([^ ]+) ([^ ]+) ([^ ]+) ([WE]) ([^ ]+)m ([^ ]+)m ([^ ]+)m ([^ ]+)m$/)
+	if ( matches ) {
+		$(latitude).find ("[name='lat-degrees']").val ( matches [ 1 ] )
+		$(latitude).find ("[name='lat-minutes']").val ( matches [ 2 ] )
+		$(latitude).find ("[name='lat-seconds']").val ( matches [ 3 ] )
+		$(latitude).find ("[name='lat-direction']").val ( matches [ 4 ] )
+		$(longitude).find ("[name='lon-degrees']").val ( matches [ 5 ] )
+		$(longitude).find ("[name='lon-minutes']").val ( matches [ 6 ] )
+		$(longitude).find ("[name='lon-seconds']").val ( matches [ 7 ] )
+		$(longitude).find ("[name='lon-direction']").val ( matches [ 8 ] )
+		$(altitude).val ( matches [ 9 ] )
+		$(size).val ( matches [ 10 ] )
+		$(percision).find ("[name='pre-horizontal']").val ( matches [ 11 ] )
+		$(percision).find ("[name='pre-vertical']").val ( matches [ 12 ] )
+	}
+	confirm.addTitle ( "Add Record: LOC content", $(this).val () )
+	confirm.addRow ( "Latitude", latitude, true )
+	confirm.addRow ( "Longitude", longitude, true )
+	confirm.addRow ( "Altitude (in meters)", altitude, true )
+	confirm.addRow ( "Size (in meters)", size, true )
+	confirm.addRow ( "Percision (in meters)", percision, true )
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save", callback: ( components ) => {
+		var latDegrees = $( components.container ).find ("[name='lat-degrees']").val ().trim ()
+		var latMinutes = $( components.container ).find ("[name='lat-minutes']").val ().trim ()
+		var latSeconds = $( components.container ).find ("[name='lat-seconds']").val ().trim ()
+		var latDirection = $( components.container ).find ("[name='lat-direction']").val ()
+		var lonDegrees = $( components.container ).find ("[name='lon-degrees']").val ().trim ()
+		var lonMinutes = $( components.container ).find ("[name='lon-minutes']").val ().trim ()
+		var lonSeconds = $( components.container ).find ("[name='lon-seconds']").val ().trim ()
+		var lonDirection = $( components.container ).find ("[name='lon-direction']").val ()
+		var altitude = $( components.container ).find ("[name='altitude']").val ().trim ()
+		var size = $( components.container ).find ("[name='size']").val ().trim ()
+		var preHorizontal = $( components.container ).find ("[name='pre-horizontal']").val ().trim ()
+		var preVertical = $( components.container ).find ("[name='pre-vertical']").val ().trim ()
+		let newValue = `IN LOC ${latDegrees} ${latMinutes} ${latSeconds} ${latDirection} ${lonDegrees} ${lonMinutes} ${lonSeconds} ${lonDirection} ${altitude}m ${size}m ${preHorizontal}m ${preVertical}m`
+			.replace ( /(\d\.[0-9]*[1-9])0*|(\d)\.0+/g, "$1$2" )
+		$(that).val ( newValue ).text ( newValue ).trigger ("change")
+		confirm.close ()
+	}})
+	confirm.show ()
+})
+
+$(document).on ( "focus", ".show-form-srv-name", function () {
+	var that = this
+	var confirm = new modal.Modal ()
+	var service = modal.createInput ( "text", "service", "_sip" )
+	var protocol = $("<select name='protocol' ><option value='_udp' >UDP</option><option value='_tcp' >TCP</option><option value='_tls' selected >TLS</option><select/>")
+	var name = modal.createInput ( "text", "name", global.getDomainName (), global.getDomainName () )
+	let oldValue = `${service.val ()}.${protocol.val ()}.${name.val ()}.`
+	if ( $(that).hasClass ("editable") ) {
+		oldValue = $(that).text ()
+	}
+	var matches = $(this).val ().match (/^([^.]+)\.([^.]+)\.(.+)\.$/)
+	if ( matches ) {
+		$(service).val ( matches [ 1 ] )
+		$(protocol).val ( matches [ 2 ] )
+		$(name).val ( matches [ 3 ] )
+	}
+	confirm.addTitle ( "Add Record: SRV name", $(this).val () )
+	confirm.addRow ( "Service name", service )
+	confirm.addRow ( "Protocol", protocol )
+	confirm.addRow ( "Name", name )
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save", callback: ( components ) => {
+		var service = $( components.container ).find ("input[name='service']").val ().trim () || "_sip"
+		var protocol = $( components.container ).find ("select[name='protocol']").val ().trim ()
+		var name = $( components.container ).find ("input[name='name']").val ().trim () || global.getDomainName ()
+		let newValue = `${service}.${protocol}.${name}.`
+		$(that).val ( newValue ).text ( newValue )
+		if ( $(that).hasClass ("editable") && oldValue != newValue ) {
+			$(that).trigger ("change")
+		}
+		confirm.close ()
+	}})
+	confirm.show ()
+})
+
+$(document).on ( "focus", ".show-form-srv", function () {
+	var that = this
+	var confirm = new modal.Modal ()
+	var priority = modal.createInput ( "text", "priority", "1", "1" )
+	var weight = modal.createInput ( "text", "weight", "10", "1" )
+	var port = modal.createInput ( "text", "port", "8444", "1" )
+	var target = modal.createInput ( "text", "target", "example.com", global.getDomainName () )
+	var matches = $(this).val ().match (/^SRV ([^ ]+) ([^ ]+) ([^ ]+) (.+)\.$/)
+	if ( matches ) {
+		$(priority).val ( matches [ 1 ] )
+		$(weight).val ( matches [ 2 ] )
+		$(port).val ( matches [ 3 ] )
+		$(target).val ( matches [ 4 ] )
+	}
+	let oldValue = $(that).val ()
+	if ( $(that).hasClass ("editable") ) {
+		oldValue = $(that).text ()
+	}
+	confirm.addTitle ( "Add Record: SRV content", $(this).val () )
+	confirm.addRow ( "Priority", priority )
+	confirm.addRow ( "Weight", weight )
+	confirm.addRow ( "Port", port )
+	confirm.addRow ( "Target", target )
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save", callback: ( components ) => {
+		var priority = $( components.container ).find ("input[name='priority']").val ().trim () || "1"
+		var weight = $( components.container ).find ("input[name='weight']").val ().trim () || "1"
+		var port = $( components.container ).find ("input[name='port']").val ().trim () || "1"
+		var target = $( components.container ).find ("input[name='target']").val ().trim () || global.getDomainName ()
+		let newValue = `SRV ${priority} ${weight} ${port} ${target}.`
+		$(that).val ( newValue ).text ( newValue )
+		if ( $(that).hasClass ("editable") && oldValue != newValue ) {
+			$(that).trigger ("change")
+		}
+		else {
+			$(document).find (".priority.add").val ( priority )
+		}
+		confirm.close ()
+	}})
+	confirm.show ()
+})
+
+$(document).on ( "focus", ".show-form-spf", function () {
+	var that = this
+	var confirm = new modal.Modal ()
+	var policy = modal.createTextarea ( "policy", "Policy parameters", $(this).val () )
+	confirm.addTitle ( "Add Record: SPF content", $(this).val () )
+	confirm.addRow ( "Content", policy, true )
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save", callback: ( components ) => {
+		var policy = $( components.container ).find ("[name='policy']").val ()
+		$(that).val ( policy ).text ( policy ).trigger ("change")
+		confirm.close ()
+	}})
+	confirm.show ()
+})
+
+$(document).on ( "focus", ".show-form-txt", function () {
+	var that = this
+	var confirm = new modal.Modal ()
+	var text = modal.createTextarea ( "text", "Text", $(this).val () )
+	confirm.addTitle ( "Add Record: TXT content", $(this).val () )
+	confirm.addRow ( "Content", text, true )
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save", callback: ( components ) => {
+		var text = $( components.container ).find ("[name='text']").val ()
+		$(that).val ( text ).text ( text ).trigger ("change")
+		confirm.close ()
+	}})
+	confirm.show ()
+})
+
+$(document).on ( "focus", ".show-form-caa", function () {
+	var that = this
+	var confirm = new modal.Modal ( true )
+	var tag = modal.createSelect ( "tag", [
+		{ label: "Only allow specific hostnames", value: "issue", selected: true },
+		{ label: "Only allow wildcards", value: "issuewild" },
+		{ label: "Send violation reports to URL (http:, https:, or mailto:)", value: "iodef" }
+	])
+	var value = modal.createInput ( "text", "value", "Certificate authority (CA) domain name" )
+	let oldValue = $(that).hasClass (".editable") ? $(this).text () : $(this).val ()
+	var matches = oldValue.match (/0 ((?:issue|issuewild|iodef)) \"(.+)\"/)
+	if ( matches ) {
+		$(tag).val ( matches [ 1 ] )
+		$(value).val ( matches [ 2 ] )
+	}
+	confirm.addTitle ( "Add Record: CAA content", $(this).val () )
+	confirm.addRow ( "Tag", tag )
+	confirm.addRow ( "Value", value )
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save", callback: ( components ) => {
+		var tag = $( components.container ).find ("[name='tag']").val ().trim ()
+		var value = $( components.container ).find ("[name='value']").val ().trim ()
+		let newValue = `0 ${tag} "${value}"`
+		$(that).val ( newValue ).text ( newValue ).trigger ("change")
+		confirm.close ()
+	}})
+	confirm.show ()
+})
+
+$(document).on ( "cloudflare.dns.dns_records.page", function ( event, data ) {
+	$(data.section).data ( "page", $(data.trigger).data ("page") )
+	populateResult ( data.section )
+})
+
+$(document).on ( "cloudflare.dns.dns_records.next_page", function ( event, data ) {
+	if ( $(data.section).data ("page") + 1 <= Math.ceil ( $(data.section).data ("item-count") / $(data.section).data ("page-size") ) ) {
+		$(data.section).data ( "page", $(data.section).data ("page") + 1 )
+		populateResult ( data.section )
+	}
+})
+
+$(document).on ( "cloudflare.dns.dns_records.previous_page", function ( event, data ) {
+	if ( $(data.section).data ("page") - 1 > 0 ) {
+		$(data.section).data ( "page", $(data.section).data ("page") - 1 )
+		populateResult ( data.section )
+	}
+})
+
+$(document).on ( "cloudflare.dns.dns_records.sort", function ( event, data ) {
+	$(data.section).data ( "page", 1 )
+	$(data.section).data ( "sort", $(data.trigger).data ("sort") )
+	if ( $(data.trigger).hasClass ("sort-asc") ) {
+		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
+		$(data.trigger).removeClass ("sort-asc").addClass ("sort-desc")
+		$(data.section).data ( "direction", "desc" )
+	}
+	else if ( $(data.trigger).hasClass ("sort-desc") ) {
+		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
+		$(data.trigger).removeClass ("sort-asc").removeClass ("sort-desc")
+		$(data.section).data ( "direction", "" )
+	}
+	else {
+		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
+		$(data.trigger).addClass ("sort-asc")
+		$(data.section).data ( "direction", "asc" )
+	}
+	populateResult ( data.section )
+})
+
+$(document).on ( "cloudflare.dns.dns_records.export", function ( event, data ) {
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key },
+		success: function ( response ) {
+			notification.showMessages ( response )
+			let blob = new Blob ( [ response ], { type: "octet/stream" } )
+			let url = window.URL.createObjectURL ( blob )
+			let a = document.createElement ("a")
+			document.body.appendChild ( a )
+			a.style = "display: none"
+			a.href = url
+			a.download = global.getDomainName () + ".txt"
+			a.click ()
+			window.URL.revokeObjectURL ( url )
+			$(data.section).removeClass ("loading")
+		}
+	})
+})
+
+$(document).on ( "cloudflare.dns.dns_records.upload", function ( event, data ) {
+	let prompt = new modal.Modal ()
+	let form = $(`<form method="POST" enctype="multipart/form-data" >`)
+		.css ( "display", "none" )
+	let fileInput = $("<input id='file_select' >")
+		.prop ( "type", "file" )
+		.prop ( "name", "file" )
+	let submitInput = $("<input>")
+		.prop ( "type", "submit" )
+		.prop ( "name", "submit" )
+		.css ({ "display": "none" })
+	let fileButton = modal.createInput ( "button", "select", "", "Select a file" )
+		.on ( "click", () => $(fileInput).trigger ("click") )
+	let fileName = modal.createInput ( "text", "filename", "", "" )
+		.prop ( "disabled", true )
+		.css ( "margin-left", "10px" )
+		.on ( "click", () => $(fileInput).trigger ("click") )
+	$(fileInput).on ( "change", () => {
+		let newVal = $(fileInput).val ().split ("\\").pop ()
+		$(fileName).val ( newVal == null ? "" : newVal )
+	})
+	let messagesContainer = $("<div>").addClass ("message_container")
+	$(form).append ( fileInput ).append ( submitInput )
+		.on ( "submit", ( event ) => {
+			event.preventDefault ()
+			$(prompt.components.modal).addClass ("loading")
+			let formData = new FormData ( form [ 0 ] )
+			formData.set ( "form_key", data.form.key )
+			formData.set ( "file", ($(fileInput)) [ 0 ].files [ 0 ] )
+			$.ajax ({
+				url: data.form.endpoint,
+				type: "POST",
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: ( response ) => {
+					notification.showMessages ( response )
+					if ( response.success && response.result.recs_added == response.result.total_records_parsed ) {
+						prompt.close ()
+						$(data.section).addClass ("loading")
+						common.loadSections (".dns.dns_records")
+					}
+					else if ( response.success ) {
+						$(prompt.components.modal).removeClass ("loading")
+						$(messagesContainer).html ( $("<div>")
+							.text (`${response.result.recs_added} record(s) added`)
+							.addClass ("status")
+						)
+						response.messages.map ( message => {
+							$(messagesContainer).append ( $("<div>").text ( message.message ) )
+						})
+						if ( response.result.recs_added > 0 ) {
+							common.loadSections (".dns.dns_records")
+						}
+					}
+					else {
+						$(prompt.components.modal).removeClass ("loading")
+						prompt.close ()
+					}
+				}
+			})
+		})
+	prompt.addTitle ("Upload DNS File")
+	prompt.addElement ( $("<p>").text ("If you have a DNS file that is in the BIND format, you can upload it here and we will do our best to parse it so you don't have to retype it.") )
+	prompt.addElement ( form )
+	prompt.addElement ( $("<div>")
+		.append ( fileButton )
+		.append ( fileName )
+		.css ({
+			display: "flex",
+			padding: "22.5px",
+			background: "#F5F5F5",
+			border: "solid 1px #DEDEDE"
+		})
+	)
+	prompt.addElement ( messagesContainer )
+	prompt.addButton ({ label: "Cancel", class: "gray", callback: prompt.close })
+	prompt.addButton ({ label: "Upload", callback: () => $(form).trigger ("submit") })
+	prompt.show ()
+})
+
+$(document).on ( "blur", ".editable", ( event ) => {
+	let target = event.target
+	let oldValue = $(target).data ("old")
+	let newValue = $(target).text ()
+	if ( oldValue !== newValue ) {
+		$(target).trigger ( "change", { target } )
+	}
+})
+
+$(document).on ( "change", ".editable, .proxied, td.ttl", ( event ) => {
+	let target = event.target
+	let oldValue = $(target).data ("old")
+	let newValue = $(target).text ()
+	if ( oldValue !== newValue || $(target).hasClass ("proxied") ) {
+		$(target).data ( "old", newValue )
+		let entry = $(event.target).closest ("tr")
+		let id = $(entry).data ("entry").id
+		let type = $(entry).data ("entry").type
+		let name = $(entry).find ("td.name").text ()
+		let content = $(entry).find ("td.value > .editable").text ()
+		let ttl = $(entry).find (".ttl").data ("ttl")
+		let proxied = $(entry).find (".proxied").length > 0 &&
+					  $(entry).find (".proxied").prop ("src").indexOf ("proxied_on") >= 0
+		let priority = $(entry).find (".value .priority").text () || 0
+		let section = $(entry).closest ("section")
+		let endpoint = $(section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1edit$3" )
+		let formKey = $(section).data ("form-key")
+		$(section).addClass ("loading")
+		$(section).find ("[contenteditable]").prop ( "contenteditable", false )
+		$.ajax ({
+			url: endpoint,
+			type: "POST",
+			data: {
+				"form_key": formKey,
+				"id": id,
+				"type": type,
+				"name": name,
+				"content": content,
+				"ttl": ttl,
+				"proxied": proxied,
+				"priority": priority == "" ? 0 : priority
+			},
+			success: ( response ) => {
+				notification.showMessages ( response )
+				$(section).find ("[contenteditable]").prop ( "contenteditable", true )
+				common.loadSections (".dns.dns_records")
+			}
+		})
+	}
+})
+
+$(document).on ( "click", ".cloudflare td.ttl", ( event ) => {
+	if ( $(event.target).hasClass ("ttl") ) {
+		let target = $(event.target)
+		let entry = $(target).closest ("tr")
+		let proxied = $(entry).find (".proxied")
+		if ( proxied.length == 0 || $(proxied).eq ( 0 ).prop ("src").indexOf ("proxied_off") > -1 ) {
+			let select = createTtlSelect ( $(target).data ("ttl") )
+			$(select).on ( "change", () => {
+				let value = $(select).val ()
+				$(select).trigger ("blur")
+				$(target).data ( "ttl", value )
+				$(target).html ( secondsToAppropriate ( value ) )
+				$(target).trigger ("change")
+			})
+			$(target).html ( select.focus () )
+		}
+	}
+})
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./access_rules.js": 51,
+	"./bot_fight_mode.js": 52,
+	"./bot_management.js": 53,
+	"./browser_integrity_check.js": 54,
+	"./challenge_passage.js": 55,
+	"./javascript_detections.js": 56,
+	"./privacy_pass_support.js": 57,
+	"./security_level.js": 58,
+	"./user_agent_blocking.js": 59,
+	"./web_application_firewall.js": 60,
+	"./zone_lockdown.js": 61
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 50;
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const common = __webpack_require__ (3)
+const notification = __webpack_require__ (2)
+const modal = __webpack_require__ (5)
+
+function filterResults ( term, results ) {
+	let searchTerm = ( term + "" ).toLowerCase ().trim ()
+	return results.filter ( entry => {
+		return ( entry.notes + "" ).toLowerCase ().indexOf ( searchTerm ) > -1
+			|| ( entry.configuration.value + "" ).toLowerCase ().indexOf ( searchTerm ) > -1
+	})
+}
+
+function sortResults ( section, results ) {
+	let pivot = $(section).find (".sort-asc, .sort-desc")
+	if ( pivot.length > 0 ) {
+		let access = ( obj, path ) => {
+			return path.reduce ( ( o, i ) => o [ i ], obj )
+		}
+		let attribute = $(pivot).data ("sort").split (".")
+		let isAsc = $(pivot).hasClass ("sort-asc") === true
+		results = results.sort ( ( a, b ) => {
+			let aValue = (access ( a, attribute ) + "").toLowerCase ()
+			let bValue = (access ( b, attribute ) + "").toLowerCase ()
+			if ( isAsc ) {
+				if ( aValue < bValue ) return -1
+				if ( aValue > bValue ) return 1
+				return 0
+			}
+			else {
+				if ( aValue > bValue ) return -1
+				if ( aValue < bValue ) return 1
+				return 0
+			}
+		})
+	}
+	return results
+}
+
+function sortResults ( section, results ) {
+	let pivot = $(section).find (".sort-asc, sort-desc")
+	if ( pivot.length > 0 ) {
+		let access = ( obj, path ) => {
+			return path.reduce ( ( o, i ) => o [ i ], obj )
+		}
+		let attribute = $(pivot).data ("sort").split (".")
+		results = results.sort ( ( a, b ) => {
+			let aValue = (access ( a, attribute ) + "").toLowerCase ()
+			let bValue = (access ( b, attribute ) + "").toLowerCase ()
+			if ( $(pivot).hasClass ("sort-desc") ) {
+				if ( aValue > bValue ) return -1
+				if ( aValue < bValue ) return 1
+				return 0
+			}
+			else {
+				if ( aValue < bValue ) return -1
+				if ( aValue > bValue ) return 1
+				return 0
+			}
+		})
+	}
+	return results
+}
+
+function populateResult ( section ) {
+	let results = $(section).data ("result") || []
+	results = filterResults ( $(section).find (".search").val (), results )
+	results = sortResults ( section, results )
+	let table = $(section).find ("table > tbody")
+	$(section).data ( "item-count", results.length )
+	let itemCount = $(section).data ("item-count")
+	let page = $(section).data ("page")
+	let pageSize = $(section).data ("page-size")
+	let pageCount = Math.ceil ( itemCount / pageSize )
+	let from = pageSize * ( page - 1 ) + 1
+	if ( itemCount == 0 ) from = 0
+	let to = Math.min ( pageSize * page, itemCount )
+	$(section).find (".pagination_container .pages").html ("")
+	$(section).find (".pagination_container .showing").html (`${from} - ${to} of ${itemCount} rules`)
+	let pages = $(section).find (".pagination_container .pages")
+	let createPage = ( number ) => {
+		return $(`<span class="page" >`)
+			.addClass ( number == page ? "" : "trigger" )
+			.addClass ( number == page ? "current" : "" )
+			.data ( "target", "page" )
+			.data ( "page", number )
+			.text ( number )
+	}
+	if ( pageCount > 7 ) {
+		$(pages).append ( createPage ( 1 ) )
+		if ( pageCount > 7 && page > 4 ) {
+			$(pages).append ( $(`<span>`).text ("...") )
+		}
+		let start = Math.max ( 2, page - 3 )
+		let end = Math.min ( pageCount - 1, page + 3 )
+		if ( page - 4 < 0 ) end += Math.abs ( page - 4 )
+		if ( page + 3 > pageCount ) start -= page + 3 - pageCount
+		if ( pageCount <= 7 && page < 4 ) end -= 1
+		if ( pageCount <= 7 && page > 4 ) start += 1
+		for ( let i = start; i <= end; i++ ) {
+			$(pages).append ( createPage ( i ) )
+		}
+		if ( pageCount > 7 && page < pageCount - 3 ) {
+			$(pages).append ( $(`<span>`).text ("...") )
+		}
+		$(pages).append ( createPage ( pageCount ) )
+	}
+	else {
+		for ( let i = 1; i <= pageCount; i++ ) {
+			$(pages).append ( createPage ( i ) )
+		}
+	}
+	if ( page == 1 ) {
+		$(section).find (".previous").addClass ("disabled")
+	}
+	else {
+		$(section).find (".previous").removeClass ("disabled")
+	}
+	if ( page == pageCount ) {
+		$(section).find (".next").addClass ("disabled")
+	}
+	else {
+		$(section).find (".next").removeClass ("disabled")
+	}
+	$(table).html ("")
+	let appended = 0
+	for ( let i = 0; i < results.length; i++ ) {
+		if ( i >= ( page - 1 ) * pageSize && i < page * pageSize ) {
+			let entry = results [ i ]
+			$(table).append ( $(`<tr>`)
+				.append ( $(`<td>`)
+					.text ( entry.configuration.value )
+					.append ( $(`<span>`).text ( entry.notes ) )
+					.css ({ width: "100%" })
+				)
+				.append ( $(`<td>`).text ("This website") )
+				.append ( $(`<td>`).css ( "display", "flex" )
+					.html ( modal.createSelect ( "mode", [
+							{ "label": "Block", "value": "block", selected: entry.mode == "block" },
+							{ "label": "Challenge", "value": "challenge", selected: entry.mode == "challenge" },
+							{ "label": "Whitelist", "value": "whitelist", selected: entry.mode == "whitelist" },
+							{ "label": "JavaScript Challenge", "value": "js_challenge", selected: entry.mode == "js_challenge" }
+						])
+						.css ({ minWidth: "200px" })
+						.addClass ("trigger-select")
+						.data ( "target", "mode" )
+						.data ( "id", entry.id )
+					)
+					.append ( modal.createIconButton ( "trigger edit", "&#xF013;" )
+						.data ( "id", entry.id )
+						.data ( "note", entry.notes )
+						.data ( "target", "edit" )
+					)
+					.append ( modal.createIconButton ( "trigger delete", "&#xF01A;" )
+						.data ( "id", entry.id )
+						.data ( "target", "delete" )
+					)
+				)
+			)
+		}
+	}
+	if ( results.length == 0 ) {
+		$(table).append ( $("<tr>").append ( $("<td colspan='6' >").text ("No access rules found.") ) )
+	}
+}
+
+$(document).on ( "cloudflare.firewall.access_rules.initialize", function ( event, data ) {
+	$(data.section).data ( "result", data.response.result )
+	populateResult ( data.section )
+	$(data.section).removeClass ("loading")
+})
+
+$(document).on ( "cloudflare.firewall.access_rules.sort", function ( event, data ) {
+	$(data.section).data ( "page", 1 )
+	$(data.section).data ( "sort", $(data.trigger).data ("sort") )
+	if ( $(data.trigger).hasClass ("sort-asc") ) {
+		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
+		$(data.trigger).removeClass ("sort-asc").addClass ("sort-desc")
+		$(data.section).data ( "direction", "desc" )
+	}
+	else if ( $(data.trigger).hasClass ("sort-desc") ) {
+		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
+		$(data.trigger).removeClass ("sort-asc").removeClass ("sort-desc")
+		$(data.section).data ( "direction", "" )
+	}
+	else {
+		$(data.trigger).siblings ().removeClass ("sort-asc").removeClass ("sort-desc")
+		$(data.trigger).addClass ("sort-asc")
+		$(data.section).data ( "direction", "asc" )
+	}
+	populateResult ( data.section )
+})
+
+$(document).on ( "cloudflare.firewall.access_rules.search", function ( event, data ) {
+	$(data.section).data ( "page", 1 )
+	let table = $(data.section).find ("table > tbody")
+	$(table).children ().remove ()
+	populateResult ( data.section )
+})
+
+$(document).on ( "cloudflare.firewall.access_rules.add", function ( event, data ) {
+	$(data.section).addClass ("loading")
+	var value = $(data.section).find ("[name='value']").val ()
+	var mode = $(data.section).find ("[name='mode']").val ()
+	var note = $(data.section).find ("[name='note']").val ()
+	var target = ""
+	switch ( true ) {
+		case /[0-9]+(?:\.[0-9]+){3}\/[0-9]+/.test ( value ):
+			target = "ip_range"
+			break
+		case /[0-9]+(?:\.[0-9]+){3}/.test ( value ):
+			target = "ip"
+			break
+		case /AS[0-9]+/.test ( value ):
+			target = "asn"
+			break
+		default:
+			target = "country"
+	}
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: {
+			"form_key": data.form.key,
+			"target": target,
+			"value": value,
+			"mode": mode,
+			"note": note
+		},
+		success: function ( response ) {
+			notification.showMessages ( response )
+			$(data.section).addClass ("loading")
+			$(data.section).find ("[name='value']").val ("")
+			$(data.section).find ("[name='mode']").val ("block")
+			$(data.section).find ("[name='note']").val ("")
+			common.loadSections (".access_rules")
+		}
+	})
+	common.loadSections (".access_rules")
+})
+
+$(document).on ( "cloudflare.firewall.access_rules.delete", function ( event, data ) {
+	var confirm = new modal.Modal ()
+	confirm.addTitle ("Confirm")
+	confirm.addElement ( $("<p>").text (`Are you sure you want to delete this rule?`) )
+	confirm.addButton ({ label: "OK", callback: ( components ) => {
+		confirm.close ()
+		$(data.section).addClass ("loading")
+		var id = $(data.trigger).data ("id")
+		$.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: { "form_key": data.form.key, "id": id },
+			success: function ( response ) {
+				notification.showMessages ( response )
+				common.loadSections (".access_rules")
+			}
+		})
+	}})
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.show ()
+})
+
+$(document).on ( "cloudflare.firewall.access_rules.mode", function ( event, data ) {
+	$(data.section).addClass ("loading")
+	var id = $(data.trigger).data ("id")
+	var mode = $(data.trigger).val ()
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key, "id": id, "mode": mode },
+		success: function ( response ) {
+			notification.showMessages ( response )
+			common.loadSections (".access_rules")
+		}
+	})
+})
+
+$(document).on ( "cloudflare.firewall.access_rules.edit", function ( event, data ) {
+	let notes = modal.createTextarea ( "notes", "", $(data.trigger).data ("note") ).css ({
+		margin: "22.5px 22.5px 0 22.5px",
+		width: "calc(100% - 45px)",
+		fontSize: "1.1em"
+	})
+	let edit = new modal.Modal ( 800 )
+	edit.addTitle ("Edit notes")
+	edit.addElement ( notes )
+	edit.addButton ({ label: "Close", class: "gray", callback: edit.close })
+	edit.addButton ({ label: "Save", callback: ( components ) => {
+		edit.close ()
+		$(data.section).addClass ("loading")
+		$.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: { "form_key": data.form.key, "id": $(data.trigger).data ("id"), "note": notes.val () },
+			success: function ( response ) {
+				notification.showMessages ( response )
+				common.loadSections (".access_rules")
+			}
+		})
+	}})
+	edit.show ()
+})
+
+$(document).on ( "cloudflare.firewall.access_rules.page", function ( event, data ) {
+	$(data.section).data ( "page", $(data.trigger).data ("page") )
+	populateResult ( data.section )
+})
+
+$(document).on ( "cloudflare.firewall.access_rules.next_page", function ( event, data ) {
+	if ( $(data.section).data ("page") + 1 <= Math.ceil ( $(data.section).data ("item-count") / $(data.section).data ("page-size") ) ) {
+		$(data.section).data ( "page", $(data.section).data ("page") + 1 )
+		populateResult ( data.section )
+	}
+})
+
+$(document).on ( "cloudflare.firewall.access_rules.previous_page", function ( event, data ) {
+	if ( $(data.section).data ("page") - 1 > 0 ) {
+		$(data.section).data ( "page", $(data.section).data ("page") - 1 )
+		populateResult ( data.section )
+	}
+})
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.firewall.bot_fight_mode.initialize", switchElement.initializeCustom ( "fight_mode", true ) )
+$(document).on ( "cloudflare.firewall.bot_fight_mode.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.firewall.bot_management.initialize", switchElement.initializeCustom ( "enabled", true ) )
+$(document).on ( "cloudflare.firewall.bot_management.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.firewall.browser_integrity_check.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.firewall.browser_integrity_check.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const selectElement = __webpack_require__ (4)
+
+$(document).on ( "cloudflare.firewall.challenge_passage.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.firewall.challenge_passage.update", selectElement.update )
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.firewall.javascript_detections.initialize", switchElement.initializeCustom ( "enable_js", true ) )
+$(document).on ( "cloudflare.firewall.javascript_detections.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.firewall.privacy_pass_support.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.firewall.privacy_pass_support.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const selectElement = __webpack_require__ (4)
+
+$(document).on ( "cloudflare.firewall.security_level.initialize", selectElement.initialize )
+$(document).on ( "cloudflare.firewall.security_level.update", selectElement.update )
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const common = __webpack_require__ (3)
+const notification = __webpack_require__ (2)
+const modal = __webpack_require__ (5)
+
+function populateResult ( section ) {
+	let results = $(section).data ("result") || []
+	let table = $(section).find ("table > tbody")
+	$(section).data ( "item-count", results.length )
+	let itemCount = $(section).data ("item-count")
+	let page = $(section).data ("page")
+	let pageSize = $(section).data ("page-size")
+	let pageCount = Math.ceil ( itemCount / pageSize )
+	let from = pageSize * ( page - 1 ) + 1
+	if ( itemCount == 0 ) from = 0
+	let to = Math.min ( pageSize * page, itemCount )
+	$(section).find (".pagination_container .pages").html ("")
+	$(section).find (".pagination_container .showing").html (`${from} - ${to} of ${itemCount} rules`)
+	let pages = $(section).find (".pagination_container .pages")
+	let createPage = ( number ) => {
+		return $(`<span class="page" >`)
+			.addClass ( number == page ? "" : "trigger" )
+			.addClass ( number == page ? "current" : "" )
+			.data ( "target", "page" )
+			.data ( "page", number )
+			.text ( number )
+	}
+	if ( pageCount > 7 ) {
+		$(pages).append ( createPage ( 1 ) )
+		if ( pageCount > 7 && page > 4 ) {
+			$(pages).append ( $(`<span>`).text ("...") )
+		}
+		let start = Math.max ( 2, page - 3 )
+		let end = Math.min ( pageCount - 1, page + 3 )
+		if ( page - 4 < 0 ) end += Math.abs ( page - 4 )
+		if ( page + 3 > pageCount ) start -= page + 3 - pageCount
+		if ( pageCount <= 7 && page < 4 ) end -= 1
+		if ( pageCount <= 7 && page > 4 ) start += 1
+		for ( let i = start; i <= end; i++ ) {
+			$(pages).append ( createPage ( i ) )
+		}
+		if ( pageCount > 7 && page < pageCount - 3 ) {
+			$(pages).append ( $(`<span>`).text ("...") )
+		}
+		$(pages).append ( createPage ( pageCount ) )
+	}
+	else {
+		for ( let i = 1; i <= pageCount; i++ ) {
+			$(pages).append ( createPage ( i ) )
+		}
+	}
+	if ( page == 1 ) {
+		$(section).find (".previous").addClass ("disabled")
+	}
+	else {
+		$(section).find (".previous").removeClass ("disabled")
+	}
+	if ( page == pageCount ) {
+		$(section).find (".next").addClass ("disabled")
+	}
+	else {
+		$(section).find (".next").removeClass ("disabled")
+	}
+	$(table).html ("")
+	let appended = 0
+	for ( let i = 0; i < results.length; i++ ) {
+		if ( i >= ( page - 1 ) * pageSize && i < page * pageSize ) {
+			let entry = results [ i ]
+			$(table).append ( createRow ( entry ) )
+		}
+	}
+	if ( results.length == 0 ) {
+		$(table).append ( $("<tr>").append ( $("<td colspan='2' >").text ("You currently have no User Agent Blocking rules. Please click on 'Create Blocking Rule' to get started.") ) )
+	}
+}
+
+function createRow ( entry ) {
+	let switchElement = modal.createSwitch ( "state", !entry.paused )
+		.css ( "margin", "auto 15px auto 22px" )
+	$(switchElement).find ("input")
+		.addClass ("trigger")
+		.data ( "target", "toggle" )
+		.data ( "entry", entry )
+	return $("<tr>")
+		.append ( $("<td>")
+			.append ( $("<b>").text ( entry.description ).css ({ "text-overflow": "ellipsis", "overflow": "hidden" }) )
+			.append ( $("<span>").text ( entry.configuration.value ).css ({ "text-overflow": "ellipsis", "overflow": "hidden" }) )
+			.css ({ "width": "100%", "max-width": "100px" })
+		)
+		.append ( $("<td>")
+			.append ( modal.createSelect ( "mode", [
+				{ "label": "Block", "value": "block" },
+				{ "label": "Challenge", "value": "challenge" },
+				{ "label": "JavaScript Challenge", "value": "js_challenge" }
+				]).val ( entry.mode )
+				.css ( "width", "auto" )
+				.addClass ( "trigger-select" )
+				.data ( "target", "mode" )
+				.data ( "entry", entry )
+			)
+			.append ( switchElement )
+			.append ( modal.createIconButton ( "trigger edit", "&#xF019;" )
+				.css ( "display", "inline-block" )
+				.addClass ("trigger")
+				.data ( "target", "edit" )
+				.data ( "entry", entry )
+			)
+			.append ( modal.createIconButton ( "trigger delete", "&#xF01A;" )
+				.css ( "display", "inline-block" )
+				.addClass ("trigger")
+				.data ( "target", "delete" )
+				.data ( "entry", entry )
+			)
+		)
+}
+
+function createModal ( name = false, action = false, agent = false ) {
+	let prompt = new modal.Modal ( 600 )
+	let nameElem = modal.createInput ( "text", "name", "Example: Block Internet Explorer 6 browsers", name ? name : "" )
+	let agentElem = modal.createTextarea ( "agent", "Example: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)", agent ? agent : "" )
+		.css ({ width: "100%", margin: 0 })
+	let actionElem = modal.createSelect ( "mode", [
+		{ "label": "Block", "value": "block", "selected": action === false || action == "block" },
+		{ "label": "Challenge", "value": "challenge", "selected": action == "challenge" },
+		{ "label": "JavaScript Challenge", "value": "js_challenge", "selected": action == "js_challenge" }
+	])
+	prompt.addTitle ( ( name === false ? "Create" : "Edit" ) + " a User Agent Blocking Rule" )
+	prompt.addElement ( $("<p>").text ("Provide a description, an action, and a specific User Agent which you wish to configure.") )
+	prompt.addRow ( "Name Description", nameElem, true )
+	prompt.addRow ( "Action", actionElem, true )
+	prompt.addRow ( "User Agent", agentElem, true )
+	prompt.addButton ({ label: "Cancel", class: "gray", callback: prompt.close })
+	prompt.show ()
+	return prompt
+}
+
+$(document).on ( "cloudflare.firewall.user_agent_blocking.initialize", function ( event, data ) {
+	let used = data.response.usage.used
+	let available = data.response.usage.max
+	let message = `You have ${used} of ${available} User Agent Blocking rules active`
+	$(data.section).find (".usage").text ( message )
+	$(data.section).data ( "result", data.response.result )
+	$(data.section).data ( "used", used )
+	$(data.section).data ( "available", available )
+	populateResult ( data.section )
+	$(data.section).removeClass ("loading")
+})
+
+$(document).on ( "cloudflare.firewall.user_agent_blocking.create", function ( event, data ) {
+	let used = (data.section).data ("used")
+	let available = (data.section).data ("available")
+	let prompt = createModal ()
+	let create = ( paused ) => {
+		let description = $(prompt.components.container).find ("[name='name']").val ()
+		let mode = $(prompt.components.container).find ("[name='mode']").val ()
+		let agent = $(prompt.components.container).find ("[name='agent']").val ()
+		$(data.section).addClass ("loading")
+		$(prompt.components.modal).addClass ("loading")
+		$.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: {
+				"form_key": data.form.key,
+				"mode": mode,
+				"paused": paused,
+				"description": description,
+				"value": agent
+			},
+			success: function ( response ) {
+				$(prompt.components.modal).removeClass ("loading")
+				if ( response.success ) {
+					prompt.close ()
+				}
+				notification.showMessages ( response )
+				common.loadSections (".firewall.user_agent_blocking")
+			}
+		})
+	}
+	prompt.addButton ({ label: "Save as Draft", class: "gray", callback: () => create ( true ) })
+	if ( used < available ) {
+		prompt.addButton ({ label: "Save and Deploy", callback: () => create ( false ) })
+	}
+})
+
+$(document).on ( "cloudflare.firewall.user_agent_blocking.edit", function ( event, data ) {
+	let entry = $(data.trigger).data ("entry")
+	let prompt = createModal ( entry.description, entry.mode, entry.configuration.value )
+	prompt.addButton ({ label: "Save", callback: () => {
+		$(data.section).addClass ("loading")
+		$(prompt.components.modal).addClass ("loading")
+		let modal = $(prompt.components.modal)
+		$.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: {
+				"form_key": data.form.key,
+				"id": entry.id,
+				"mode": $(modal).find ("[name='mode']").val (),
+				"paused": entry.paused,
+				"description": $(modal).find ("[name='name']").val (),
+				"value": $(modal).find ("[name='agent']").val ()
+			},
+			success: ( response ) => {
+				$(modal).removeClass ("loading")
+				if ( response.success ) {
+					prompt.close ()
+				}
+				notification.showMessages ( response )
+				common.loadSections (".firewall.user_agent_blocking")
+			}
+		})
+	}})
+})
+
+$(document).on ( "cloudflare.firewall.user_agent_blocking.delete", function ( event, data ) {
+	let prompt = new modal.Modal ( 600 )
+	let entry = $(data.trigger).data ("entry")
+	prompt.addTitle ( "Please confirm that you would like to delete the following rule: <b>" + entry.description + "</b>" )
+	prompt.addButton ({ label: "Cancel", class: "gray", callback: prompt.close })
+	prompt.addButton ({ label: "Delete User Agent Rule", class: "red", callback: () => {
+		$(data.section).addClass ("loading")
+		prompt.close ()
+		$.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: { "form_key": data.form.key, "id": entry.id },
+			success: function ( response ) {
+				notification.showMessages ( response )
+				common.loadSections (".firewall.user_agent_blocking")
+			}
+		})
+	}})
+	prompt.show ()
+})
+
+$(document).on ( "cloudflare.firewall.user_agent_blocking.mode", function ( event, data ) {
+	let target = $(data.trigger)
+	let entry = $(target).data ("entry")
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: {
+			"form_key": data.form.key,
+			"id": entry.id,
+			"mode": target.val (),
+			"paused": entry.paused,
+			"value": entry.configuration.value,
+			"description": entry.description
+		},
+		success: function ( response ) {
+			notification.showMessages ( response )
+			common.loadSections (".firewall.user_agent_blocking")
+		}
+	})
+})
+
+$(document).on ( "cloudflare.firewall.user_agent_blocking.toggle", function ( event, data ) {
+	let target = $(data.trigger)
+	let entry = $(target).data ("entry")
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: {
+			"form_key": data.form.key,
+			"id": entry.id,
+			"mode": entry.mode,
+			"paused": !$(target).prop ("checked"),
+			"value": entry.configuration.value,
+			"description": entry.description
+		},
+		success: function ( response ) {
+			notification.showMessages ( response )
+			common.loadSections (".firewall.user_agent_blocking")
+		}
+	})
+})
+
+$(document).on ( "cloudflare.firewall.user_agent_blocking.page", function ( event, data ) {
+	$(data.section).data ( "page", $(data.trigger).data ("page") )
+	populateResult ( data.section )
+})
+
+$(document).on ( "cloudflare.firewall.user_agent_blocking.next_page", function ( event, data ) {
+	if ( $(data.section).data ("page") + 1 <= Math.ceil ( $(data.section).data ("item-count") / $(data.section).data ("page-size") ) ) {
+		$(data.section).data ( "page", $(data.section).data ("page") + 1 )
+		populateResult ( data.section )
+	}
+})
+
+$(document).on ( "cloudflare.firewall.user_agent_blocking.previous_page", function ( event, data ) {
+	if ( $(data.section).data ("page") - 1 > 0 ) {
+		$(data.section).data ( "page", $(data.section).data ("page") - 1 )
+		populateResult ( data.section )
+	}
+})
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const switchElement = __webpack_require__ (1)
+
+$(document).on ( "cloudflare.firewall.web_application_firewall.initialize", switchElement.initialize )
+$(document).on ( "cloudflare.firewall.web_application_firewall.toggle", switchElement.toggle )
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__);
+
+
+
+const notification = __webpack_require__ (2)
+const modal = __webpack_require__ (5)
+const common = __webpack_require__ (3)
+const global = __webpack_require__ (7)
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.firewall.zone_lockdown.initialize", function ( event, data ) {
+	let rulesUsed = data.response.result.filter ( e => !e.paused ).length
+	let rulesAllowed = data.response.entitlements.allocation.value
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#rules_total").text ( rulesAllowed )
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#rules_used").text ( rulesUsed )
+	if ( rulesUsed < rulesAllowed ) {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#action")
+			.addClass ("trigger")
+			.val ("Create Lockdown Rule")
+			.off ( "click" )
+	}
+	else {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#action")
+			.removeClass ("trigger")
+			.val ("Buy More Zone Lockdown Rules")
+			.on ( "click", () => {
+				window.open ( "https://www.cloudflare.com/plans/", "_blank" )
+			})
+	}
+	var table = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("table.rules")
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody > tr").remove ()
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ( "rules", data.response.result )
+	if ( data.response.result.length > 0 ) {
+		data.response.result
+		.sort ( ( a, b ) => {
+			return a.priority - b.priority
+		})
+		.map ( rule => {
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody").append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<tr>")
+				.data ( "rule", rule )
+				.append (
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td class='no_white_space' >")
+						.html (`<b>${rule.description}</b>`)
+						.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<span>").html (
+							[
+								rule.urls.length > 0 ? `${rule.urls.length} URLs` : null,
+								rule.configurations.length > 0 ? `${rule.configurations.length} IP Addresses` : null,
+								rule.priority ? `<br/>Priority: ${rule.priority}` : null,
+							].filter ( e => e ).join (", ")
+						))
+				)
+				.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td>")
+					.append (( () => {
+						var element = modal.createSwitch ( "status", !rule.paused )
+						__WEBPACK_IMPORTED_MODULE_0_jquery___default()(element).find ("input")
+							.addClass ("trigger")
+							.data ( "target", "toggle" )
+							.data ( "rule", rule )
+						return element
+					}) () )
+					.append (
+						modal.createIconButton ( "edit", "&#xF019;" )
+							.addClass ("trigger")
+							.data ( "target", "edit" )
+							.data ( "data", rule )
+							.css ( "display", "inline-block" )
+					)
+					.append (
+						modal.createIconButton ( "delete", "&#xF01A;" )
+							.addClass ("trigger")
+							.data ( "target", "delete" )
+							.data ( "id", rule.id )
+							.data ( "description", rule.description )
+							.css ( "display", "inline-block" )
+					)
+				)
+			)
+		})
+	}
+	else {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody").append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()("<tr>").append (
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td colspan='6' >").text ("You currently have no Zone Lockdown Rules. To create some click on the button above.")
+			)
+		)
+	}
+})
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.firewall.zone_lockdown.toggle", function ( event, data ) {
+	var rule = data.trigger.data ("rule")
+	var enabled = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.trigger).is (":checked")
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
+		url: data.form.endpoint.replace ( "toggle", "edit" ),
+		type: "POST",
+		data: {
+			"form_key": data.form.key,
+			"id": rule.id,
+			"description": rule.description,
+			"paused": !enabled,
+			"configurations": rule.configurations,
+			"urls": rule.urls,
+			"priority": rule.priority
+		},
+		success: function ( response ) {
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).removeClass ("loading")
+			notification.showMessages ( response )
+		}
+	})
+})
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.firewall.zone_lockdown.delete", function ( event, data ) {
+	var confirm = new modal.Modal ( 800 )
+	confirm.addTitle ("Delete Zone Lockdown Rule")
+	confirm.addElement ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<p>").html (`Please confirm that you would like to delete the following rule: <b>${data.trigger.data ("description")}</b>`) )
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Delete Zone Lockdown Rule", class: "red", callback: ( components ) => {
+		confirm.close ()
+		var id = data.trigger.data ("id")
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: { "form_key": data.form.key, "id": id },
+			success: function ( response ) {
+				notification.showMessages ( response )
+				common.loadSections (".zone_lockdown")
+			}
+		})
+	}})
+	confirm.show ()
+})
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.firewall.zone_lockdown.edit", function ( event, data ) {
+	var response = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.trigger).data ("data")
+	var section = data.section
+	var confirm = new modal.Modal ( 800 )
+	var collections = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div class="collections" >`)
+	var yourSite = global.getDomainName ()
+	var paused = response.paused
+	var id = response.id
+	confirm.addTitle ("Edit a Zone Lockdown Rule")
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Name") ),
+		modal.createInput ( "text", "description", "Example: Allow traffic from Office IP address", response.description ),
+		true
+	)
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("URLs (Separate URLS by new line)") ),
+		modal.createTextarea ( "urls", `Example: www.${yourSite}/login\nwww.${yourSite}`, response.urls.join ("\n") ),
+		true
+	)
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("IP Range (Separate IP Addresses by new line)") ),
+		modal.createTextarea ( "configurations", `Example: 1.1.1.0/28\n1.1.1.0/12`, response.configurations.map ( e => e.value ).join ("\n") ),
+		true
+	)
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Priority") ),
+		modal.createInput ( "number", "priority", "", response.priority ),
+		true
+	)
+	var saveCallback = components => {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).addClass ("loading")
+		var target = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='description']").val ()
+		var urls = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='urls']").val ()
+		var configurations = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='configurations']").val ()
+		var priority = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='priority']").val ()
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: {
+				"form_key": data.form.key,
+				"id": id,
+				"description": target,
+				"paused": paused,
+				"configurations": configurations.split ("\n")
+					.map ( e => e.trim () )
+					.filter ( e => /^\d{1,3}(?:\.\d{1,3}){3}(?:\/\d{1,2})?$/m.test ( e) )
+					.map ( e => {
+						var match = e.match (/^(\d{1,3}(?:\.\d{1,3}){3})(?:\/(\d{1,2}))?$/m)
+						return {
+							target: match [ 2 ] ? "ip_range" : "ip",
+							value: e,
+						}
+					}),
+				"urls": urls.split ("\n")
+					.map ( e => e.trim () )
+					.filter ( e => e.length > 0 ),
+				"priority": priority
+			},
+			success: function ( response ) {
+				if ( response.success ) {
+					confirm.close ()
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
+					common.loadSections (".zone_lockdown")
+				}
+				else {
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
+					notification.showMessages ( response )
+				}
+			}
+		})
+	}
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save", callback: ( components ) => { saveCallback ( components ) } })
+	confirm.show ()
+})
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.firewall.zone_lockdown.create", function ( event, data ) {
+	var section = data.section
+	var confirm = new modal.Modal ( 800 )
+	var collections = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div class="collections" >`)
+	var yourSite = global.getDomainName ()
+	confirm.addTitle ("Create a Zone Lockdown Rule")
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Name") ),
+		modal.createInput ( "text", "description", "Example: Allow traffic from Office IP address" ),
+		true
+	)
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("URLs (Separate URLS by new line)") ),
+		modal.createTextarea ( "urls", `Example: www.${yourSite}/login\nwww.${yourSite}` ),
+		true
+	)
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("IP Range (Separate IP Addresses by new line)") ),
+		modal.createTextarea ( "configurations", `Example: 1.1.1.0/28\n1.1.1.0/12` ),
+		true
+	)
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Priority") ),
+		modal.createInput ( "number", "priority", "" ),
+		true
+	)
+	var saveCallback = ( components, status ) => {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).addClass ("loading")
+		var target = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='description']").val ()
+		var urls = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='urls']").val ()
+		var configurations = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='configurations']").val ()
+		var priority = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='priority']").val ()
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: {
+				"form_key": data.form.key,
+				"description": target,
+				"paused": status,
+				"configurations": configurations.split ("\n")
+					.map ( e => e.trim () )
+					.filter ( e => /^\d{1,3}(?:\.\d{1,3}){3}(?:\/\d{1,2})?$/m.test ( e) )
+					.map ( e => {
+						var match = e.match (/^(\d{1,3}(?:\.\d{1,3}){3})(?:\/(\d{1,2}))?$/m)
+						return {
+							target: match [ 2 ] ? "ip_range" : "ip",
+							value: e,
+						}
+					}),
+				"urls": urls.split ("\n")
+					.map ( e => e.trim () )
+					.filter ( e => e.length > 0 ),
+				"priority": priority
+			},
+			success: function ( response ) {
+				if ( response.success ) {
+					confirm.close ()
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
+					common.loadSections (".zone_lockdown")
+				}
+				else {
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
+					notification.showMessages ( response )
+				}
+			}
+		})
+	}
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save as Draft", class: "gray", callback: ( components ) => { saveCallback ( components, true ) } })
+	confirm.addButton ({ label: "Save and Deploy", callback: ( components ) => { saveCallback ( components, false ) } })
+	confirm.show ()
+})
+
+
+/***/ }),
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -16981,9 +16564,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 		// AMD. Register as an anonymous module.
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 			__webpack_require__(0),
-			__webpack_require__(8),
+			__webpack_require__(9),
 			__webpack_require__(6),
-			__webpack_require__(9)
+			__webpack_require__(10)
 		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
@@ -17193,7 +16776,7 @@ return $.widget( "ui.mouse", {
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17241,7 +16824,7 @@ return $.extend( $.expr[ ":" ], {
 
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17295,21 +16878,11 @@ return $.fn.scrollParent = function( includeHidden ) {
 
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./http_2.js": 67,
-	"./http_3.js": 68,
-	"./ip_geolocation.js": 69,
-	"./ipv6_compatibility.js": 70,
-	"./maximum_upload_size.js": 71,
-	"./onion_routing.js": 72,
-	"./pseudo_ipv4.js": 73,
-	"./response_buffering.js": 74,
-	"./true_client_ip_header.js": 75,
-	"./websockets.js": 76,
-	"./zero_rtt_connection_resumption.js": 77
+	"./page_rules.js": 66
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -17325,10 +16898,731 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 66;
+webpackContext.id = 65;
+
+/***/ }),
+/* 66 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__);
+
+
+
+const notification = __webpack_require__ (2)
+const modal = __webpack_require__ (5)
+const common = __webpack_require__ (3)
+const global = __webpack_require__ (7)
+
+function upperCaseFirst ( target ) {
+	target = target + ""
+	return target.charAt ( 0 ).toUpperCase () + target.slice ( 1 )
+}
+
+function valueToLabel ( value ) {
+	let lookup = {
+		"pick_a_setting": "Pick a Setting",
+		"always_online": "Always Online",
+		"minify": "Auto Minify",
+		"browser_cache_ttl": "Browser Cache TTL",
+		"browser_check": "Browser Integrity Check",
+		"bypass_cache_on_cookie": "Bypass Cache on Cookie",
+		"cache_by_device_type": "Cache By Device Type",
+		"cache_deception_armor": "Cache Deception Armor",
+		"cache_level": "Cache Level",
+		"cache_on_cookie": "Cache on Cookie",
+		"disable_apps": "Disable Apps",
+		"disable_performance": "Disable Performance",
+		"disable_security": "Disable Security",
+		"edge_cache_ttl": "Edge Cache TTL",
+		"email_obfuscation": "Email Obfuscation",
+		"forwarding_url": "Forwarding URL",
+		"host_header_override": "Host Header Override",
+		"ip_geolocation": "IP Geolocation Header",
+		"mirage": "Mirage",
+		"explicit_cache_control": "Origin Cache Control",
+		"origin_error_page_pass_thru": "Origin Error Page Pass-thru",
+		"polish": "Polish",
+		"sort_query_string_for_cache": "Query String Sort",
+		"resolve_override": "Resolve Override",
+		"respect_strong_etag": "Respect Strong ETags",
+		"response_buffering": "Response Buffering",
+		"rocket_loader": "Rocket Loader",
+		"security_level": "Security Level",
+		"server_side_exclude": "Server Side Excludes",
+		"ssl": "SSL",
+		"true_client_ip_header": "True Client IP Header",
+		"waf": "Web Application Firewall",
+		"status_code": "Status Code",
+		"url": "Url",
+		"html": "HTML",
+		"js": "JS",
+		"css": "CSS"
+	}
+	if ( value in lookup ) {
+		return lookup [ value ]
+	}
+	return "Undefined"
+}
+
+function createRow ( previousExists = false, values = [] ) {
+	var close = __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<div class='cloudflare-font delete' >").html ("&#xF01A;")
+	var row = __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<div class='dynamic_wrapper collection' >")
+		.append ( modal.createSelect ( "setting", [
+			{ label: "Pick a Setting", value: "pick_a_setting", disabled: true, selected: true },
+			{ label: valueToLabel ("always_online"), value: "always_online" },
+			{ label: valueToLabel ("minify"), value: "minify" },
+			{ label: valueToLabel ("browser_cache_ttl"), value: "browser_cache_ttl" },
+			{ label: valueToLabel ("browser_check"), value: "browser_check" },
+			{ label: valueToLabel ("bypass_cache_on_cookie"), value: "bypass_cache_on_cookie" },
+			{ label: valueToLabel ("cache_by_device_type"), value: "cache_by_device_type" },
+			{ label: valueToLabel ("cache_deception_armor"), value: "cache_deception_armor" },
+			{ label: valueToLabel ("cache_level"), value: "cache_level" },
+			{ label: valueToLabel ("cache_on_cookie"), value: "cache_on_cookie" },
+			{ label: valueToLabel ("disable_apps"), value: "disable_apps" },
+			{ label: valueToLabel ("disable_performance"), value: "disable_performance" },
+			{ label: valueToLabel ("disable_security"), value: "disable_security" },
+			{ label: valueToLabel ("edge_cache_ttl"), value: "edge_cache_ttl" },
+			{ label: valueToLabel ("email_obfuscation"), value: "email_obfuscation" },
+			{ label: valueToLabel ("forwarding_url"), value: "forwarding_url", disabled: previousExists },
+			{ label: valueToLabel ("host_header_override"), value: "host_header_override" },
+			{ label: valueToLabel ("ip_geolocation"), value: "ip_geolocation" },
+			{ label: valueToLabel ("mirage"), value: "mirage" },
+			{ label: valueToLabel ("explicit_cache_control"), value: "explicit_cache_control" },
+			{ label: valueToLabel ("origin_error_page_pass_thru"), value: "origin_error_page_pass_thru" },
+			{ label: valueToLabel ("polish"), value: "polish" },
+			{ label: valueToLabel ("sort_query_string_for_cache"), value: "sort_query_string_for_cache" },
+			{ label: valueToLabel ("resolve_override"), value: "resolve_override" },
+			{ label: valueToLabel ("respect_strong_etag"), value: "respect_strong_etag" },
+			{ label: valueToLabel ("response_buffering"), value: "response_buffering" },
+			{ label: valueToLabel ("rocket_loader"), value: "rocket_loader" },
+			{ label: valueToLabel ("security_level"), value: "security_level" },
+			{ label: valueToLabel ("server_side_exclude"), value: "server_side_exclude" },
+			{ label: valueToLabel ("ssl"), value: "ssl" },
+			{ label: valueToLabel ("true_client_ip_header"), value: "true_client_ip_header" },
+			{ label: valueToLabel ("waf"), value: "waf" },
+		]).addClass ("dynamic-trigger").val ( values.length > 0 ? values [ 0 ] : "pick_a_setting" ) )
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="always_online" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="minify" >`)
+				.append (`<label class="text" >HTML</label>`)
+				.append ( modal.createSwitch ("html") )
+				.append (`<label class="text" >CSS</label>`)
+				.append ( modal.createSwitch ("css") )
+				.append (`<label class="text" >JS</label>`)
+				.append ( modal.createSwitch ("js") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="browser_cache_ttl" >`).html ( modal.createSelect ( "value", [
+				{ label: "Enable Browser Cache TTL", value: "", selected: true, disabled: true },
+				{ label: "30 minutes", value: 1800 },
+				{ label: "an hour", value: 3600 },
+				{ label: "2 hours", value: 7200 },
+				{ label: "3 hours", value: 10800 },
+				{ label: "4 hours", value: 14400 },
+				{ label: "5 hours", value: 18000 },
+				{ label: "8 hours", value: 28800 },
+				{ label: "12 hours", value: 43200 },
+				{ label: "16 hours", value: 57600 },
+				{ label: "20 hours", value: 72000 },
+				{ label: "a day", value: 86400 },
+				{ label: "2 days", value: 172800 },
+				{ label: "3 days", value: 259200 },
+				{ label: "4 days", value: 345600 },
+				{ label: "5 days", value: 432000 },
+				{ label: "8 days", value: 691200 },
+				{ label: "16 days", value: 1382400 },
+				{ label: "24 days", value: 2073600 },
+				{ label: "a month", value: 2678400 },
+				{ label: "2 months", value: 5356800 },
+				{ label: "6 months", value: 16070400 },
+				{ label: "a year", value: 31536000 }
+			]))
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="browser_check" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="bypass_cache_on_cookie" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_by_device_type" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_deception_armor" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_level" >`).append ( modal.createSelect ( "value", [
+				{ label: "Select Cache Level", value: "", disabled: true, selected: true },
+				{ label: "Bypass", value: "bypass" },
+				{ label: "No Query String", value: "basic" },
+				{ label: "Ignore Query String", value: "simplified" },
+				{ label: "Standard", value: "aggressive" },
+				{ label: "Cache Everything", value: "cache_everything" }
+			]))
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="cache_on_cookie" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="disable_apps" >`).html ("<p>Apps are disabled</p>")
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="disable_performance" >`).html ("<p>Performance is disabled</p>")
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="disable_security" >`).html ("<p>Security is disabled</p>")
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="edge_cache_ttl" >`).html ( modal.createSelect ( "value", [
+				{ label: "Enter Edge Cache TTL", value: "", selected: true, disabled: true },
+				{ label: "2 hours", value: 7200 },
+				{ label: "3 hours", value: 10800 },
+				{ label: "4 hours", value: 14400 },
+				{ label: "5 hours", value: 18000 },
+				{ label: "8 hours", value: 28800 },
+				{ label: "12 hours", value: 43200 },
+				{ label: "16 hours", value: 57600 },
+				{ label: "20 hours", value: 72000 },
+				{ label: "a day", value: 86400 },
+				{ label: "2 days", value: 172800 },
+				{ label: "3 days", value: 259200 },
+				{ label: "4 days", value: 345600 },
+				{ label: "5 days", value: 432000 },
+				{ label: "6 days", value: 518400 },
+				{ label: "7 days", value: 604800 },
+				{ label: "14 days", value: 1209600 },
+				{ label: "a month", value: 2419200 }
+			]))
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="email_obfuscation" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="forwarding_url" >`)
+				.html ( modal.createSelect ( "status_code", [
+					{ label: "Select Status Code", value: "", disabled: true, selected: true },
+					{ label: "301 - Permanent Redirect", value: 301 },
+					{ label: "302 - Temporary Redirect", value: 302 }
+				]))
+				.append ( modal.createInput ( "text", "url", "Enter destination URL" ) )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="host_header_override" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="ip_geolocation" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="mirage" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="explicit_cache_control" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="origin_error_page_pass_thru" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="polish" >`).append (
+				modal.createSelect ( "value", [
+					{ label: "Select Value", value: "", disabled: true, selected: true },
+					{ label: "Off", value: "off" },
+					{ label: "Lossless", value: "lossless" },
+					{ label: "Lossy", value: "lossy" }
+				])
+			)
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="sort_query_string_for_cache" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="resolve_override" >`).append ( modal.createInput ( "text", "value", "Enter Value" ) )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="respect_strong_etag" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="response_buffering" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="rocket_loader" >`).append (
+				modal.createSwitch ("value")
+			)
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="security_level" >`).html ( modal.createSelect ( "value", [
+				{ label: "Select Security Level", value: "", disabled: true, selected: true },
+				{ label: "Essentially Off", value: "essentially_off" },
+				{ label: "Low", value: "low" },
+				{ label: "Medium", value: "medium" },
+				{ label: "High", value: "high" },
+				{ label: "I'm Under Attack", value: "under_attack" }
+			]))
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="server_side_exclude" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="ssl" >`).html ( modal.createSelect ( "value", [
+				{ label: "Select SSL Setting", value: "", disabled: true, selected: true },
+				{ label: "Off", value: "off" },
+				{ label: "Flexible", value: "flexible" },
+				{ label: "Full", value: "full" },
+				{ label: "Strict", value: "strict" }
+			]))
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="true_client_ip_header" >`).append ( modal.createSwitch ("value") )
+		)
+		.append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div data-dynamic-wrapper="waf" >`).append ( modal.createSwitch ("value") )
+		)
+		.append ( close.click ( () => { __WEBPACK_IMPORTED_MODULE_0_jquery___default()(close).parent ().remove () } ) )
+	if ( values.length > 0 ) {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).addClass ("active")
+		if ( values.length > 1 ) {
+			let target = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("input,[name='value']")
+			let value = values [1]
+			if ( values [0] == "forwarding_url" ) {
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='status_code']").val ( values [ 1 ] )
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='url']").val ( values [ 2 ] )
+			}
+			else if ( values [0] == "minify" ) {
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='html']")
+					.prop ( "checked", values [ 1 ].html == "on" )
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='css']")
+					.prop ( "checked", values [ 1 ].css == "on" )
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(row).find (`[data-dynamic-wrapper="${values[0]}"]`).find ("[name='js']")
+					.prop ( "checked", values [ 1 ].js == "on" )
+			}
+			else if ( ( value == "on" || value == "off" ) && values[0] != "ssl" && values[0] != "rocket_loader" ) {
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(target).prop ( "checked", value == "on" )
+			}
+			else {
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(target).val ( value )
+			}
+		}
+	}
+	return row
+}
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.initialize", function ( event, data ) {
+	let rulesUsed = data.response.result.length
+	let rulesAllowed = data.response.entitlements.allocation.value
+	if ( rulesUsed < rulesAllowed ) {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#rules_left").text ( rulesAllowed - rulesUsed )
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#action")
+			.addClass ("trigger")
+			.val ("Create Page Rule")
+			.off ( "click" )
+	}
+	else {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#rules_left").text ("0")
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("#action")
+			.removeClass ("trigger")
+			.val ("Buy More Page Rules")
+			.on ( "click", () => {
+				window.open ( "https://support.cloudflare.com/hc/en-us/articles/225894428-How-To-Buy-Additional-Page-Rules", "_blank" )
+			})
+	}
+	var table = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).find ("table.rules")
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody > tr").remove ()
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ( "rules", data.response.result )
+	if ( data.response.result.length > 0 ) {
+		data.response.result
+		.sort ( ( a, b ) => {
+			return b.priority - a.priority
+		})
+		.map ( ( rule, index ) => {
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody").append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<tr>")
+				.data ( "rule", rule )
+				.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td class='handle' >").html ("&#xF000; &#xF001;") )
+				.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td>").text ( index + 1 ).css ( "min-width", "initial" ) )
+				.append (
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td class='no_white_space' >")
+						.text ( rule.targets [ 0 ].constraint.value )
+						.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<span>").text (
+							rule.actions.map ( i => {
+								let id = valueToLabel ( i.id )
+								let value = ""
+								if ( i.value && i.value instanceof Object ) {
+									value = ": ("
+									let delim = ""
+									for ( let key in i.value ) {
+										value += delim + valueToLabel ( key ) + ": " + i.value [ key ]
+										delim = ", "
+									}
+									value += ")"
+								}
+								else if ( i.value ) {
+									value = ": " + upperCaseFirst ( i.value )
+								}
+								let string = id + value
+								return string
+							}).join (", ")
+						))
+				)
+				.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td>")
+					.append (( () => {
+						var element = modal.createSwitch ( "status", rule.status == "active" )
+						__WEBPACK_IMPORTED_MODULE_0_jquery___default()(element).find ("input")
+							.addClass ("trigger")
+							.data ( "target", "toggle" )
+							.data ( "id", rule.id )
+						return element
+					}) () )
+					.append (
+						modal.createIconButton ( "edit", "&#xF019;" )
+							.addClass ("trigger")
+							.data ( "target", "edit" )
+							.data ( "data", rule )
+							.css ( "display", "inline-block" )
+					)
+					.append (
+						modal.createIconButton ( "delete", "&#xF01A;" )
+							.addClass ("trigger")
+							.data ( "target", "delete" )
+							.data ( "id", rule.id )
+							.css ( "display", "inline-block" )
+					)
+				)
+			)
+		})
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody").sortable ({
+			handle: ".handle",
+			helper: ( e, ui ) => {
+				ui.children ().each ( () => {
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).width ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).width () )
+				})
+				return ui
+			},
+			stop: ( e, ui ) => {
+				ui.item.parent ().find ("tr").each ( ( i, e ) => {
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()( e ).find ("td").eq ( 1 ).text ( i + 1 )
+				})
+				var priorities = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(table)
+					.find ("tbody > tr")
+					.toArray ()
+					.map ( ( rule, index ) => {
+						let data = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(rule).data ("rule")
+						return {
+							id: data.id,
+							priority: index + 1
+						}
+					})
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
+					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1priority$3" ),
+					type: "POST",
+					data: {
+						"form_key": __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ("form-key"),
+						"priorities": priorities
+					},
+					success: function ( response ) {
+						notification.showMessages ( response )
+					}
+				})
+			}
+		})
+	}
+	else {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(table).find ("tbody").append (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()("<tr>").append (
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()("<td colspan='6' >").text ("You do not have any Page Rules yet. Click 'Create Page Rule' above to get started.")
+			)
+		)
+	}
+})
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.toggle", function ( event, data ) {
+	var id = data.trigger.data ("id")
+	var state = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.trigger).is (":checked")
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
+	__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: { "form_key": data.form.key, "state": state, "id": id },
+		success: function ( response ) {
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).removeClass ("loading")
+			notification.showMessages ( response )
+		}
+	})
+})
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.delete", function ( event, data ) {
+	var confirm = new modal.Modal ()
+	confirm.addTitle ("Confirm")
+	confirm.addElement ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()("<p>").text ("Are you sure you want to delete this page rule?") )
+	confirm.addButton ({ label: "OK", callback: ( components ) => {
+		confirm.close ()
+		var id = data.trigger.data ("id")
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: { "form_key": data.form.key, "id": id },
+			success: function ( response ) {
+				notification.showMessages ( response )
+				common.loadSections (".page_rules")
+			}
+		})
+	}})
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.show ()
+})
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.edit", function ( event, data ) {
+	var response = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.trigger).data ("data")
+	var that = this
+	var confirm = new modal.Modal ( 800 )
+	var collections = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div class="collections" >`)
+	confirm.addTitle ( "Edit Page Rule for " + global.getDomainName (), __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).val () )
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`)
+			.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("If the URL matches: ") )
+			.append ( "By using the asterisk (*) character, you can create dynamic patterns that can match many URLs, rather than just one. " )
+			.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a href="https://support.cloudflare.com/hc/en-us/articles/218411427" target="_blank" >`).text ("Learn more here") ),
+		modal.createInput ( "text", "target", "Example: www.example.com/*" ).val ( response.targets [0].constraint.value ),
+		true
+	)
+	response.actions.map ( action => {
+		var values = [ action.value ]
+		if ( action.id == "forwarding_url" ) {
+			values = [ action.value.status_code, action.value.url ]
+		}
+		collections.append ( createRow ( false, [ action.id ].concat ( values ) ) )
+	})
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Then the settings are:") ),
+		[
+			collections,
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a class="dashed" >`).text ("+ Add a Setting").click ( () => {
+				var previousExists = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(collections).find (".collection").length > 0
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(collections).append ( createRow ( previousExists ) )
+			})
+		],
+		true
+	)
+	var saveCallback = ( components, status ) => {
+		var target = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='target']").val ()
+		var actions = __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.makeArray ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()( components.container )
+			.find (".collections > .collection")
+			.map ( ( i, e ) => {
+				var id = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[name='setting']").val ()
+				var value = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='value']").eq ( 0 )
+				value = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).is (":checkbox") ? ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).is (":checked") ? "on" : "off" ) : __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).val ()
+				if ( id == "forwarding_url" ) value = {
+					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='url']").eq ( 0 ).val (),
+					status_code: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='status_code']").eq ( 0 ).val ()
+				}
+				if ( id == "minify" ) value = {
+					html: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='html']").eq ( 0 ).is (":checked") ? "on" : "off",
+					css: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='css']").eq ( 0 ).is (":checked") ? "on" : "off",
+					js: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='js']").eq ( 0 ).is (":checked") ? "on" : "off"
+				}
+				return { id, value }
+			}))
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).addClass ("loading")
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: {
+				"form_key": data.form.key,
+				"target": target,
+				"actions": actions,
+				"status": status,
+				"id": response.id
+			},
+			success: function ( response ) {
+				if ( response.success ) {
+					confirm.close ()
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
+					common.loadSections (".page_rules")
+				}
+				else {
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
+					notification.showMessages ( response )
+				}
+			}
+		})
+	}
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save as Draft", class: "gray", callback: ( components ) => { saveCallback ( components, false ) } })
+	confirm.addButton ({ label: "Save and Deploy", callback: ( components ) => { saveCallback ( components, true ) } })
+	confirm.show ()
+})
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_rules.page_rules.create", function ( event, data ) {
+	var section = data.section
+	var that = this
+	var confirm = new modal.Modal ( 800 )
+	var collections = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<div class="collections" >`)
+	confirm.addTitle ( "Create a Page Rule for " + global.getDomainName (), __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).val () )
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`)
+			.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("If the URL matches: ") )
+			.append ( "By using the asterisk (*) character, you can create dynamic patterns that can match many URLs, rather than just one. " )
+			.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a href="https://support.cloudflare.com/hc/en-us/articles/218411427" target="_blank" >`).text ("Learn more here") ),
+		modal.createInput ( "text", "target", "Example: www.example.com/*" ),
+		true
+	)
+	confirm.addRow (
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`).append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Then the settings are:") ),
+		[
+			collections.append ( createRow () ),
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<a class="dashed" >`).text ("+ Add a Setting").click ( () => {
+				var previousExists = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(collections).find (".collection").length > 0
+				__WEBPACK_IMPORTED_MODULE_0_jquery___default()(collections).append ( createRow ( previousExists ) )
+			})
+		],
+		true
+	)
+	if ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(section).data ("rules").length > 0 ) {
+		var customOptions = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(section).data ("rules")
+			.sort ( ( a, b ) => { return b.priority - a.priority } )
+			.map ( rule => {
+				return {
+					label: rule.targets [ 0 ].constraint.value,
+					value: rule.priority
+				}
+			})
+		customOptions = [{ label: "Select which Page Rule this will fire after", value: 1, selected: true, disabled: true }].concat ( customOptions )
+		confirm.addRow (
+			__WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<p>`)
+				.append ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(`<strong>`).text ("Order: ") )
+				.append ("This is the order in which your Page Rules will be triggered. Only one Page Rule will trigger per URL, so put your most specific Page Rules at the top."),
+			[
+				modal.createSelect ( "order", [
+					{ label: "First", value: "first", selected: true },
+					{ label: "Last", value: "last" },
+					{ label: "Custom", value: "custom" }
+				]).on ( "change", ( event ) => {
+					if ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(event.target).val () === "custom" ) {
+						__WEBPACK_IMPORTED_MODULE_0_jquery___default()(event.target).next ().show ()
+					}
+					else {
+						__WEBPACK_IMPORTED_MODULE_0_jquery___default()(event.target).next ().hide ()
+					}
+				}),
+				modal.createSelect ( "custom", customOptions ).hide ()
+			],
+			true
+		)
+	}
+	var saveCallback = ( components, status ) => {
+		var target = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='target']").val ()
+		var actions = __WEBPACK_IMPORTED_MODULE_0_jquery___default.a.makeArray ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()( components.container )
+			.find (".collections > .collection")
+			.map ( ( i, e ) => {
+				var id = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[name='setting']").val ()
+				var value = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='value']").eq ( 0 )
+				value = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).is (":checkbox") ? ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).is (":checked") ? "on" : "off" ) : __WEBPACK_IMPORTED_MODULE_0_jquery___default()(value).val ()
+				if ( id == "forwarding_url" ) value = {
+					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='url']").eq ( 0 ).val (),
+					status_code: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='status_code']").eq ( 0 ).val ()
+				}
+				if ( id == "minify" ) value = {
+					html: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='html']").eq ( 0 ).val (),
+					css: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='css']").eq ( 0 ).val (),
+					js: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(e).find ("[data-dynamic-wrapper='" + id + "']").find ("[name='js']").eq ( 0 ).val ()
+				}
+				return { id, value }
+			}))
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).addClass ("loading")
+		let getPriority = () => {
+			var priority = 1
+			if ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(section).data ("rules").length > 0 ) {
+				let order = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='order']").val ()
+				if ( order === "custom" ) {
+					priority = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.container).find ("[name='custom']").val ()
+				}
+				else if ( order == "last" ) {
+					priority = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(section).data ("rules").length + 1
+				}
+			}
+			return priority
+		}
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
+			url: data.form.endpoint,
+			type: "POST",
+			data: {
+				"form_key": data.form.key,
+				"target": target,
+				"actions": actions,
+				"status": status,
+				"priority": getPriority ()
+			},
+			success: function ( response ) {
+				if ( response.success ) {
+					confirm.close ()
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).addClass ("loading")
+					common.loadSections (".page_rules")
+				}
+				else {
+					__WEBPACK_IMPORTED_MODULE_0_jquery___default()(components.modal).removeClass ("loading")
+					notification.showMessages ( response )
+				}
+			}
+		})
+	}
+	confirm.addButton ({ label: "Cancel", class: "gray", callback: confirm.close })
+	confirm.addButton ({ label: "Save as Draft", class: "gray", callback: ( components ) => { saveCallback ( components, false ) } })
+	confirm.addButton ({ label: "Save and Deploy", callback: ( components ) => { saveCallback ( components, true ) } })
+	confirm.show ()
+})
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "change", ".cloudflare_modal .collection [name='setting']", function () {
+	if ( __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).val () == "forwarding_url" ) {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(".cloudflare_modal a.dashed").hide ()
+	}
+	else {
+		__WEBPACK_IMPORTED_MODULE_0_jquery___default()(".cloudflare_modal a.dashed").show ()
+	}
+})
+
 
 /***/ }),
 /* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./http_2.js": 68,
+	"./http_3.js": 69,
+	"./ip_geolocation.js": 70,
+	"./ipv6_compatibility.js": 71,
+	"./maximum_upload_size.js": 72,
+	"./onion_routing.js": 73,
+	"./pseudo_ipv4.js": 74,
+	"./response_buffering.js": 75,
+	"./true_client_ip_header.js": 76,
+	"./websockets.js": 77,
+	"./zero_rtt_connection_resumption.js": 78
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 67;
+
+/***/ }),
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17339,7 +17633,7 @@ $(document).on ( "cloudflare.network.http_2.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17350,7 +17644,7 @@ $(document).on ( "cloudflare.network.http_3.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17361,7 +17655,7 @@ $(document).on ( "cloudflare.network.ip_geolocation.toggle", switchElement.toggl
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17372,7 +17666,7 @@ $(document).on ( "cloudflare.network.ipv6_compatibility.toggle", switchElement.t
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17383,7 +17677,7 @@ $(document).on ( "cloudflare.network.maximum_upload_size.update", selectElement.
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17394,7 +17688,7 @@ $(document).on ( "cloudflare.network.onion_routing.toggle", switchElement.toggle
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17405,7 +17699,7 @@ $(document).on ( "cloudflare.network.pseudo_ipv4.update", selectElement.update )
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17416,7 +17710,7 @@ $(document).on ( "cloudflare.network.response_buffering.toggle", switchElement.t
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17427,7 +17721,7 @@ $(document).on ( "cloudflare.network.true_client_ip_header.toggle", switchElemen
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17438,7 +17732,7 @@ $(document).on ( "cloudflare.network.websockets.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17449,13 +17743,13 @@ $(document).on ( "cloudflare.network.zero_rtt_connection_resumption.toggle", swi
 
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./email_address_obfuscation.js": 79,
-	"./hotlink_protection.js": 80,
-	"./server_side_excludes.js": 81
+	"./email_address_obfuscation.js": 80,
+	"./hotlink_protection.js": 81,
+	"./server_side_excludes.js": 82
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -17471,10 +17765,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 78;
+webpackContext.id = 79;
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17485,7 +17779,7 @@ $(document).on ( "cloudflare.scrape_shield.email_address_obfuscation.toggle", sw
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17496,7 +17790,7 @@ $(document).on ( "cloudflare.scrape_shield.hotlink_protection.toggle", switchEle
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)

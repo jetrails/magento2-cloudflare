@@ -1,0 +1,46 @@
+<section
+	class="cloudflare firewall zone_lockdown initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="firewall"
+	data-section-name="zone_lockdown" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Zone Lockdown</span>
+			<p>Lockdown a specific URL on your zone to specific IP addresses. This is useful to protect an admin or protected area from non-specified IP addresses.</p>
+			<p><strong>You have used <span id="rules_used" >0</span> of <span id="rules_total" >0</span> Zone Lockdown Rules</strong></p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<input id="action" class="trigger" type="button" value="Create Lockdown Rule" data-target="create" />
+			</div>
+		</div>
+	</div>
+	<div class="row" >
+		<table class="rules" cellpadding="0" cellspacing="0" >
+			<thead>
+				<tr>
+					<th>Rule Name/Description</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="2" >You currently have no Zone Lockdown Rules. To create some click on the button above.</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<p>Zone Lockdown allows you to allow specific IP addresses and IP ranges whereby all other IPs are effectively blocked. This is best used to protect an Administrative area of a website to, e.g. an office or VPN.</p>
+			<p>Zone Lockdown supports:<br>Specific sub-domains, allowing you to, for example, allow IP 1.2.3.4 to access domain foo.example.com and allow IP 5.6.7.8 to access domain bar.example.com, but not necessarily allow the vice versa.<br>Specific URLs, allowing you to, for example, allow IP 1.2.3.4 to access directory example.com/foo/<em> and allow IP 5.6.7.8 to access directory example.com/bar/</em>, but not necessarily allow the vice versa.<br>This is useful when you need more granularity in your IP Access Rules since, with the IP Firewall, you can only either apply the block to all sub-domains of the current domain, or all domains on your account, and you can not specify URIs.</p>
+			<p>Advanced Options:<br>In a scenario where you have multiple Zone Lockdown rules, which overlap, you can set a priority to ensure one Zone Lockdown rule is honored over another. For example, if you protected example.com/admin/<em> but also had example.com/admin/api/</em> - and the users to API had a different set of IP allowed IP addresses, then this would keep this area protected.</p>
+			<p>The <em>lower</em> the number, the <em>higher</em> the priority. Higher priority rules take precedence over those with lower priority.</p>
+		</div>
+	</div>
+</section>

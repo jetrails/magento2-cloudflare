@@ -128,6 +128,9 @@
 								<resource
 									id="JetRails_Cloudflare::unmetered_ddos_mitigation"
 									title="Unmetered DDoS Mitigation" />
+								<resource
+									id="JetRails_Cloudflare::zone_lockdown"
+									title="Zone Lockdown" />
 							</resource>
 							<resource
 								id="JetRails_Cloudflare::settings_tab"

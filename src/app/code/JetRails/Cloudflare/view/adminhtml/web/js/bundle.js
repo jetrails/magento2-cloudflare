@@ -12156,11 +12156,11 @@ requireAll ( __webpack_require__(11) )
 requireAll ( __webpack_require__(13) )
 requireAll ( __webpack_require__(20) )
 requireAll ( __webpack_require__(30) )
-requireAll ( __webpack_require__(40) )
-requireAll ( __webpack_require__(44) )
-requireAll ( __webpack_require__(55) )
-requireAll ( __webpack_require__(61) )
-requireAll ( __webpack_require__(73) )
+requireAll ( __webpack_require__(41) )
+requireAll ( __webpack_require__(45) )
+requireAll ( __webpack_require__(56) )
+requireAll ( __webpack_require__(62) )
+requireAll ( __webpack_require__(74) )
 
 $(window).on ( "load", function () {
 
@@ -12888,9 +12888,10 @@ var map = {
 	"./enhanced_http2_prioritization.js": 34,
 	"./image_resizing.js": 35,
 	"./mirage.js": 36,
-	"./polish.js": 37,
-	"./prefetch_urls.js": 38,
-	"./rocket_loader.js": 39
+	"./mobile_redirect.js": 37,
+	"./polish.js": 38,
+	"./prefetch_urls.js": 39,
+	"./rocket_loader.js": 40
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -13005,6 +13006,50 @@ const $ = __webpack_require__ (0)
 const common = __webpack_require__ (3)
 const notification = __webpack_require__ (2)
 
+$(document).on ( "cloudflare.speed.mobile_redirect.initialize", ( event, data ) => {
+	var domains = data.response.result.domains
+	var setting = data.response.result.value
+	$(data.section).find ("[name='mobile_subdomain']").html ("")
+	for ( let domain of domains ) {
+		$(data.section).find ("[name='mobile_subdomain']").append (
+			$("<option>").prop ( "value", domain.value ).text ( domain.label )
+		)
+	}
+	$(data.section).find ("[name='mobile_subdomain']").val ( setting.mobile_subdomain )
+	$(data.section).find ("[name='strip_uri']").val ( setting.strip_uri + "" )
+	$(data.section).find ("[name='status']").prop ( "checked", setting.status === "on" )
+})
+
+$(document).on ( "cloudflare.speed.mobile_redirect.change", ( event, data ) => {
+	let mobileSubdomain = $(data.section).find ("[name='mobile_subdomain']").val ()
+	let stripUri = $(data.section).find ("[name='strip_uri']").val ()
+	let status = $(data.section).find ("[name='status']").prop ("checked")
+	$(data.section).addClass ("loading")
+	$.ajax ({
+		url: data.form.endpoint,
+		type: "POST",
+		data: {
+			"form_key": data.form.key,
+			"mobile_subdomain": mobileSubdomain,
+			"status": status ? "on" : "off",
+			"strip_uri": stripUri
+		},
+		success: ( response ) => {
+			notification.showMessages (  response )
+			common.loadSections (".mobile_redirect")
+		}
+	})
+})
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const $ = __webpack_require__ (0)
+const common = __webpack_require__ (3)
+const notification = __webpack_require__ (2)
+
 $(document).on ( "cloudflare.speed.polish.initialize", ( event, data ) => {
 	var value = data.response.state.result.value
 	var webp = data.response.webp.result.value == "on"
@@ -13033,7 +13078,7 @@ $(document).on ( "cloudflare.speed.polish.change", ( event, data ) => {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13044,7 +13089,7 @@ $(document).on ( "cloudflare.speed.prefetch_urls.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13055,13 +13100,13 @@ $(document).on ( "cloudflare.speed.rocket_loader.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./cloudflare_nameservers.js": 41,
-	"./cname_flattening.js": 42,
-	"./dns_records.js": 43
+	"./cloudflare_nameservers.js": 42,
+	"./cname_flattening.js": 43,
+	"./dns_records.js": 44
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -13077,10 +13122,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 40;
+webpackContext.id = 41;
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13101,7 +13146,7 @@ $(document).on ( "cloudflare.dns.cloudflare_nameservers.initialize", function ( 
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13112,7 +13157,7 @@ $(document).on ( "cloudflare.dns.cname_flattening.update", selectElement.update 
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -13823,20 +13868,20 @@ $(document).on ( "click", ".cloudflare td.ttl", ( event ) => {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./access_rules.js": 45,
-	"./bot_fight_mode.js": 46,
-	"./bot_management.js": 47,
-	"./browser_integrity_check.js": 48,
-	"./challenge_passage.js": 49,
-	"./javascript_detections.js": 50,
-	"./privacy_pass_support.js": 51,
-	"./security_level.js": 52,
-	"./user_agent_blocking.js": 53,
-	"./web_application_firewall.js": 54
+	"./access_rules.js": 46,
+	"./bot_fight_mode.js": 47,
+	"./bot_management.js": 48,
+	"./browser_integrity_check.js": 49,
+	"./challenge_passage.js": 50,
+	"./javascript_detections.js": 51,
+	"./privacy_pass_support.js": 52,
+	"./security_level.js": 53,
+	"./user_agent_blocking.js": 54,
+	"./web_application_firewall.js": 55
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -13852,10 +13897,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 44;
+webpackContext.id = 45;
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14183,7 +14228,7 @@ $(document).on ( "cloudflare.firewall.access_rules.previous_page", function ( ev
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14194,7 +14239,7 @@ $(document).on ( "cloudflare.firewall.bot_fight_mode.toggle", switchElement.togg
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14205,7 +14250,7 @@ $(document).on ( "cloudflare.firewall.bot_management.toggle", switchElement.togg
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14216,7 +14261,7 @@ $(document).on ( "cloudflare.firewall.browser_integrity_check.toggle", switchEle
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14227,7 +14272,7 @@ $(document).on ( "cloudflare.firewall.challenge_passage.update", selectElement.u
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14238,7 +14283,7 @@ $(document).on ( "cloudflare.firewall.javascript_detections.toggle", switchEleme
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14249,7 +14294,7 @@ $(document).on ( "cloudflare.firewall.privacy_pass_support.toggle", switchElemen
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14260,7 +14305,7 @@ $(document).on ( "cloudflare.firewall.security_level.update", selectElement.upda
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14563,7 +14608,7 @@ $(document).on ( "cloudflare.firewall.user_agent_blocking.previous_page", functi
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -14574,11 +14619,11 @@ $(document).on ( "cloudflare.firewall.web_application_firewall.toggle", switchEl
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./page_rules.js": 56
+	"./page_rules.js": 57
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -14594,17 +14639,17 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 55;
+webpackContext.id = 56;
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery_ui_ui_widgets_sortable__);
 
 
@@ -15285,7 +15330,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "change", ".cloudf
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -15310,10 +15355,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 		// AMD. Register as an anonymous module.
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 			__webpack_require__(0),
-			__webpack_require__(58),
 			__webpack_require__(59),
-			__webpack_require__(8),
 			__webpack_require__(60),
+			__webpack_require__(8),
+			__webpack_require__(61),
 			__webpack_require__(6),
 			__webpack_require__(9)
 		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
@@ -16848,7 +16893,7 @@ return $.widget( "ui.sortable", $.ui.mouse, {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17083,7 +17128,7 @@ return $.widget( "ui.mouse", {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17131,7 +17176,7 @@ return $.extend( $.expr[ ":" ], {
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -17185,21 +17230,21 @@ return $.fn.scrollParent = function( includeHidden ) {
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./http_2.js": 62,
-	"./http_3.js": 63,
-	"./ip_geolocation.js": 64,
-	"./ipv6_compatibility.js": 65,
-	"./maximum_upload_size.js": 66,
-	"./onion_routing.js": 67,
-	"./pseudo_ipv4.js": 68,
-	"./response_buffering.js": 69,
-	"./true_client_ip_header.js": 70,
-	"./websockets.js": 71,
-	"./zero_rtt_connection_resumption.js": 72
+	"./http_2.js": 63,
+	"./http_3.js": 64,
+	"./ip_geolocation.js": 65,
+	"./ipv6_compatibility.js": 66,
+	"./maximum_upload_size.js": 67,
+	"./onion_routing.js": 68,
+	"./pseudo_ipv4.js": 69,
+	"./response_buffering.js": 70,
+	"./true_client_ip_header.js": 71,
+	"./websockets.js": 72,
+	"./zero_rtt_connection_resumption.js": 73
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -17215,10 +17260,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 61;
+webpackContext.id = 62;
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17229,7 +17274,7 @@ $(document).on ( "cloudflare.network.http_2.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17240,7 +17285,7 @@ $(document).on ( "cloudflare.network.http_3.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17251,7 +17296,7 @@ $(document).on ( "cloudflare.network.ip_geolocation.toggle", switchElement.toggl
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17262,7 +17307,7 @@ $(document).on ( "cloudflare.network.ipv6_compatibility.toggle", switchElement.t
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17273,7 +17318,7 @@ $(document).on ( "cloudflare.network.maximum_upload_size.update", selectElement.
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17284,7 +17329,7 @@ $(document).on ( "cloudflare.network.onion_routing.toggle", switchElement.toggle
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17295,7 +17340,7 @@ $(document).on ( "cloudflare.network.pseudo_ipv4.update", selectElement.update )
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17306,7 +17351,7 @@ $(document).on ( "cloudflare.network.response_buffering.toggle", switchElement.t
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17317,7 +17362,7 @@ $(document).on ( "cloudflare.network.true_client_ip_header.toggle", switchElemen
 
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17328,7 +17373,7 @@ $(document).on ( "cloudflare.network.websockets.toggle", switchElement.toggle )
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17339,13 +17384,13 @@ $(document).on ( "cloudflare.network.zero_rtt_connection_resumption.toggle", swi
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./email_address_obfuscation.js": 74,
-	"./hotlink_protection.js": 75,
-	"./server_side_excludes.js": 76
+	"./email_address_obfuscation.js": 75,
+	"./hotlink_protection.js": 76,
+	"./server_side_excludes.js": 77
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -17361,10 +17406,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 73;
+webpackContext.id = 74;
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17375,7 +17420,7 @@ $(document).on ( "cloudflare.scrape_shield.email_address_obfuscation.toggle", sw
 
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)
@@ -17386,7 +17431,7 @@ $(document).on ( "cloudflare.scrape_shield.hotlink_protection.toggle", switchEle
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const $ = __webpack_require__ (0)

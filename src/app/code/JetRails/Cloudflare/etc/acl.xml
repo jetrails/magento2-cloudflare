@@ -163,6 +163,9 @@
 							<resource
 								id="JetRails_Cloudflare::amp_real_url"
 								title="AMP Real URL" />
+							<resource
+								id="JetRails_Cloudflare::mobile_redirect"
+								title="Mobile Redirect" />
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::page_rule"

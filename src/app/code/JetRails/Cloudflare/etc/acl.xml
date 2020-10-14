@@ -54,6 +54,9 @@
 								id="JetRails_Cloudflare::cloudflare_nameservers"
 								title="Cloudflare Nameservers" />
 							<resource
+								id="JetRails_Cloudflare::custom_nameservers"
+								title="Custom Nameservers" />
+							<resource
 								id="JetRails_Cloudflare::cname_flattening"
 								title="CNAME Flattening" />
 						</resource>

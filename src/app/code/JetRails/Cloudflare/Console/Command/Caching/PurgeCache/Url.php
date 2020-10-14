@@ -9,7 +9,7 @@
 	use Symfony\Component\Console\Input\InputOption;
 	use Symfony\Component\Console\Output\OutputInterface;
 
-	class Individual extends AbstractCommand {
+	class Url extends AbstractCommand {
 
 		protected $_storeManager;
 		protected $_model;
@@ -46,8 +46,8 @@
 				)
 			];
 			$this
-				->setName ("cloudflare:caching:purge-cache:individual")
-				->setDescription ("Purge individual URL from Cloudflare cache")
+				->setName ("cloudflare:caching:purge-cache:url")
+				->setDescription ("Purge URLs from Cloudflare cache")
 				->setDefinition ( $options );
 			parent::configure ();
 		}
@@ -65,10 +65,10 @@
 			$urls = $input->getOption ("url");
 			$store = $this->_getStoreByDomain ( $domain );
 			$this->_storeManager->setCurrentStore ( $store->getId () );
-			$response = $this->_model->purgeIndividual ( $urls );
+			$response = $this->_model->purgeUrls ( $urls );
 			$this->_storeManager->setCurrentStore ( $old );
 			if ( $this->_isSuccessful ( $response, $input, $output ) ) {
-				$output->writeln ("Successfully purged individual urls!");
+				$output->writeln ("Successfully purged urls!");
 			}
 		}
 

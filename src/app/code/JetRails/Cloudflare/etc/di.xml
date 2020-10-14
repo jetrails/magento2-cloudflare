@@ -10,7 +10,10 @@
 				<item name="cloudflare:caching:development-mode:get" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\DevelopmentMode\Get</item>
 				<item name="cloudflare:caching:development-mode:set" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\DevelopmentMode\Set</item>
 				<item name="cloudflare:caching:purge-cache:everything" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Everything</item>
-				<item name="cloudflare:caching:purge-cache:individual" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Individual</item>
+				<item name="cloudflare:caching:purge-cache:url" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Url</item>
+				<item name="cloudflare:caching:purge-cache:host" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Host</item>
+				<item name="cloudflare:caching:purge-cache:tag" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Tag</item>
+				<item name="cloudflare:caching:purge-cache:prefix" xsi:type="object" >JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Prefix</item>
 			</argument>
 		</arguments>
 	</type>

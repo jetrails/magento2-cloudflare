@@ -8,7 +8,7 @@
 	 * This controller has two endpoints. One is used to send an API call to
 	 * Cloudflare and it purges all the cache for the current domain. The other
 	 * endpoint asks the Cloudflare API to purge certain files from a zone.
-	 * @version     1.3.0
+	 * @version     1.3.1
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

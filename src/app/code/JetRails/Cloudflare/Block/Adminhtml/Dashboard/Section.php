@@ -13,7 +13,7 @@
 	 * folder. This block class has methods that give the template access to a
 	 * valid form key for AJAX communications. This block class also returns a
 	 * custom endpoint for every section based on the binded template's path.
-	 * @version     1.3.0
+	 * @version     1.3.1
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

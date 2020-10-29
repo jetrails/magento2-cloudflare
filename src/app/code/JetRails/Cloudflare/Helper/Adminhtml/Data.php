@@ -161,7 +161,7 @@
 			}
 			$domain = $this->_storeManager->getStore ()->getBaseUrl ();
 			$domain = parse_url ( $domain ) ["host"];
-			preg_match ( "/\.?([^.]+\.[^.]+)$/i", $domain, $matches );
+			preg_match ( "/([^.\s]+\.([^.\s]{3,}|[^.\s]{2}\.[^.\s]{2}|[^.\s]{2}))\b$/im", $domain, $matches );
 			return $matches [ 1 ];
 		}
 
@@ -179,7 +179,7 @@
 			$stores = $this->_storeManager->getStores ();
 			foreach ( $stores as $store ) {
 				$domain = parse_url ( $store->getBaseUrl () ) ["host"];
-				preg_match ( "/\.?([^.]+\.[^.]+)$/im", $domain, $matches );
+				preg_match ( "/([^.\s]+\.([^.\s]{3,}|[^.\s]{2}\.[^.\s]{2}|[^.\s]{2}))\b$/im", $domain, $matches );
 				$domain = $matches [ 1 ];
 				array_push ( $domains, $domain );
 			}

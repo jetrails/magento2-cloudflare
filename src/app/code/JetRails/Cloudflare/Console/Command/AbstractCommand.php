@@ -30,7 +30,8 @@
 			$stores = $this->_storeManager->getStores ();
 			foreach ( $stores as $store ) {
 				$domain = parse_url ( $store->getBaseUrl () ) ["host"];
-				array_push ( $domains, $domain );
+				preg_match ( "/([^.\s]+\.([^.\s]{3,}|[^.\s]{2}\.[^.\s]{2}|[^.\s]{2}))\b$/im", $domain, $matches );
+				array_push ( $domains, $matches [ 1 ] );
 			}
 			$domains = array_unique ( $domains );
 			sort ( $domains );
@@ -47,7 +48,8 @@
 			$stores = $this->_storeManager->getStores ();
 			foreach ( $stores as $store ) {
 				$host = parse_url ( $store->getBaseUrl () ) ["host"];
-				if ( $host === $domain ) {
+				preg_match ( "/([^.\s]+\.([^.\s]{3,}|[^.\s]{2}\.[^.\s]{2}|[^.\s]{2}))\b$/im", $host, $matches );
+				if ( $matches [ 1 ] === $domain ) {
 					return $store;
 				}
 			}

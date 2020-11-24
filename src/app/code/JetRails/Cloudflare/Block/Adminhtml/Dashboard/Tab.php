@@ -12,7 +12,7 @@
 	 * This block class is used for tab template files. These template files
 	 * use this block's helper methods in order to render all the sections that
 	 * belong to said tab.
-	 * @version     1.3.1
+	 * @version     1.3.2
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

@@ -11,7 +11,7 @@
 	/**
 	 * This class inherits from the PageGetter class, so loading of the initial
 	 * values gets processed through the parent class.
-	 * @version     1.3.1
+	 * @version     1.3.2
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

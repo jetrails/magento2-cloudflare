@@ -59,7 +59,7 @@ $(window).on ( "load", function () {
 				"action": $(this).data ("target")
 			},
 			"form": {
-				"endpoint": $(this).closest ("section").data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1" + $(this).data ("target") + "$3" ),
+				"endpoint": $(this).closest ("section").data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)?(.*)$/, "$1" + $(this).data ("target") + "$3" ),
 				"key": $(this).closest ("section").data ("form-key")
 			},
 			"section": section,

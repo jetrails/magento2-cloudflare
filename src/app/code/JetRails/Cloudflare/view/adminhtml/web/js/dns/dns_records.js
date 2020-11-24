@@ -659,7 +659,7 @@ $(document).on ( "change", ".editable, .proxied, td.ttl", ( event ) => {
 					  $(entry).find (".proxied").prop ("src").indexOf ("proxied_on") >= 0
 		let priority = $(entry).find (".value .priority").text () || 0
 		let section = $(entry).closest ("section")
-		let endpoint = $(section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1edit$3" )
+		let endpoint = $(section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)?(.*)$/, "$1edit$3" )
 		let formKey = $(section).data ("form-key")
 		$(section).addClass ("loading")
 		$(section).find ("[contenteditable]").prop ( "contenteditable", false )

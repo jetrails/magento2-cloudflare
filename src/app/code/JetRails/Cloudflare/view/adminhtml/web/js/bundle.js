@@ -13782,7 +13782,7 @@ $(window).on ( "load", function () {
 				"action": $(this).data ("target")
 			},
 			"form": {
-				"endpoint": $(this).closest ("section").data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1" + $(this).data ("target") + "$3" ),
+				"endpoint": $(this).closest ("section").data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)?(.*)$/, "$1" + $(this).data ("target") + "$3" ),
 				"key": $(this).closest ("section").data ("form-key")
 			},
 			"section": section,
@@ -15604,7 +15604,7 @@ $(document).on ( "change", ".editable, .proxied, td.ttl", ( event ) => {
 					  $(entry).find (".proxied").prop ("src").indexOf ("proxied_on") >= 0
 		let priority = $(entry).find (".value .priority").text () || 0
 		let section = $(entry).closest ("section")
-		let endpoint = $(section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1edit$3" )
+		let endpoint = $(section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)?(.*)$/, "$1edit$3" )
 		let formKey = $(section).data ("form-key")
 		$(section).addClass ("loading")
 		$(section).find ("[contenteditable]").prop ( "contenteditable", false )
@@ -17472,7 +17472,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_r
 						}
 					})
 				__WEBPACK_IMPORTED_MODULE_0_jquery___default.a.ajax ({
-					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1priority$3" ),
+					url: __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)?(.*)$/, "$1priority$3" ),
 					type: "POST",
 					data: {
 						"form_key": __WEBPACK_IMPORTED_MODULE_0_jquery___default()(data.section).data ("form-key"),

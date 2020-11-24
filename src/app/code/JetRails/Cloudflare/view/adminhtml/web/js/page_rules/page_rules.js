@@ -405,7 +405,7 @@ $(document).on ( "cloudflare.page_rules.page_rules.initialize", function ( event
 						}
 					})
 				$.ajax ({
-					url: $(data.section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)(.*)$/, "$1priority$3" ),
+					url: $(data.section).data ("endpoint").replace ( /(cloudflare\/[^\/]+\/)(index)?(.*)$/, "$1priority$3" ),
 					type: "POST",
 					data: {
 						"form_key": $(data.section).data ("form-key"),

@@ -397,6 +397,7 @@ $(document).on ( "cloudflare.page_rules.page_rules.initialize", function ( event
 				var priorities = $(table)
 					.find ("tbody > tr")
 					.toArray ()
+					.reverse ()
 					.map ( ( rule, index ) => {
 						let data = $(rule).data ("rule")
 						return {

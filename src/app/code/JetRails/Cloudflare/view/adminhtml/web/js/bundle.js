@@ -17464,6 +17464,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).on ( "cloudflare.page_r
 				var priorities = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(table)
 					.find ("tbody > tr")
 					.toArray ()
+					.reverse ()
 					.map ( ( rule, index ) => {
 						let data = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(rule).data ("rule")
 						return {

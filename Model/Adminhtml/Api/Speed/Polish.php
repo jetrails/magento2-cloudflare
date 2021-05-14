@@ -60,7 +60,7 @@
 			$this->_requestModel->setData ( array ( "value" => $value ) );
 			$response = $this->_requestModel->resolve ( $endpoint );
 			$zoneId = $this->_configurationModel->getZoneId ();
-			if ( isset ( $response->success ) && $response->success && $value != "off" ) {
+			if ( is_object ( $response ) && isset ( $response->success ) && $response->success && $value != "off" ) {
 				$endpoint = sprintf ( "zones/%s/settings/webp", $zoneId );
 				$this->_requestModel->setType ( Request::REQUEST_PATCH );
 				$this->_requestModel->setData ( array (

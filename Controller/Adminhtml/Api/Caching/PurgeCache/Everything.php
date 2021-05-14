@@ -23,7 +23,7 @@
 		 */
 		public function execute () {
 			$response = $this->_api->purgeEverything ();
-			if ( isset ( $response->success ) && $response->success ) {
+			if ( is_object ( $response ) && isset ( $response->success ) && $response->success ) {
 				$response->messages = array_merge (
 					array (
 						"Successfully purged all assets. Please allow up to " .

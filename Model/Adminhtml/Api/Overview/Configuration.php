@@ -40,12 +40,12 @@
 		public function validateAuth () {
 			$this->_request->setType ( Request::REQUEST_GET );
 			$response = $this->_request->resolve ("user/tokens/verify");
-			if ( !isset ( $response->success ) && $response->success ) {
-				return false;
+			if ( is_object ( $response ) && isset ( $response->success ) && $response->success ) {
+				$zone = $this->getZoneId ();
+				$response = $this->_request->resolve ("zones/$zone");
+				return is_object ( $response ) && isset ( $response->success ) && $response->success;
 			}
-			$zone = $this->getZoneId ();
-			$response = $this->_request->resolve ("zones/$zone");
-			return isset ( $response->success ) && $response->success;
+			return false;
 		}
 
 		/**

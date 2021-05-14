@@ -23,7 +23,7 @@
 		public function execute () {
 			$items = $this->_request->getParam ("items");
 			$response = $this->_api->purgeUrls ( $items );
-			if ( isset ( $response->success ) && $response->success ) {
+			if ( is_object ( $response ) && isset ( $response->success ) && $response->success ) {
 				$response->messages = array_merge (
 					array (
 						"Successfully purged assets. Please allow up to 30 " .

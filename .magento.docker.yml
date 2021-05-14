@@ -1,0 +1,12 @@
+name: magento-development
+services:
+    php:
+        version: "7.4"
+    mysql:
+        version: "10.4"
+    elasticsearch:
+        version: "7.6"
+hooks:
+    build: ""
+    deploy: ""
+    post_deploy: ""

@@ -10,52 +10,27 @@
 		"type": "git",
 		"url": "https://github.com/jetrails/magento2-cloudflare.git"
 	},
-	"engines": {
-		"node": ">=8.10.0 <9.0.0"
-	},
-	"resolutions": {
-		"**/**/bl": "^1.2.3",
-		"**/**/yargs-parser": "^13.1.2",
-		"**/**/mixin-deep": "^1.3.2",
-		"**/**/tar": "^2.2.2",
-		"**/**/mem": "^4.0.0",
-		"**/**/fstream": "^1.0.12",
-		"**/**/node-sass": "^4.13.1",
-		"**/**/clean-css": "^4.1.11",
-		"**/**/minimatch": "^3.0.2",
-		"**/**/lodash": "^4.17.13",
-		"**/**/acorn": "^5.7.4",
-		"**/**/kind-of": "^6.0.3",
-		"**/**/minimist": "^1.2.3",
-		"**/**/set-value": "^2.0.1"
-	},
-	"devDependencies": {
-		"extract-text-webpack-plugin": "^3.0.2",
-		"fs-extra": "^7.0.0",
-		"gulp": "^3.9.1",
-		"gulp-concat": "^2.6.1",
-		"gulp-gzip": "^1.4.2",
-		"gulp-magepack": "^1.0.3",
-		"gulp-minify": "^2.1.0",
-		"gulp-minify-css": "^1.2.4",
-		"gulp-replace": "^1.0.0",
-		"gulp-sass": "^3.2.1",
-		"gulp-tar": "^2.1.0",
-		"gulp-uglify": "^3.0.0",
-		"npm-run-all": "^4.1.5",
-		"webpack": "^3.12.0",
-		"webpack-stream": "^4.0.3"
-	},
 	"dependencies": {
 		"jquery": "^3.5.1",
-		"jquery-ui": "^1.12.1"
+		"jquery-ui-dist": "^1.12.1"
+	},
+	"devDependencies": {
+		"@parcel/transformer-sass": "2.0.0-beta.2",
+		"parcel": "^2.0.0-beta.2",
+		"sass": "^1.32.12"
+	},
+	"alias": {
+		"cloudflare": "~/view/adminhtml/web/js"
+	},
+	"entrypoints": {
+		"bundle": "view/adminhtml/web/bundle",
+		"style": "view/adminhtml/web/scss/index.scss",
+		"script": "view/adminhtml/web/js/index.js"
 	},
 	"scripts": {
-		"package-init": "rm -rf dist; mkdir -p dist",
-		"package-source": "cp -R src/app/code/JetRails/Cloudflare dist/JetRails_Cloudflare-$npm_package_version;",
-		"package-metadata": "cp composer-marketplace.json dist/JetRails_Cloudflare-$npm_package_version/composer.json",
-		"package-zip": "cd dist/JetRails_Cloudflare-$npm_package_version; zip -r ../JetRails_Cloudflare-$npm_package_version.zip .",
-		"package-clean": "rm -rf dist/JetRails_Cloudflare-$npm_package_version",
-		"package": "npm-run-all package-init package-source package-metadata package-zip package-clean"
+		"build:styles": "parcel build --no-source-maps --dist-dir $npm_package_entrypoints_bundle $npm_package_entrypoints_style",
+		"build:scripts": "parcel build --no-source-maps --dist-dir $npm_package_entrypoints_bundle $npm_package_entrypoints_script",
+		"build:all": "parcel build --no-source-maps --dist-dir $npm_package_entrypoints_bundle $npm_package_entrypoints_script $npm_package_entrypoints_style",
+		"build": "rm -rf $npm_package_entrypoints_bundle && yarn build:all"
 	}
 }

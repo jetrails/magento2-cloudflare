@@ -1,12 +1,14 @@
 # Files
 .DS_Store
-yarn-error.log
 *.tar.gz
+*.zip
+yarn-error.log
 
 # Directories
+.cache
+.parcel-cache
 .docker-sync
-node_modules
-build
 dist
-public_html
+node_modules
 private
+public_html

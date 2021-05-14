@@ -1,0 +1,26 @@
+input[type="radio"] {
+	margin-right: 12px;
+	visibility: visible;
+	cursor: pointer;
+	&:after {
+		content: "";
+		position: absolute;
+		width: 18px;
+		height: 18px;
+		box-shadow: inset 0 0 0px 10px #FFF;
+		background: $color-text_gray_dark;
+		margin-top: -3px;
+		border: solid 1px #BCBEC0;
+		border-radius: 100%;
+		box-sizing: border-box;
+		visibility: visible;
+		transition: all 200ms;
+		margin-left: -2px;
+	}
+	&:focus:after, &:hover:after {
+		border-color: $color-blue;
+	}
+	&:checked:after {
+		box-shadow: inset 0 0 0px 3px #FFF;
+	}
+}

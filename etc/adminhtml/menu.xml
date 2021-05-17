@@ -4,18 +4,18 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd" >
 	<menu>
-		<add
-			id="JetRails_Cloudflare::jetrails"
+		<update
+			id="JetRails_Plugins::jetrails"
 			title="JetRails"
 			module="JetRails_Cloudflare"
-			resource="JetRails_Cloudflare::jetrails"
+			resource="JetRails_Plugins::jetrails"
 			sortOrder="79"
 		/>
 		<add
 			id="JetRails_Cloudflare::cloudflare"
 			title="Cloudflare"
 			module="JetRails_Cloudflare"
-			parent="JetRails_Cloudflare::jetrails"
+			parent="JetRails_Plugins::jetrails"
 			resource="JetRails_Cloudflare::cloudflare"
 			sortOrder="0"
 		/>

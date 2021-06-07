@@ -17,4 +17,55 @@
 			</argument>
 		</arguments>
 	</type>
+	<type name="JetRails\Cloudflare\Console\Command\SetAuth" >
+		<arguments>
+			<argument name="storeManager" xsi:type="object" >Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+			<argument name="cacheTypeList" xsi:type="object" >Magento\Framework\App\Cache\TypeListInterface\Proxy</argument>
+			<argument name="encryptor" xsi:type="object" >Magento\Framework\Encryption\EncryptorInterface\Proxy</argument>
+			<argument name="configReader" xsi:type="object" >Magento\Framework\App\Config\ScopeConfigInterface\Proxy</argument>
+			<argument name="configWriter" xsi:type="object" >Magento\Framework\App\Config\Storage\WriterInterface\Proxy</argument>
+		</arguments>
+	</type>
+	<type name="JetRails\Cloudflare\Console\Command\Caching\DevelopmentMode\Get" >
+		<arguments>
+			<argument name="storeManager" xsi:type="object" >Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+			<argument name="model" xsi:type="object" >JetRails\Cloudflare\Model\Adminhtml\Api\Caching\DevelopmentMode\Proxy</argument>
+		</arguments>
+	</type>
+	<type name="JetRails\Cloudflare\Console\Command\Caching\DevelopmentMode\Set" >
+		<arguments>
+			<argument name="storeManager" xsi:type="object" >Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+			<argument name="model" xsi:type="object" >JetRails\Cloudflare\Model\Adminhtml\Api\Caching\DevelopmentMode\Proxy</argument>
+		</arguments>
+	</type>
+	<type name="JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Everything" >
+		<arguments>
+			<argument name="storeManager" xsi:type="object" >Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+			<argument name="model" xsi:type="object" >JetRails\Cloudflare\Model\Adminhtml\Api\Caching\PurgeCache\Proxy</argument>
+		</arguments>
+	</type>
+	<type name="JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Url" >
+		<arguments>
+			<argument name="storeManager" xsi:type="object" >Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+			<argument name="model" xsi:type="object" >JetRails\Cloudflare\Model\Adminhtml\Api\Caching\PurgeCache\Proxy</argument>
+		</arguments>
+	</type>
+	<type name="JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Host" >
+		<arguments>
+			<argument name="storeManager" xsi:type="object" >Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+			<argument name="model" xsi:type="object" >JetRails\Cloudflare\Model\Adminhtml\Api\Caching\PurgeCache\Proxy</argument>
+		</arguments>
+	</type>
+	<type name="JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Tag" >
+		<arguments>
+			<argument name="storeManager" xsi:type="object" >Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+			<argument name="model" xsi:type="object" >JetRails\Cloudflare\Model\Adminhtml\Api\Caching\PurgeCache\Proxy</argument>
+		</arguments>
+	</type>
+	<type name="JetRails\Cloudflare\Console\Command\Caching\PurgeCache\Prefix" >
+		<arguments>
+			<argument name="storeManager" xsi:type="object" >Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+			<argument name="model" xsi:type="object" >JetRails\Cloudflare\Model\Adminhtml\Api\Caching\PurgeCache\Proxy</argument>
+		</arguments>
+	</type>
 </config>

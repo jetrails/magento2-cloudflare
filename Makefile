@@ -18,6 +18,7 @@ bump: ## Bump version in source files based on latest git tag
 	VERSION=$(VERSION); find Block Console Controller Helper Model etc view -type f -iname "*.php" -exec sed -E -i '' "s/([\t ]+\*[\t ]+@version[\t ]+)(.*)/\1$$VERSION/g" {} +
 	VERSION=$(VERSION); sed -E -i '' "s/(Version-)(.+)(-orange)/\1$$VERSION\3/g" ./README.md
 	VERSION=$(VERSION); sed -E -i '' "s/(\"version\": \")(.+)(\")/\1$$VERSION\3/g" ./composer.json
+	VERSION=$(VERSION); sed -E -i '' "s/(\"version\": \")(.+)(\")/\1$$VERSION\3/g" ./package.json
 
 deploy: ## Deploy code to public_html directory
 	NAMESPACE_PATH=$(NAMESPACE_PATH); mkdir -p "./public_html/app/code/$$NAMESPACE_PATH"

@@ -3,6 +3,7 @@
 	namespace JetRails\Cloudflare\Helper\Adminhtml;
 
 	use stdClass;
+	use JetRails\Cloudflare\Helper\Adminhtml\PublicSuffixList;
 	use Magento\Framework\App\Cache\TypeListInterface;
 	use Magento\Framework\App\Cache\Type\Config as ConfigType;
 	use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -29,10 +30,6 @@
 	 */
 	class Data extends AbstractHelper {
 
-		/**
-		 * @var     string       XPATH_AUTH_ZONE      Path to auth zone setting
-		 * @var     string       XPATH_AUTH_TOKEN     Path to auth token setting
-		 */
 		const XPATH_AUTH_ZONE  = "cloudflare/configuration/auth_zone";
 		const XPATH_AUTH_TOKEN = "cloudflare/configuration/auth_token";
 
@@ -43,6 +40,8 @@
 		protected $_coreSession;
 		protected $_storeManager;
 		protected $_urlBuilder;
+		protected $_publicSuffixList;
+		protected $_psl;
 
 		public function __construct (
 			Context $context,
@@ -53,6 +52,7 @@
 			StoreManagerInterface $storeManager,
 			WriterInterface $configWriter,
 			UrlInterface $urlBuilder,
+			PublicSuffixList $publicSuffixList,
 			array $data = []
 		) {
 			parent::__construct ( $context, $data );
@@ -63,6 +63,18 @@
 			$this->_coreSession = $coreSession;
 			$this->_storeManager = $storeManager;
 			$this->_urlBuilder = $urlBuilder;
+			$this->_publicSuffixList = $publicSuffixList;
+			$this->refreshPSL ();
+		}
+
+		public function refreshPSL () {
+			$data = $this->_coreSession->getPSL ();
+			if ( $data == null ) {
+				$data = array_values ( $this->_publicSuffixList->getPSL () );
+				$this->_coreSession->setPSL ( $data );
+			}
+			$this->_psl = $data;
+			return $this->_psl;
 		}
 
 		/**
@@ -160,9 +172,7 @@
 				return $session->getCloudflareSelectedDomain ();
 			}
 			$domain = $this->_storeManager->getStore ()->getBaseUrl ();
-			$domain = parse_url ( $domain ) ["host"];
-			preg_match ( "/([^.\s]+\.([^.\s]{3,}|[^.\s]{2}\.[^.\s]{2}|[^.\s]{2}))\b$/im", $domain, $matches );
-			return $matches [ 1 ];
+			return $this->_publicSuffixList->extract ( $domain, $this->_psl ) ["root_domain"];
 		}
 
 		/**
@@ -178,9 +188,7 @@
 			$domains = array ();
 			$stores = $this->_storeManager->getStores ();
 			foreach ( $stores as $store ) {
-				$domain = parse_url ( $store->getBaseUrl () ) ["host"];
-				preg_match ( "/([^.\s]+\.([^.\s]{3,}|[^.\s]{2}\.[^.\s]{2}|[^.\s]{2}))\b$/im", $domain, $matches );
-				$domain = $matches [ 1 ];
+				$domain = $this->_publicSuffixList->extract ( $store->getBaseUrl (), $this->_psl ) ["root_domain"];
 				array_push ( $domains, $domain );
 			}
 			$domains = array_unique ( $domains );

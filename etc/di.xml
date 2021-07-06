@@ -24,6 +24,7 @@
 			<argument name="encryptor" xsi:type="object" >Magento\Framework\Encryption\EncryptorInterface\Proxy</argument>
 			<argument name="configReader" xsi:type="object" >Magento\Framework\App\Config\ScopeConfigInterface\Proxy</argument>
 			<argument name="configWriter" xsi:type="object" >Magento\Framework\App\Config\Storage\WriterInterface\Proxy</argument>
+			<argument name="publicSuffixList" xsi:type="object" >JetRails\Cloudflare\Helper\Adminhtml\PublicSuffixList\Proxy</argument>
 		</arguments>
 	</type>
 	<type name="JetRails\Cloudflare\Console\Command\Caching\DevelopmentMode\Get" >

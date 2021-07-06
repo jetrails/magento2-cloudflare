@@ -3,6 +3,7 @@
 	namespace JetRails\Cloudflare\Console\Command;
 
 	use stdClass;
+	use JetRails\Cloudflare\Helper\Adminhtml\PublicSuffixList;
 	use Magento\Framework\App\Cache\Type\Config as ConfigType;
 	use Magento\Framework\App\Cache\TypeListInterface;
 	use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -29,13 +30,16 @@
 		protected $_configWriter;
 		protected $_encryptor;
 		protected $_storeManager;
+		protected $_publicSuffixList;
+		protected $_psl;
 
 		public function __construct (
 			StoreManagerInterface $storeManager,
 			TypeListInterface $cacheTypeList,
 			EncryptorInterface $encryptor,
 			ScopeConfigInterface $configReader,
-			WriterInterface $configWriter
+			WriterInterface $configWriter,
+			PublicSuffixList $publicSuffixList
 		) {
 			// Call the parent constructor
 			parent::__construct ();
@@ -45,6 +49,7 @@
 			$this->_configReader = $configReader;
 			$this->_configWriter = $configWriter;
 			$this->_encryptor = $encryptor;
+			$this->_publicSuffixList = $publicSuffixList;
 		}
 
 		/**
@@ -86,10 +91,13 @@
 		 * @return  array                             All domains for all stores
 		 */
 		private function _getDomainNames () {
+			if ( $this->_psl == null ) {
+				$this->_psl = $this->_publicSuffixList->getPSL ();
+			}
 			$domains = array ();
 			$stores = $this->_storeManager->getStores ();
 			foreach ( $stores as $store ) {
-				$domain = parse_url ( $store->getBaseUrl () ) ["host"];
+				$domain = $this->_publicSuffixList->extract ( $store->getBaseUrl (), $this->_psl ) ["root_domain"];
 				array_push ( $domains, $domain );
 			}
 			$domains = array_unique ( $domains );

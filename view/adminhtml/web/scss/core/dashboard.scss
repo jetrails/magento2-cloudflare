@@ -129,6 +129,17 @@ div.cloudflare-dashboard {
 				cursor: pointer;
 				background: #FFF;
 				transition: all 200ms;
+				svg:nth-child( 1 ) {
+					margin: 7.5px 20px;
+					height: 50px;
+					width: 50px;
+					background: #2c7cb0;
+					border-radius: 5px;
+					line-height: 50px;
+					text-align: center;
+					padding: 8px;
+					box-sizing: border-box;
+				}
 				span:nth-child( 1 ) {
 					font-family: "cloudflare-font", sans-serif;
 					font-style: normal;

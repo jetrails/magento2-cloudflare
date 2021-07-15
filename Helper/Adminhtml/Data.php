@@ -22,7 +22,7 @@
 	 * Cloudflare API. It also deals with loading all the domain names that are
 	 * found within this Magento installation and which domain is currently
 	 * selected.
-	 * @version     1.3.4
+	 * @version     1.3.5
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

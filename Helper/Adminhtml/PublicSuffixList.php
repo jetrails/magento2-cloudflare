@@ -7,7 +7,7 @@
 	/**
 	 * This helper exists to download a list of domain suffixes that are used to then determine the
 	 * effective TLD and the root domain of a hostname.
-	 * @version     1.3.4
+	 * @version     1.3.5
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

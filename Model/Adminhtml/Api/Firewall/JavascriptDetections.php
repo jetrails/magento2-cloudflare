@@ -7,7 +7,7 @@
 	/**
 	 * This model class inherits from the Setter model.  It essentially wraps
 	 * that class in order to send passed data to the Cloudflare API endpoint.
-	 * @version     1.3.4
+	 * @version     1.3.5
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

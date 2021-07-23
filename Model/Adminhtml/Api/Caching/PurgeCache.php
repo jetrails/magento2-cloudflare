@@ -10,7 +10,7 @@
 	 * uses certain endpoints to purge everything that is related to a certain
 	 * zone and it also asks the Cloudflare API to purge the cache for an array
 	 * of specific URLs.
-	 * @version     1.3.5
+	 * @version     1.3.6
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

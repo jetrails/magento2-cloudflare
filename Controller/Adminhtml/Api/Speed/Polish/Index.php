@@ -9,7 +9,7 @@
 	 * helper methods that are contained within it. This controller contains two
 	 * actions. One gets the values for the polish and webp settings and the
 	 * other changes them.
-	 * @version     1.3.5
+	 * @version     1.3.6
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

@@ -1,5 +1,7 @@
 VENDOR=JetRails
 MODULE=Cloudflare
+MAGENTO_VERSION=2.4.3
+MAGENTO_EDITION=community
 NAMESPACE=$(VENDOR)"_"$(MODULE)
 NAMESPACE_PATH=$(VENDOR)"/"$(MODULE)
 VERSION=$(shell git describe --tags `git rev-list --tags --max-count=1`)
@@ -38,9 +40,12 @@ clean: ## Remove generated files and folders
 nuke: clean ## Remove generated & deployment data
 	rm -rf ./node_modules ./public_html
 
+install-from-magento: ## Install module from official Magento repo (for testing)
+	docker-compose -f ./public_html/docker-compose.yml run --rm build composer require --no-ansi jetrails/magento2-cloudflare:1.3.6
+
 dev-create: ## Create development environment
 	composer global config repositories.magento composer https://repo.magento.com/
-	composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.4.2 ./public_html
+	composer create-project --repository-url=https://repo.magento.com/ magento/project-$(MAGENTO_EDITION)-edition=$(MAGENTO_VERSION) ./public_html
 	cp .magento.docker.yml .magento.setup.params ./public_html
 	cd public_html && composer require magento/ece-tools -w
 	cd public_html && ./vendor/bin/ece-docker build:compose --with-test --with-selenium --no-varnish --mode developer

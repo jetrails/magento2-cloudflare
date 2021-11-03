@@ -1,5 +1,5 @@
 {
-	"version": "1.3.6",
+	"version": "1.3.7",
 	"name": "magento2-cloudflare",
 	"description": "Interact with popular Cloudflare features though Magento's backend portal",
 	"author": "Rafael Grigorian",

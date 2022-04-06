@@ -10,7 +10,7 @@
 	 * all the data is collected and saved within the instance, this class has
 	 * a method to transform all the collected data into a CURL request and
 	 * executes it.
-	 * @version     1.3.7
+	 * @version     1.3.8
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

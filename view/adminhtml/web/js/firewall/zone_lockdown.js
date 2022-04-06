@@ -172,12 +172,11 @@ $(document).on ( "cloudflare.firewall.zone_lockdown.edit", function ( event, dat
 				"paused": paused,
 				"configurations": configurations.split ("\n")
 					.map ( e => e.trim () )
-					.filter ( e => /^\d{1,3}(?:\.\d{1,3}){3}(?:\/\d{1,2})?$/m.test ( e) )
+					.filter ( e => !!e )
 					.map ( e => {
-						var match = e.match (/^(\d{1,3}(?:\.\d{1,3}){3})(?:\/(\d{1,2}))?$/m)
 						return {
-							target: match [ 2 ] ? "ip_range" : "ip",
-							value: e,
+							target: /\//.test ( e ) ? "ip_range" : "ip",
+							value: e.trim (),
 						}
 					}),
 				"urls": urls.split ("\n")
@@ -245,12 +244,11 @@ $(document).on ( "cloudflare.firewall.zone_lockdown.create", function ( event, d
 				"paused": status,
 				"configurations": configurations.split ("\n")
 					.map ( e => e.trim () )
-					.filter ( e => /^\d{1,3}(?:\.\d{1,3}){3}(?:\/\d{1,2})?$/m.test ( e) )
+					.filter ( e => !!e )
 					.map ( e => {
-						var match = e.match (/^(\d{1,3}(?:\.\d{1,3}){3})(?:\/(\d{1,2}))?$/m)
 						return {
-							target: match [ 2 ] ? "ip_range" : "ip",
-							value: e,
+							target: /\//.test ( e ) ? "ip_range" : "ip",
+							value: e.trim (),
 						}
 					}),
 				"urls": urls.split ("\n")

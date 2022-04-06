@@ -205,17 +205,17 @@ $(document).on ( "cloudflare.firewall.access_rules.add", function ( event, data 
 	var note = $(data.section).find ("[name='note']").val ()
 	var target = ""
 	switch ( true ) {
-		case /[0-9]+(?:\.[0-9]+){3}\/[0-9]+/.test ( value ):
-			target = "ip_range"
-			break
-		case /[0-9]+(?:\.[0-9]+){3}/.test ( value ):
-			target = "ip"
+		case /^[a-z]{2}$/i.test ( value ):
+			target = "country"
 			break
 		case /AS[0-9]+/.test ( value ):
 			target = "asn"
 			break
+		case /\//.test ( value ):
+			target = "ip_range"
+			break
 		default:
-			target = "country"
+			target = "ip"
 	}
 	$.ajax ({
 		url: data.form.endpoint,

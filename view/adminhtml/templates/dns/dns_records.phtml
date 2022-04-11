@@ -13,10 +13,10 @@
 		<div class="wrapper_left holds_table" >
 			<span class="section_title" >DNS Records</span>
 			<p>A, AAAA, and CNAME records can have their traffic routed through the Cloudflare system. Add more records using this form, and click the cloud next to each record to toggle Cloudflare on or off.</p>
-			<div/>
+			<div>
 				<input class="search trigger-change" type="text" placeholder="Search DNS records" data-target="search" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/search.svg') ?>);" />
 			</div>
-			<div class="dynamic_wrapper" />
+			<div class="dynamic_wrapper" >
 				<select class="dynamic-trigger type" >
 					<option value="a" selected >A</option>
 					<option value="aaaa" >AAAA</option>

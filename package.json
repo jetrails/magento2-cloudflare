@@ -29,8 +29,9 @@
 	},
 	"scripts": {
 		"build:styles": "parcel build --no-source-maps --dist-dir $npm_package_entrypoints_bundle $npm_package_entrypoints_style",
+		"postbuild:styles": "mv $npm_package_entrypoints_bundle/index.css $npm_package_entrypoints_bundle/index.min.css",
 		"build:scripts": "parcel build --no-source-maps --dist-dir $npm_package_entrypoints_bundle $npm_package_entrypoints_script",
-		"build:all": "parcel build --no-source-maps --dist-dir $npm_package_entrypoints_bundle $npm_package_entrypoints_script $npm_package_entrypoints_style",
-		"build": "rm -rf $npm_package_entrypoints_bundle && yarn build:all"
+		"postbuild:scripts": "mv $npm_package_entrypoints_bundle/index.js $npm_package_entrypoints_bundle/index.min.js",
+		"build": "rm -rf $npm_package_entrypoints_bundle && yarn build:styles && yarn build:scripts"
 	}
 }

@@ -43,17 +43,24 @@ nuke: clean ## Remove generated & deployment data
 install-from-magento: ## Install module from official Magento repo (for testing)
 	docker-compose -f ./public_html/docker-compose.yml run --rm build composer require --no-ansi jetrails/magento2-cloudflare:1.3.7
 
+shell: ## Spawn a shell
+	docker-compose -f ./public_html/docker-compose.yml run --rm deploy bash
+
 dev-create: ## Create development environment
 	composer global config repositories.magento composer https://repo.magento.com/
-	composer create-project --repository-url=https://repo.magento.com/ magento/project-$(MAGENTO_EDITION)-edition=$(MAGENTO_VERSION) ./public_html
+	composer create-project --prefer-dist --repository-url=https://repo.magento.com/ magento/project-$(MAGENTO_EDITION)-edition=$(MAGENTO_VERSION) ./public_html
 	cp .magento.docker.yml .magento.setup.params ./public_html
+	cd public_html && ln -s ../docker-compose.override.yml ./docker-compose.override.yml
 	cd public_html && composer require magento/ece-tools -w
-	cd public_html && ./vendor/bin/ece-docker build:compose --with-test --with-selenium --no-varnish --mode developer
+	cd public_html && ./vendor/bin/ece-docker build:compose --no-varnish --mode production
 	cd public_html && docker-compose up -d
-	cd public_html && docker-compose run --rm deploy bin/magento setup:install `cat .magento.setup.params | tr '\n' ' '` ;
-	cd public_html && docker-compose run --rm deploy magento-command deploy:mode:set developer
+	cd public_html && docker-compose run --rm deploy composer self-update --2
+	cd public_html && docker-compose run --rm deploy magento-command setup:install `cat .magento.setup.params | tr '\n' ' '` ;
 	cd public_html && docker-compose run --rm deploy magento-command module:disable Magento_TwoFactorAuth
 	cd public_html && docker-compose run --rm deploy magento-command cache:flush
+	cd public_html && docker-compose run --rm deploy magento-command deploy:mode:set production -s
+	cd public_html && docker-compose run --rm deploy magento-command setup:static-content:deploy --jobs 4
+	cd public_html && docker-compose run --rm deploy magento-command setup:di:compile
 
 dev-up: ## Spin development environment up
 	docker-compose -f ./public_html/docker-compose.yml up -d

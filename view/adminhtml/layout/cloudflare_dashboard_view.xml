@@ -5,8 +5,8 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" >
 	<head>
 		<title>Cloudflare Dashboard</title>
-		<link src="JetRails_Cloudflare::bundle/js/index.js" />
-		<css src="JetRails_Cloudflare::bundle/scss/index.css" />
+		<link src="JetRails_Cloudflare::bundle/index.min.js" />
+		<css src="JetRails_Cloudflare::bundle/index.min.css" />
 	</head>
 	<body>
 		<referenceContainer name="content" >

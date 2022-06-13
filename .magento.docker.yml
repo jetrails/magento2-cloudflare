@@ -1,7 +1,7 @@
 name: magento-development
 services:
     php:
-        version: "7.4"
+        version: "8.1"
     mysql:
         version: "10.4"
     elasticsearch:

@@ -9,7 +9,7 @@
 	/**
 	 * This class extends from Magento's default controller action class and it
 	 * is specific to the actions that can be used under the dashboard resource.
-	 * @version     1.3.8
+	 * @version     1.3.9
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

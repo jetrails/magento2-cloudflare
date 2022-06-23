@@ -32,6 +32,19 @@
 		}
 
 		/**
+		 * This method wraps the PageGetter class and adds the results of the
+		 * usage endpoint.
+		 * @param   integer      page                Current page number to get
+		 * @param   array        previous            Collection of prev results
+		 * @return  stdClass                         CF response to request
+		 */
+		public function getValue ( $page = 1, $previous = array () ) {
+			$result = parent::getValue ( $page, $previous );
+			$result->usage = $this->usage ();
+			return $result;
+		}
+
+		/**
 		 * This method takes in an firewall rule id and asks the Cloudflare API to
 		 * delete the rule that corresponds to that id.
 		 * @param   string       id                  Firewall rule id
@@ -116,6 +129,28 @@
 				return $this->_requestModel->resolve ( $endpoint );
 			}
 			return $filter;
+		}
+
+		/**
+		 * This method asks the Cloudflare API for the usage information as it
+		 * pertains to firewall rules. It then only returns the allocation for
+		 * the zone scope.
+		 * @return  stdClass                         CF response to request
+		 */
+		public function usage () {
+			$endpoint = $this->getEndpoint ("firewall/rules/usage");
+			$this->_requestModel->setType ( Request::REQUEST_GET );
+			$result = $this->_requestModel->resolve ( $endpoint );
+			if ( isset ( $result->result ) ) {
+				$result = array_filter ( $result->result, function ( $i ) {
+					return $i->scope === "zone";
+				});
+				return $result [ 0 ];
+			}
+			return [
+				"used" => 0,
+				"max" => 0
+			];
 		}
 
 	}

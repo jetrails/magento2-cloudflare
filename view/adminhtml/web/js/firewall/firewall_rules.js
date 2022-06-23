@@ -141,6 +141,10 @@ function populateResult ( section ) {
 }
 
 $(document).on ( "cloudflare.firewall.firewall_rules.initialize", function ( event, data ) {
+	let used = data.response.usage.used
+	let available = data.response.usage.max
+	$(data.section).find (".usage-used").text ( used )
+	$(data.section).find (".usage-total").text ( available )
 	$(data.section).data ( "result", data.response.result )
 	populateResult ( data.section )
 	$(data.section).removeClass ("loading")

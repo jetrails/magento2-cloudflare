@@ -41,7 +41,7 @@ nuke: clean ## Remove generated & deployment data
 	rm -rf ./node_modules ./public_html
 
 install-from-magento: ## Install module from official Magento repo (for testing)
-	docker-compose -f ./public_html/docker-compose.yml run --rm build composer require --no-ansi jetrails/magento2-cloudflare:1.3.9
+	docker-compose -f ./public_html/docker-compose.yml run --rm build composer require --no-ansi jetrails/magento2-cloudflare:1.4.0
 
 shell: ## Spawn a shell
 	docker-compose -f ./public_html/docker-compose.yml run --rm deploy bash

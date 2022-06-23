@@ -9,7 +9,7 @@
 	 * This class is a parent class that child classes inherit from. It
 	 * implements functionality to easily get a setting value from Cloudflare
 	 * using their API.
-	 * @version     1.3.9
+	 * @version     1.4.0
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

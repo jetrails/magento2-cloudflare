@@ -10,7 +10,7 @@
 	 * This class handles the logic to authenticate a zone/token pair through
 	 * the use of the Cloudflare API. It also has a very popular method that
 	 * retrieves the currently selected domain's zone id.
-	 * @version     1.3.9
+	 * @version     1.4.0
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

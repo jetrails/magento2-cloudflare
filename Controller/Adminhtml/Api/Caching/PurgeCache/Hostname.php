@@ -7,7 +7,7 @@
 	/**
 	 * This action is used to send an API call to Cloudflare and request to
 	 * purge cache for the current domain.
-	 * @version     1.3.9
+	 * @version     1.4.0
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

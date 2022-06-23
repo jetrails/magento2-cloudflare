@@ -26,23 +26,40 @@
 							id="JetRails_Cloudflare::caching"
 							title="Caching" >
 							<resource
-								id="JetRails_Cloudflare::purge_cache"
-								title="Purge Cache" />
+								id="JetRails_Cloudflare::configuration_tab"
+								title="Configuration" >
+								<resource
+									id="JetRails_Cloudflare::purge_cache"
+									title="Purge Cache" />
+								<resource
+									id="JetRails_Cloudflare::caching_level"
+									title="Caching Level" />
+								<resource
+									id="JetRails_Cloudflare::browser_cache_expiration"
+									title="Browser Cache Expiration" />
+								<resource
+									id="JetRails_Cloudflare::crawler_hints"
+									title="Crawler Hints" />
+								<resource
+									id="JetRails_Cloudflare::always_online"
+									title="Always Online" />
+								<resource
+									id="JetRails_Cloudflare::development_mode"
+									title="Development Mode" />
+								<resource
+									id="JetRails_Cloudflare::enable_query_string_sort"
+									title="Enable Query String Sort" />
+							</resource>
 							<resource
-								id="JetRails_Cloudflare::caching_level"
-								title="Caching Level" />
-							<resource
-								id="JetRails_Cloudflare::browser_cache_expiration"
-								title="Browser Cache Expiration" />
-							<resource
-								id="JetRails_Cloudflare::always_online"
-								title="Always Online" />
-							<resource
-								id="JetRails_Cloudflare::development_mode"
-								title="Development Mode" />
-							<resource
-								id="JetRails_Cloudflare::enable_query_string_sort"
-								title="Enable Query String Sort" />
+								id="JetRails_Cloudflare::tiered_cache"
+								title="Tiered Cache" >
+								<resource
+									id="JetRails_Cloudflare::argo_tiered_cache"
+									title="Argo Tiered Cache" />
+								<resource
+									id="JetRails_Cloudflare::tiered_cache_topology"
+									title="Tiered Cache Topology" />
+							</resource>
 						</resource>
 						<resource
 							id="JetRails_Cloudflare::dns"
@@ -113,11 +130,14 @@
 							id="JetRails_Cloudflare::firewall"
 							title="Firewall" >
 							<resource
-								id="JetRails_Cloudflare::managed_rules_tab"
-								title="Managed Rules" >
+								id="JetRails_Cloudflare::waf_tab"
+								title="WAF" >
 								<resource
 									id="JetRails_Cloudflare::web_application_firewall"
 									title="Web Application Firewall" />
+								<resource
+									id="JetRails_Cloudflare::firewall_rules"
+									title="Firewall Rules" />
 							</resource>
 							<resource
 								id="JetRails_Cloudflare::tools_tab"
@@ -173,6 +193,9 @@
 								<resource
 									id="JetRails_Cloudflare::automatic_platform_optimization"
 									title="Automatic Platform Optimization for WordPress" />
+								<resource
+									id="JetRails_Cloudflare::early_hints"
+									title="Early Hints" />
 								<resource
 									id="JetRails_Cloudflare::enhanced_http2_prioritization"
 									title="Enhanced HTTP/2 Prioritization" />
@@ -232,8 +255,17 @@
 								id="JetRails_Cloudflare::http_2"
 								title="HTTP/2" />
 							<resource
+								id="JetRails_Cloudflare::http_2_to_origin"
+								title="HTTP/2 to Origin" />
+							<resource
+								id="JetRails_Cloudflare::http_3"
+								title="HTTP/3 (with QUIC)" />
+							<resource
 								id="JetRails_Cloudflare::ipv6_compatibility"
 								title="IPv6 Compatibility" />
+							<resource
+								id="JetRails_Cloudflare::grpc"
+								title="gRPC" />
 							<resource
 								id="JetRails_Cloudflare::websockets"
 								title="WebSockets" />

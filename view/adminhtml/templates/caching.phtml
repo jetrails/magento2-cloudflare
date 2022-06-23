@@ -1,15 +1,27 @@
 <section class='tabs-wrapper at_least_one' >
 	<div data-tab='configuration' class="active" >Configuration</div>
+	<div data-tab='tiered_cache' >Tiered Cache</div>
 	<div data-tab-content='configuration' class='active' >
 		<?php
 
-			echo $block->renderSections ( "caching/configuration_tab", array (
+			echo $block->renderSections ( "caching/configuration", array (
 				"purge_cache",
 				"caching_level",
 				"browser_cache_expiration",
+				"crawler_hints",
 				"always_online",
 				"development_mode",
 				"enable_query_string_sort"
+			));
+
+		?>
+	</div>
+	<div data-tab-content='tiered_cache' >
+		<?php
+
+			echo $block->renderSections ( "caching/tiered_cache", array (
+				"argo_tiered_cache",
+				"tiered_cache_topology"
 			));
 
 		?>

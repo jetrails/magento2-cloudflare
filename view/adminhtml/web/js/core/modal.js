@@ -107,8 +107,8 @@ function createRows () {
 	return rows
 }
 
-function createSelect ( name, options ) {
-	let select = $("<select name='" + name + "' >")
+function createSelect ( name, options, multiple = false ) {
+	let select = $(`<select name='${name}' ${multiple ? "multiple" : ""} >`)
 	options = options.map ( option => {
 		var element = new Option ( option.label, option.value )
 		if ( option.selected ) $(element).prop ( "selected", true )

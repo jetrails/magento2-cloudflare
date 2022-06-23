@@ -1,0 +1,33 @@
+<section
+	class="cloudflare caching tiered_cache_topology initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="caching"
+	data-section-name="tiered_cache_topology" >
+	<div class="row" >
+		<div class="wrapper_left" >
+			<span class="section_title" >Tiered Cache Topology</span>
+			<p>Selecting your cache topology allows you to control how your origin connects to Cloudflare's data centers to help ensure higher cache hit ratios, fewer origin connections, and a reduction of Internet latency.</p>
+			<p><strong>Smart Tiered Cache Topology</strong> instructs Cloudflare to find the single best upper tier(s) for your origin(s).</p>
+			<p><strong>Generic Global Tiered Topology</strong> instructs Cloudflare to use its representative sample of global data centers as a network of upper tiers.</p>
+			<p><strong>Custom Tiered Cache Topology</strong> allows you to work with Cloudflare's support team to set a custom topology that fits your specific needs. If you want a custom topology, please contact your CSM.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<select class="trigger-select" name="value" data-target="update" >
+					<option value="on" >Smart Tiered Caching Topology</option>
+					<option value="off" >Generic Global Tiered Topology</option>
+				</select>
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<p>With Smart Tiered Cache Topology, Cloudflare will identify the Cloudflare data centers closest to your origin and only allow these data centers to pull from your origin, saving you bandwidth and processing power at your origin.</p>
+		</div>
+	</div>
+</section>

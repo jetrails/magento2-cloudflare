@@ -1,12 +1,13 @@
 <section class='tabs-wrapper at_least_one' >
-	<div data-tab='managed_rules' class="active" >Managed Rules</div>
+	<div data-tab='waf' class="active" >WAF</div>
 	<div data-tab='tools' >Tools</div>
 	<div data-tab='settings' >Settings</div>
-	<div data-tab-content='managed_rules' class='active' >
+	<div data-tab-content='waf' class='active' >
 		<?php
 
-			echo $block->renderSections ( "firewall/managed_rules_tab", array (
-				"web_application_firewall"
+			echo $block->renderSections ( "firewall/waf", array (
+				"web_application_firewall",
+				"firewall_rules"
 			));
 
 		?>

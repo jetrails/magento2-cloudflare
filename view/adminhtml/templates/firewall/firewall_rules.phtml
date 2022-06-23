@@ -1,0 +1,101 @@
+<section
+	class="cloudflare firewall firewall_rules initialize loading"
+	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
+	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-tab-name="firewall"
+	data-section-name="firewall_rules"
+	data-item-count="0"
+	data-page="1"
+	data-page-size="15"
+	data-sort=""
+	data-sort-order="" >
+	<div class="row" >
+		<div class="wrapper_left no_padding_bottom" >
+			<span class="section_title" >Firewall Rules</span>
+			<p>Control incoming traffic to your zone by filtering requests based on location, IP address, user agent, URI, and more.</p>
+			<p>You have used 0 of 1,000 active Firewall rules.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<input type="button" value="Create Firewall Rule" class="trigger" data-target="create" />
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+		</div>
+	</div>
+	<div class="row" >
+		<div>
+			<div class="dynamic_wrapper wrappable" >
+				<input
+					class="search trigger-change grow"
+					type="text"
+					placeholder="Search Description..."
+					data-target="search"
+					style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/search.svg') ?>);"
+				/>
+				<select class="status trigger-select" data-target="search" >
+					<option value="all" selected >All</option>
+					<option value="active" >Active</option>
+					<option value="paused" >Paused</option>
+				</select>
+				<select class="action trigger-select" data-target="search" >
+					<option value="all" selected >All</option>
+					<option value="managed_challenge" >Managed Challenge</option>
+					<option value="allow" >Allow</option>
+					<option value="bypass" >Bypass</option>
+					<option value="js_challenge" >JS Challenge</option>
+					<option value="block" >Block</option>
+					<option value="log" >Log</option>
+					<option value="challenge" >Legacy CAPTCHA</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="row" >
+		<table cellspacing="0" cellpadding="0" class="rules"  >
+			<thead>
+				<tr>
+					<th>Priority</th>
+					<th>Action</th>
+					<th>Description</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="4" >No Firewall Rules</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="lightbox" style="background-image: url(<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ?>)" ></div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<div class="pagination_container" >
+				<span class="previous trigger" data-target="previous_page" >&#xF002;</span>
+				<div class="pages" ></div>
+				<span class="next trigger" data-target="next_page" >&#xF003;</span>
+				<span class="showing" >0 - 0 of 0 items</span>
+			</div>
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<p>Firewall rules offer power and flexibility by targeting HTTP traffic and applying custom criteria to block, challenge, log, or allow certain requests.</p>
+			<p>In essence, firewall rules allow you to examine incoming site traffic. Requests matching the criteria you defined are subject to a specific action in response.</p>
+			<ul>
+				<li><p><strong>Log</strong> - Records matching requests in the Cloudflare Logs.</p></li>
+				<li><p><strong>Bypass</strong> - Allows user to dynamically disable Cloudflare security features for a request.<br>NOTE: Requests which match the Bypass action are still subject to evaluation (and thus a challenge or block) within firewall rules, based on the order of execution.</p></li>
+				<li><p><strong>Allow</strong> - Matching requests are exempt from challenge and block actions triggered by other firewall rules content.<br>NOTE: The scope of the Allow action is limited to firewall rules; matching requests are not exempt from action by other Cloudflare Firewall products, such as IP Access Rules, WAF, etc.</p></li>
+				<li><p><strong>Challenge (Captcha)</strong> - The client that made the request must pass a Captcha Challenge.</p></li>
+				<li><p><strong>JS Challenge</strong> - The client that made the request must pass a Cloudflare Javascript Challenge before proceeding.</p></li>
+				<li><p><strong>Block</strong> - Matching requests are denied access to the site.</p></li>
+			</ul>
+			<p>For more details about Actions, see <a href="https://developers.cloudflare.com/firewall/cf-firewall-rules/actions/">https://developers.cloudflare.com/firewall/cf-firewall-rules/actions/</a></p>
+			<p>To learn more, visit:</p>
+			<ul>
+				<li><a href="https://developers.cloudflare.com/firewall/cf-firewall-rules/">Get started with firewall rules</a></li>
+				<li><a href="https://developers.cloudflare.com/firewall/api/">Manage rules via the APIs</a></li>
+				<li><a href="https://developers.cloudflare.com/firewall/known-issues-and-faq/">Known Issues and FAQ</a></li>
+			</ul>
+		</div>
+	</div>
+</section>

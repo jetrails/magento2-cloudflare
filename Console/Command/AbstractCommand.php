@@ -3,6 +3,7 @@
 	namespace JetRails\Cloudflare\Console\Command;
 
 	use Magento\Store\Model\StoreManagerInterface;
+	use Magento\Framework\Console\Cli;
 	use Symfony\Component\Console\Command\Command;
 	use Symfony\Component\Console\Input\InputInterface;
 	use Symfony\Component\Console\Output\OutputInterface;
@@ -89,7 +90,7 @@
 			$domain = $input->getOption ("domain");
 			if ( !$domain ) {
 				$output->writeln ("Error: please pass domain name with --domain option.");
-				return $this;
+				return Cli::RETURN_FAILURE;
 			}
 			$domains = $this->_getDomainNames ();
 			if ( !in_array ( $domain, $domains ) ) {
@@ -99,9 +100,10 @@
 					$output->writeln ("- $d");
 				}
 				$output->writeln ("");
-				return $this;
+				return Cli::RETURN_FAILURE;
 			}
 			$this->runCommand ( $input, $output );
+			return Cli::RETURN_SUCCESS;
 		}
 
 		protected abstract function runCommand (

@@ -9,6 +9,7 @@
 	use Magento\Framework\App\Config\ScopeConfigInterface;
 	use Magento\Framework\App\Config\Storage\WriterInterface;
 	use Magento\Framework\Encryption\EncryptorInterface;
+	use Magento\Framework\Console\Cli;
 	use Magento\Store\Model\ScopeInterface;
 	use Magento\Store\Model\StoreManagerInterface;
 	use Symfony\Component\Console\Command\Command;
@@ -162,15 +163,15 @@
 			$token = $input->getOption ("token");
 			if ( !$domain ) {
 				$output->writeln ("Error: please pass domain name with --domain option.");
-				return $this;
+				return Cli::RETURN_FAILURE;
 			}
 			if ( !$zone ) {
 				$output->writeln ("Error: please pass zone name with --zone option.");
-				return $this;
+				return Cli::RETURN_FAILURE;
 			}
 			if ( !$token ) {
 				$output->writeln ("Error: please pass token name with --token option.");
-				return $this;
+				return Cli::RETURN_FAILURE;
 			}
 			$domains = $this->_getDomainNames ();
 			if ( !in_array ( $domain, $domains ) ) {
@@ -180,11 +181,12 @@
 					$output->writeln ("- $d");
 				}
 				$output->writeln ("");
-				return $this;
+				return Cli::RETURN_FAILURE;
 			}
 			$this->_setAuthZone ( $zone, $domain );
 			$this->_setAuthToken ( $token, $domain );
 			$output->writeln ("Successfully saved zone and token for domain $domain.");
+			return Cli::RETURN_SUCCESS;
 		}
 
 	}

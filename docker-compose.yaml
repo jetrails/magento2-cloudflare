@@ -12,7 +12,7 @@ services:
   magento:
     image: docker.io/bitnami/magento:2
     environment:
-      - MAGENTO_HOST=localhost
+      - MAGENTO_HOST=howtospeedupmagento.com
       - MAGENTO_DATABASE_HOST=mariadb
       - MAGENTO_DATABASE_PORT_NUMBER=3306
       - MAGENTO_DATABASE_USER=magento2

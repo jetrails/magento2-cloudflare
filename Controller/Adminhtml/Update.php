@@ -8,7 +8,7 @@
 	 * This class inherits from the Getter class and therefore, has an index
 	 * action. The main action in this class is the update action which simply
 	 * passes the value straight to the API model.
-	 * @version     1.4.0
+	 * @version     1.4.1
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

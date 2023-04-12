@@ -14,7 +14,7 @@
 	 * methods that load and render tab contents. It also contains methods that
 	 * help determine if the current store is configured with the supplied
 	 * Cloudflare account.
-	 * @version     1.4.0
+	 * @version     1.4.1
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

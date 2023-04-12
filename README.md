@@ -11,10 +11,42 @@
 </p>
 
 ## Documentation
+
 The user guide can be found [here](https://learn.jetrails.com/article/magento-2-cloudflare-extension).  The user guide goes through the installation process as well as explains all the features that comes with this extension. For further support, please email [development@jetrails.com](mailto://development@jetrails.com).
 
 ## Build System
+
 A simple [Makefile](Makefile) is used as a build system. Run `make help` to see available commands.
 
-## Development
-Run `make dev-create` to create a docker development environment using the [magento-cloud-docker](https://github.com/magento/magento-cloud-docker) project. Run `make dev-down` spin the environment down, `make dev-up` to spin it back up, and `make dev-nuke` to completely remove everything that is ephemeral.
+## Development Environment
+
+We use a super simple development environment that is ephemeral. You can spin it up by doing the following:
+
+```shell
+docker compose up -d
+docker compose logs -f
+docker compose down # destroy environment
+```
+
+You can deploy the module into the development environment by running the following:
+
+```shell
+make clean
+make build
+make deploy
+```
+
+You can then access the magento container by running the following:
+
+```shell
+docker compose exec magento bash
+```
+
+Once in the container you can run the standard commands to install the module:
+
+```shell
+magento setup:upgrade
+magento setup:di:compile
+```
+
+The Magento site is hosted on http://localhost and the backend can be reached at http://localhost/admin. Default user name is `jetrails` and default password is `magento2`.

@@ -12,3 +12,4 @@ dist
 node_modules
 private
 public_html
+build

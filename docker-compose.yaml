@@ -1,0 +1,35 @@
+version: "2"
+
+services:
+  elasticsearch:
+    image: docker.io/bitnami/elasticsearch:7
+  mariadb:
+    image: docker.io/bitnami/mariadb:10.3
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=magento2
+      - MARIADB_DATABASE=magento2
+  magento:
+    image: docker.io/bitnami/magento:2
+    environment:
+      - MAGENTO_HOST=localhost
+      - MAGENTO_DATABASE_HOST=mariadb
+      - MAGENTO_DATABASE_PORT_NUMBER=3306
+      - MAGENTO_DATABASE_USER=magento2
+      - MAGENTO_DATABASE_NAME=magento2
+      - MAGENTO_USERNAME=jetrails
+      - MAGENTO_PASSWORD=magento2
+      - MAGENTO_MODE=developer
+      - MAGENTO_ENABLE_HTTPS=yes
+      - MAGENTO_ENABLE_ADMIN_HTTPS=yes
+      - MAGENTO_ADMIN_URL_PREFIX=admin
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT_NUMBER=9200
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MAGENTO_ENABLE_HTTP_CACHE=no
+    ports:
+      - '80:8080'
+      - '443:8443'
+    depends_on:
+      - mariadb
+      - elasticsearch

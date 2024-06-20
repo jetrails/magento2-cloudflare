@@ -9,7 +9,7 @@
 	 * behave as the getter method. Based on the controller name, it fetches the
 	 * currently stored value though the interaction of the Cloudflare API and
 	 * the controller's respective model.
-	 * @version     1.4.1
+	 * @version     1.4.2
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

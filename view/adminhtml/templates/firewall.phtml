@@ -5,6 +5,7 @@
 	<div data-tab-content='waf' class='active' >
 		<?php
 
+	/* @noEscape */
 			echo $block->renderSections ( "firewall/waf", array (
 				"web_application_firewall",
 				"firewall_rules"
@@ -15,6 +16,7 @@
 	<div data-tab-content='tools' >
 		<?php
 
+			/* @noEscape */
 			echo $block->renderSections ( "firewall/tools_tab", array (
 				"access_rules",
 				"user_agent_blocking",
@@ -27,6 +29,7 @@
 	<div data-tab-content='settings' >
 		<?php
 
+			/* @noEscape */
 			echo $block->renderSections ( "firewall/settings_tab", array (
 				"security_level",
 				"bot_fight_mode",

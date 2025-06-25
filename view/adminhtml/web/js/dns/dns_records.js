@@ -358,7 +358,7 @@ $(document).on ( "focus", ".show-form-srv-name", function () {
 	var that = this
 	var confirm = new modal.Modal ()
 	var service = modal.createInput ( "text", "service", "_sip" )
-	var protocol = $("<select name='protocol' ><option value='_udp' >UDP</option><option value='_tcp' >TCP</option><option value='_tls' selected >TLS</option><select/>")
+	var protocol = $("<select name='protocol' ><option value='_udp' >UDP</option><option value='_tcp' >TCP</option><option value='_tls' selected >TLS</option></select>")
 	var name = modal.createInput ( "text", "name", global.getDomainName (), global.getDomainName () )
 	let oldValue = `${service.val ()}.${protocol.val ()}.${name.val ()}.`
 	if ( $(that).hasClass ("editable") ) {

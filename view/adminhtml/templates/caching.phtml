@@ -4,6 +4,7 @@
 	<div data-tab-content='configuration' class='active' >
 		<?php
 
+			/* @noEscape */
 			echo $block->renderSections ( "caching/configuration", array (
 				"purge_cache",
 				"caching_level",
@@ -19,6 +20,7 @@
 	<div data-tab-content='tiered_cache' >
 		<?php
 
+			/* @noEscape */
 			echo $block->renderSections ( "caching/tiered_cache", array (
 				"argo_tiered_cache",
 				"tiered_cache_topology"

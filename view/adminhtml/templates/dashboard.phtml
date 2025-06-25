@@ -1,28 +1,28 @@
 <script>
-	window.domain = "<?php echo $block->getDomainName () ?>"
-	window.skin_base = "<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/') ?>"
-	window.form_key = "<?php echo $block->getFormKey () ?>"
+	window.domain = "<?php echo $block->escapeHtmlAttr ( $block->getDomainName () ) ?>"
+	window.skin_base = "<?php echo $block->escapeUrl ( $block->getViewFileUrl ('JetRails_Cloudflare/') ) ?>"
+	window.form_key = "<?php echo $block->escapeHtmlAttr ( $block->getFormKey () ) ?>"
 </script>
 
 <div class="cloudflare-dashboard" >
 	<div class="dashboard-header" >
 		<div class="logo" >
-			<img src="<?php echo $block->getViewFileUrl ('JetRails_Cloudflare/images/jetrails.svg') ?>" />
+			<img src="<?php echo $block->escapeUrl ( $block->getViewFileUrl ('JetRails_Cloudflare/images/jetrails.svg') ) ?>" />
 		</div>
 		<div class="domain_wrapper" >
-			<div class="selected" ><?php echo $block->getDomainName () ?></div>
+			<div class="selected" ><?php echo $block->escapeHtml ( $block->getDomainName () ) ?></div>
 			<div class="options" >
 				<?php foreach ( $block->getDomainNames () as $domain ): ?>
 					<?php if ( $domain ["active"] ): ?>
 						<a>
 							<div class="option active" >
-								<?php echo $domain ["name"] ?>
+								<?php echo $block->escapeHtml ( $domain ["name"] ) ?>
 							</div>
 						</a>
 					<?php else: ?>
-						<a href="<?php echo $domain ["action"] ?>" >
+						<a href="<?php echo $block->escapeHtml ( $domain ["action"] ) ?>" >
 							<div class="option" >
-								<?php echo $domain ["name"] ?>
+								<?php echo $block->escapeHtml ( $domain ["name"] ) ?>
 							</div>
 						</a>
 					<?php endif ?>
@@ -70,35 +70,35 @@
 		</ul>
 		<div class="content-wrapper" >
 			<div class="content" data-target="hosting" >
-				<?php echo $block->getTabContent ("hosting") ?>
+				<?php /* @noEscape */ echo $block->getTabContent ("hosting") ?>
 			</div>
 			<div class="content" data-target="overview" >
-				<?php echo $block->getTabContent ("overview") ?>
+				<?php /* @noEscape */ echo $block->getTabContent ("overview") ?>
 			</div>
 			<?php if ( $block->isValidAuth () && $block->isValidZone () ): ?>
 				<div class="content" data-target="dns" >
-					<?php echo $block->getTabContent ("dns") ?>
+					<?php /* @noEscape */ echo $block->getTabContent ("dns") ?>
 				</div>
 				<div class="content" data-target="ssl_tls" >
-					<?php echo $block->getTabContent ("ssl_tls") ?>
+					<?php /* @noEscape */ echo $block->getTabContent ("ssl_tls") ?>
 				</div>
 				<div class="content" data-target="firewall" >
-					<?php echo $block->getTabContent ("firewall") ?>
+					<?php /* @noEscape */ echo $block->getTabContent ("firewall") ?>
 				</div>
 				<div class="content" data-target="speed" >
-					<?php echo $block->getTabContent ("speed") ?>
+					<?php /* @noEscape */ echo $block->getTabContent ("speed") ?>
 				</div>
 				<div class="content" data-target="caching" >
-					<?php echo $block->getTabContent ("caching") ?>
+					<?php /* @noEscape */ echo $block->getTabContent ("caching") ?>
 				</div>
 				<div class="content" data-target="page_rules" >
-					<?php echo $block->getTabContent ("page_rules") ?>
+					<?php /* @noEscape */ echo $block->getTabContent ("page_rules") ?>
 				</div>
 				<div class="content" data-target="network" >
-					<?php echo $block->getTabContent ("network") ?>
+					<?php /* @noEscape */ echo $block->getTabContent ("network") ?>
 				</div>
 				<div class="content" data-target="scrape_shield" >
-					<?php echo $block->getTabContent ("scrape_shield") ?>
+					<?php /* @noEscape */ echo $block->getTabContent ("scrape_shield") ?>
 				</div>
 			<?php endif ?>
 		</div>

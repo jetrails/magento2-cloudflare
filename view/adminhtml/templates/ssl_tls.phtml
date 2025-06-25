@@ -5,6 +5,7 @@
 	<div data-tab-content='overview' class='active' >
 		<?php
 
+			/* @noEscape */
 			echo $block->renderSections ( "ssl_tls/overview_tab", array (
 				"ssl",
 				"ssl_tls_recommender"
@@ -15,6 +16,7 @@
 	<div data-tab-content='edge_certificates' >
 		<?php
 
+			/* @noEscape */
 			echo $block->renderSections ( "ssl_tls/edge_certificates_tab", array (
 				"always_use_https",
 				"http_strict_transport_security",
@@ -31,6 +33,7 @@
 	<div data-tab-content='origin_server' >
 		<?php
 
+			/* @noEscape */
 			echo $block->renderSections ( "ssl_tls/origin_server_tab", array (
 				"authenticated_origin_pulls"
 			));

@@ -1,7 +1,7 @@
 <section
 	class="cloudflare hosting cta-tom"
-	data-endpoint="<?php echo $block->getApiEndpoint () ?>"
-	data-form-key="<?php echo $block->getFormKey () ?>"
+	data-endpoint="<?php echo $block->escapeUrl ( $block->getApiEndpoint () ) ?>"
+	data-form-key="<?php echo $block->escapeHtmlAttr ( $block->getFormKey () ) ?>"
 	data-tab-name="hosting"
 	data-section-name="cta-tom" >
 	<div class="row" >

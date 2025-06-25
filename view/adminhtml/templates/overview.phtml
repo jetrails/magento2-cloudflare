@@ -1,12 +1,14 @@
 <?php
 
 	if ( $block->isValidAuth () && $block->isValidZone () ) {
+		/* @noEscape */
 		echo $block->renderSections ( "overview", array (
 			"configuration",
 			"status"
 		));
 	}
 	else {
+		/* @noEscape */
 		echo $block->renderSections ( "overview", array (
 			"configuration"
 		));

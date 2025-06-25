@@ -12,7 +12,7 @@
 	 * This is a generic controller that is used within other controller classes
 	 * in this module. It supplies many helper methods that the child classes
 	 * can use which simplify the code.
-	 * @version     1.4.2
+	 * @version     1.4.3
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

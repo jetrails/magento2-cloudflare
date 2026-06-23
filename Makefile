@@ -5,8 +5,9 @@ NAMESPACE_PATH=$(VENDOR)/$(MODULE)
 VERSION=$(shell git describe --tags `git rev-list --tags --max-count=1`)
 MODULE_FILES=Block Console Controller Helper Model etc view registration.php
 MODULE_FILES_EXTRA=composer.json LICENSE.md
+SYNC_PATH=/var/www/app/code
 
-.PHONY: deps build bump deploy package clean help
+.PHONY: deps build bump deploy sync package clean lint help
 
 deps: ## Download dependencies
 	yarn install
@@ -29,6 +30,12 @@ deploy: build ## Deploy code to docker container
 	docker compose cp ./build/$(NAMESPACE_PATH) magento:/bitnami/magento/app/code/$(VENDOR)
 	docker compose exec magento chown -R daemon:root /bitnami/magento/app/code
 
+sync: ## Sync built module to remote server via rsync (requires SYNC_USER, SYNC_HOST)
+	@test -n "$(SYNC_USER)" || { echo "Error: SYNC_USER is required"; exit 1; }
+	@test -n "$(SYNC_HOST)" || { echo "Error: SYNC_HOST is required"; exit 1; }
+	ssh $(SYNC_USER)@$(SYNC_HOST) "mkdir -p $(SYNC_PATH)/$(NAMESPACE_PATH)"
+	rsync -avz --delete --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r ./build/$(NAMESPACE_PATH)/ $(SYNC_USER)@$(SYNC_HOST):$(SYNC_PATH)/$(NAMESPACE_PATH)/
+
 package: bump build ## Package into archive file
 	rm -rf ./dist
 	mkdir -p ./dist
@@ -36,6 +43,10 @@ package: bump build ## Package into archive file
 
 clean: ## Remove generated files and folders
 	rm -rf ./dist ./build ./.parcel-cache
+
+lint: ## Report PHP 8.5 compatibility issues
+	@test -d vendor || composer install
+	php -d auto_prepend_file=phpcs-magento-stubs.php vendor/bin/phpcs -p --colors --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.5 $(MODULE_FILES)
 
 help: ## Display available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

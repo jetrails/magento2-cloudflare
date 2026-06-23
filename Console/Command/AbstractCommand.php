@@ -86,7 +86,7 @@
 		 * @param       OutputInterface     output              The output interface
 		 * @return      void
 		 */
-		public function execute ( InputInterface $input, OutputInterface $output ) {
+		public function execute ( InputInterface $input, OutputInterface $output ): int {
 			$domain = $input->getOption ("domain");
 			if ( !$domain ) {
 				$output->writeln ("Error: please pass domain name with --domain option.");

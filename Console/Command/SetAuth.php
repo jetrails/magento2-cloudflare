@@ -157,7 +157,7 @@
 		 * @param       OutputInterface     output              The output interface
 		 * @return      void
 		 */
-		public function execute ( InputInterface $input, OutputInterface $output ) {
+		public function execute ( InputInterface $input, OutputInterface $output ): int {
 			$domain = $input->getOption ("domain");
 			$zone = $input->getOption ("zone");
 			$token = $input->getOption ("token");

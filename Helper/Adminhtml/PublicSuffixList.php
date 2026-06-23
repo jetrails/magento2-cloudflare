@@ -27,7 +27,6 @@
 			curl_setopt ( $handle, CURLOPT_TIMEOUT, 3 );
 			$output = curl_exec ( $handle );
 			$code = curl_getinfo ( $handle, CURLINFO_HTTP_CODE );
-			curl_close ( $handle );
 			if ( $code == 200 ) {
 				$lines = explode ( "\n", $output );
 				$lines = array_filter ( $lines, function ( $line ) { return $line != "" && !in_array ( $line [0], [ "/", " ", "\t" ] ); } );

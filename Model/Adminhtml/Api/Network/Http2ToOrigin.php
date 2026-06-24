@@ -18,7 +18,7 @@
 
 		public function getValue () {
 			$zoneId = $this->_configurationModel->getZoneId ();
-			$endpoint = sprintf ( "zones/%s/%s", $zoneId, "origin_max_http_version" );
+			$endpoint = sprintf ( "zones/%s/%s", $zoneId, "settings/origin_max_http_version" );
 			$this->_requestModel->setType ( Request::REQUEST_GET );
 			$response = $this->_requestModel->resolve ( $endpoint );
 			if ( isset ( $response ) && isset ( $response->result ) && isset ( $response->result->value ) ) {
@@ -29,7 +29,7 @@
 
 		public function setValue ( $value ) {
 			$zoneId = $this->_configurationModel->getZoneId ();
-			$endpoint = sprintf ( "zones/%s/%s", $zoneId, "origin_max_http_version" );
+			$endpoint = sprintf ( "zones/%s/%s", $zoneId, "settings/origin_max_http_version" );
 			$this->_requestModel->setType ( Request::REQUEST_PATCH );
 			$this->_requestModel->setData ( array ( "value" => $value ? "2" : "1" ) );
 			return $this->_requestModel->resolve ( $endpoint );

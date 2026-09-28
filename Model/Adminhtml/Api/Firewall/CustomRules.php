@@ -11,7 +11,7 @@
 	 * live as rules inside of the zone's entry point ruleset for the
 	 * http_request_firewall_custom phase. The order of the rules within that
 	 * ruleset is the order that they get evaluated in.
-	 * @version     1.4.5
+	 * @version     1.4.6
 	 * @package     JetRails® Cloudflare
 	 * @author      Rafael Grigorian <development@jetrails.com>
 	 * @copyright   © 2018 JETRAILS, All rights reserved

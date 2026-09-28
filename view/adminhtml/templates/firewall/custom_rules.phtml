@@ -1,0 +1,101 @@
+<section
+	class="cloudflare firewall custom_rules initialize loading"
+	data-endpoint="<?php echo $block->escapeUrl ( $block->getApiEndpoint () ) ?>"
+	data-form-key="<?php echo $block->escapeHtmlAttr ( $block->getFormKey () ) ?>"
+	data-tab-name="firewall"
+	data-section-name="custom_rules"
+	data-item-count="0"
+	data-page="1"
+	data-page-size="15"
+	data-sort=""
+	data-sort-order="" >
+	<div class="row" >
+		<div class="wrapper_left no_padding_bottom" >
+			<span class="section_title" >Custom Rules</span>
+			<p>Control incoming traffic by filtering requests to your zone. You can block or challenge incoming requests according to rules you define. Rules are evaluated in order, from top to bottom.</p>
+			<p>You have used <span class="usage-used" >0</span><span class="usage-limit" > of <span class="usage-total" >0</span></span> custom rules.</p>
+		</div>
+		<div class="wrapper_right" >
+			<div>
+				<input type="button" value="Create Custom Rule" class="trigger" data-target="create" />
+			</div>
+			<div class="lightbox" style="background-image: url(<?php echo $block->escapeUrl ( $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ) ?>)" ></div>
+		</div>
+	</div>
+	<div class="row" >
+		<div>
+			<div class="dynamic_wrapper wrappable" >
+				<input
+					class="search trigger-change grow"
+					type="text"
+					placeholder="Search Name..."
+					data-target="search"
+					style="background-image: url(<?php echo $block->escapeUrl ( $block->getViewFileUrl ('JetRails_Cloudflare/images/search.svg') ) ?>);"
+				/>
+				<select class="status trigger-select" data-target="search" >
+					<option value="all" selected >All</option>
+					<option value="enabled" >Enabled</option>
+					<option value="disabled" >Disabled</option>
+				</select>
+				<select class="action trigger-select" data-target="search" >
+					<option value="all" selected >All</option>
+					<option value="managed_challenge" >Managed Challenge</option>
+					<option value="block" >Block</option>
+					<option value="js_challenge" >JS Challenge</option>
+					<option value="skip" >Skip</option>
+					<option value="challenge" >Interactive Challenge</option>
+					<option value="log" >Log</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="row" >
+		<table cellspacing="0" cellpadding="0" class="rules"  >
+			<thead>
+				<tr>
+					<th></th>
+					<th>Order</th>
+					<th>Action</th>
+					<th>Name</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="5" >No Custom Rules</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="lightbox" style="background-image: url(<?php echo $block->escapeUrl ( $block->getViewFileUrl ('JetRails_Cloudflare/images/loading.svg') ) ?>)" ></div>
+	</div>
+	<div class="row collapsable" >
+		<div class="wrapper_bottom" >
+			<div class="pagination_container" >
+				<span class="previous trigger" data-target="previous_page" >&#xF002;</span>
+				<div class="pages" ></div>
+				<span class="next trigger" data-target="next_page" >&#xF003;</span>
+				<span class="showing" >0 - 0 of 0 items</span>
+			</div>
+			<a data-tab="help" >Help</a>
+		</div>
+		<div data-tab-content="help" >
+			<p>Custom rules let you examine incoming site traffic and apply an action to the requests that match the criteria you define. Rules are evaluated in the order they are listed. You can drag rules to reorder them when no search filters are applied.</p>
+			<p>Cloudflare deprecated Firewall Rules and moved existing firewall rules to custom rules. Rules that used the Allow or Bypass actions now use the Skip action. Your API token needs the <strong>Zone WAF</strong> permission to view and edit custom rules.</p>
+			<ul>
+				<li><p><strong>Managed Challenge</strong> - Cloudflare dynamically picks the type of challenge that is shown to the visitor, based on the characteristics of the request.</p></li>
+				<li><p><strong>Block</strong> - Matching requests are denied access to the site. Pro plans and above can customize the response that is returned.</p></li>
+				<li><p><strong>JS Challenge</strong> - The visitor must pass a Cloudflare JavaScript challenge before proceeding.</p></li>
+				<li><p><strong>Skip</strong> - Matching requests skip the security features you select, such as the remaining custom rules, rate limiting rules, managed rules, or Super Bot Fight Mode rules.</p></li>
+				<li><p><strong>Interactive Challenge</strong> - The visitor must interact with the challenge page before proceeding.</p></li>
+				<li><p><strong>Log</strong> - Records matching requests in Cloudflare Logs. Only available on Enterprise plans.</p></li>
+			</ul>
+			<p>To learn more, visit:</p>
+			<ul>
+				<li><a href="https://developers.cloudflare.com/waf/custom-rules/" target="_blank" >Custom rules</a></li>
+				<li><a href="https://developers.cloudflare.com/waf/custom-rules/skip/options/" target="_blank" >Available skip options</a></li>
+				<li><a href="https://developers.cloudflare.com/ruleset-engine/rules-language/" target="_blank" >Rules language</a></li>
+				<li><a href="https://developers.cloudflare.com/waf/reference/migration-guides/firewall-rules-to-custom-rules/" target="_blank" >Firewall rules migration</a></li>
+			</ul>
+		</div>
+	</div>
+</section>

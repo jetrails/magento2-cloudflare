@@ -136,8 +136,8 @@
 									id="JetRails_Cloudflare::web_application_firewall"
 									title="Web Application Firewall" />
 								<resource
-									id="JetRails_Cloudflare::firewall_rules"
-									title="Firewall Rules" />
+									id="JetRails_Cloudflare::custom_rules"
+									title="Custom Rules" />
 							</resource>
 							<resource
 								id="JetRails_Cloudflare::tools_tab"

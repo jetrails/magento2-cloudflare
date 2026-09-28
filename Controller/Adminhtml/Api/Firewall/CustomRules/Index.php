@@ -1,6 +1,6 @@
 <?php
 
-	namespace JetRails\Cloudflare\Controller\Adminhtml\Api\Firewall\FirewallRules;
+	namespace JetRails\Cloudflare\Controller\Adminhtml\Api\Firewall\CustomRules;
 
 	use JetRails\Cloudflare\Controller\Adminhtml\Getter;
 

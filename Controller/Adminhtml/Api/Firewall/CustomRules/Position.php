@@ -1,6 +1,6 @@
 <?php
 
-	namespace JetRails\Cloudflare\Controller\Adminhtml\Api\Firewall\FirewallRules;
+	namespace JetRails\Cloudflare\Controller\Adminhtml\Api\Firewall\CustomRules;
 
 	use JetRails\Cloudflare\Controller\Adminhtml\Action;
 
@@ -15,17 +15,20 @@
 	 * @copyright   © 2018 JETRAILS, All rights reserved
 	 * @license     MIT https://opensource.org/licenses/MIT
 	 */
-	class Delete extends Action {
+	class Position extends Action {
 
 		/**
-		 * This action takes in a firewall rule id from the request parameters
-		 * and it then asks the Cloudflare API model to delete said firewall
-		 * rule with the corresponding id.
+		 * This action takes in a custom rule id, a position, and a target rule
+		 * id through the request parameters. It then asks the Cloudflare API
+		 * model to move the custom rule with the corresponding id without
+		 * changing its definition.
 		 * @return  void
 		 */
 		public function execute () {
-			$response = $this->_api->delete (
-				$this->_request->getParam ("id")
+			$response = $this->_api->position (
+				strval ( $this->_request->getParam ("id") ),
+				strval ( $this->_request->getParam ("position") ),
+				strval ( $this->_request->getParam ("target") )
 			);
 			return $this->_sendResponse ( $response );
 		}
